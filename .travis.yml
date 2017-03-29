@@ -1,0 +1,18 @@
+language:
+  - python
+
+python:
+  - "3.5"
+
+sudo: required
+
+install: 
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+
+script: 
+  - cd CodaMais
+  - coverage run ./manage.py test
+
+after_success: 
+  - coverage

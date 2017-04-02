@@ -14,7 +14,7 @@
   <h2>Lista de Exercícios</h2>
   <div class="list-group">
     {% for exercise in list_exercises %}
-      <a href="#" class="list-group-item">{{exercise.title}}</a>
+      <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
     {% endfor %}
   </div>
 </div>

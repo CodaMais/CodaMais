@@ -14,3 +14,7 @@ def list_exercises_not_deprecated(request):
     data = {}
     data['list_exercises'] = Exercise.objects.filter(deprecated=constants.IS_NOT_DEPRECATED)
     return render(request, 'exercises.html', data)
+
+def show_exercise(request, id):
+    exercise = Exercise.objects.get(id=id)
+    return render(request, 'description_exercise.html', {'exercise':exercise})

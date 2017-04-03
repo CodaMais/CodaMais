@@ -1,25 +1,17 @@
 # Django.
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 # Local Django.
-from . import constants
-
-User = get_user_model()
+from .models import User
 
 
 class UserRegisterForm(forms.ModelForm):
     # Form Fields.
-    username = forms.CharField(max_length=constants.USERNAME_FIELD_LENGTH,
-                               label=_('Nickname'))
-    first_name = forms.CharField(max_length=constants.FIRST_NAME_FIELD_LENGTH,
-                                 label=_('First Name'))
-    email = forms.EmailField(max_length=constants.PASSWORD_FIELD_LENGTH,
-                             label=_('Email'))
     password = forms.CharField(widget=forms.PasswordInput,
                                label=_('Password'))
+
     password_confirmation = forms.CharField(widget=forms.PasswordInput,
                                             label=_('Password Confirmation'))
 
@@ -29,8 +21,6 @@ class UserRegisterForm(forms.ModelForm):
             'username',
             'first_name',
             'email',
-            'password',
-            'password_confirmation',
         ]
 
     # Front-end validation function for register page.

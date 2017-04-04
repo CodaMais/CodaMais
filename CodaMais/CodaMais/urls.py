@@ -17,10 +17,12 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.views.static import serve
+from theory.views import list_all_contents
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^redactor/', include('redactor.urls')),
+    url(r'^contents/$', list_all_contents),
 ]
 
 # When using the Django's dev server, static files are served by default but

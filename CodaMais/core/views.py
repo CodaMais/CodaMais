@@ -1,3 +1,6 @@
+# standard library
+import logging
+
 # third-party
 import hashlib
 import datetime
@@ -16,10 +19,12 @@ from .models import User
 from .models import UserProfile
 from . import constants
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 def register_view(request):
     form = UserRegisterForm(request.POST or None)
-
     if form.is_valid():
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')

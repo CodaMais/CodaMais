@@ -1,11 +1,14 @@
+# standard library
+import datetime
+
 # Django.
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from .managers import UserManager
 
 # Local Django.
 from . import constants
+from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -28,3 +31,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    activation_key = models.CharField(max_length=40, blank=True)
+    key_expires = models.DateTimeField(default=datetime.date.today())
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        verbose_name_plural = u'Perfil de Usuario'

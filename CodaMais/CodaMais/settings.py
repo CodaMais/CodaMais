@@ -1,3 +1,5 @@
+import os
+
 """
 Django settings for CodaMais project.
 
@@ -10,7 +12,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import os
+# Information needed to send the email
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'codamaisapp@gmail.com'
+EMAIL_HOST_PASSWORD = 'codamais'
+EMAIL_PORT = 587
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

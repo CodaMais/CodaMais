@@ -1,8 +1,8 @@
+# standard library
+import logging
+
 # Django
 from django.contrib.auth.models import BaseUserManager
-
-# import the logging library
-import logging
 
 # logger instance
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ class UserManager(BaseUserManager):
         user = self.model(email=self.normalize_email(email),
                           username=username,
                           first_name=first_name,
-                          is_active=True,
+                          is_active=False,
                           **kwargs)
 
         user.set_password(password)

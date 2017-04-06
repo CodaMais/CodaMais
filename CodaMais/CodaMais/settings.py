@@ -55,7 +55,7 @@ ROOT_URLCONF = 'CodaMais.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates_exercise',],
+        'DIRS': ['exercise/templates_exercise',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

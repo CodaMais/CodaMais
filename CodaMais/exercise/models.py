@@ -8,9 +8,7 @@ class Exercise(models.Model):
     category = models.PositiveIntegerField(choices=constants.CATEGORY_CHOICES)
     text = models.TextField()
     score = models.PositiveIntegerField()
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(null=True)
     deprecated = models.PositiveIntegerField(choices=constants.DEPRECATED_CHOICES)
-
-    # Admin List function.
-    def __unicode__(self):
-        return self.title
+    input_exercise = models.CharField(max_length=constants.MAX_LENGTH_INPUT)
+    output_exercise = models.CharField(max_length=constants.MAX_LENGTH_OUTPUT)

@@ -25,6 +25,6 @@ def create_exercise(request):
 
     if form.is_valid():
         form.save()
-        return redirect('list_all_exercises')
+        return redirect('list_exercises_not_deprecated')
     else:
         return render(request, 'new_exercise.html', {'form':form})

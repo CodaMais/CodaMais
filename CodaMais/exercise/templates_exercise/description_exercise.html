@@ -1,0 +1,44 @@
+<html>
+  <header>
+    <title>
+      Exercícios
+    </title>
+    <meta charset="utf-8">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  </header>
+  <body>
+    <ol>
+      {{exercise.title}}<br>
+      {{exercise.score}}<br>
+      {{exercise.text}}<br>
+      {{exercise.get_category_display}}<br>
+    </ol>
+      <table class="table" >
+        <tr>
+          <th>
+            Entrada
+          </th>
+          <th>
+            Saída
+          </th>
+        </tr>
+        <tr>
+          <td>
+            {{exercise.input_exercise}}
+          </td>
+          <td>
+            {{exercise.output_exercise}}
+          </td>
+        </tr>
+      </table>
+      {% if exercise.image.url != None %}
+        <img src='{{exercise.image.url}}' class='img-resp'/>
+      {% else %}
+        <!-- Nothing to do -->
+      {% endif %}
+
+  </body>
+</html>

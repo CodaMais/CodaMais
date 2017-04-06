@@ -20,7 +20,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 
 # Local Django
-from core import views
+from user import views
 
 urlpatterns = i18n_patterns(
     url(r'^admin/', admin.site.urls),

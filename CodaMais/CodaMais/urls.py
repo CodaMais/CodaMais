@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^exercise/(?P<id>\d+)/$', show_exercise, name='show_exercise'),
     url(r'^exercise/$', list_exercises_not_deprecated, name='list_exercises_not_deprecated'),
     url(r'^admin/', admin.site.urls),
+    url(r'^exercise/new_exercise/$', create_exercise, name='register_exercise'),
 ]
 
 if settings.DEBUG:

@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from exercise.models import Exercise
 from exercise import constants
+from exercise.form import ExerciseForm
 
 
 def list_all_exercises(request):
@@ -18,3 +19,12 @@ def list_exercises_not_deprecated(request):
 def show_exercise(request, id):
     exercise = Exercise.objects.get(id=id)
     return render(request, 'description_exercise.html', {'exercise':exercise})
+
+def create_exercise(request):
+    form = ExerciseForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+        form.save()
+        return redirect('list_all_exercises')
+    else:
+        return render(request, 'new_exercise.html', {'form':form})

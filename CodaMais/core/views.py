@@ -1,7 +1,5 @@
 # standard library
 import logging
-
-# third-party
 import hashlib
 import datetime
 import random

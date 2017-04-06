@@ -21,6 +21,11 @@ class User(AbstractBaseUser, PermissionsMixin):
                                   default='')
     email = models.EmailField(max_length=constants.EMAIL_FIELD_LENGTH,
                               default='', unique=True)
+
+    # User Profile Image
+    user_image = models.ImageField(default=constants.USER_IMAGE,
+                                   editable=False)
+
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 

@@ -2,6 +2,7 @@
 USERNAME_FIELD_LENGTH = 30
 USERNAME_MIN_LENGTH = 3
 FIRST_NAME_FIELD_LENGTH = 30
+USER_IMAGE = 'CodaMais/core/media/user_default.png'
 
 # PASSWORDS FIELDS.
 PASSWORD_FIELD_LENGTH = 30
@@ -10,7 +11,7 @@ PASSWORD_MIN_LENGTH = 8
 # EMAIL FIELDS.
 EMAIL_FIELD_LENGTH = 30
 
-# VALIDATIONS MESSAGES
+# VALIDATION MESSAGES.
 USERNAME_REGISTERED = 'Nickname already registered'
 USERNAME_MIN_SIZE = 'Username must have at least 8 characteres'
 USERNAME_FORMAT = 'Your name must have just letters'

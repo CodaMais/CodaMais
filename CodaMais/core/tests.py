@@ -31,6 +31,21 @@ class UserTest(TestCase):
         self.assertEqual(self.email, user.get_full_name())
 
 
+class UserAdminTest(TestCase):
+        email = "user@user.com"
+        password = "userpassword"
+        first_name = "User"
+
+        def setUp(self):
+            User.objects.create_superuser(email=self.email,
+                                          password=self.password,
+                                          first_name=self.first_name)
+
+        def test_admin_user_get_short_name(self):
+            user = User.objects.get(email=self.email)
+            self.assertEqual(self.email, user.get_short_name())
+
+
 class UserProfileTest(TestCase):
     email = "user@user.com"
     password = "userpassword"
@@ -67,7 +82,7 @@ class MetaTest(TestCase):
 class UserRegisterFormTest(TestCase):
     email = "user@user.com"
     password = "userpassword"
-    first_name = "User"
+    first_name = "Username"
     username = "Username"
     valid_form = {}
     invalid_form = {}
@@ -102,8 +117,13 @@ class UserRegisterFormTest(TestCase):
         user_form = UserRegisterForm(self.valid_form)
         self.assertFalse(user_form.is_valid())
 
-    def test_UserRegisterForm_username_invalid(self):
+    def test_UserRegisterForm_username_min_size_invalid(self):
         self.invalid_form['username'] = 'Us'
+        user_form = UserRegisterForm(self.invalid_form)
+        self.assertFalse(user_form.is_valid())
+
+    def test_UserRegisterForm_username_max_size_invalid(self):
+        self.invalid_form['username'] = 'usernameInvalid'
         user_form = UserRegisterForm(self.invalid_form)
         self.assertFalse(user_form.is_valid())
 
@@ -121,8 +141,13 @@ class UserRegisterFormTest(TestCase):
         user_form = UserRegisterForm(self.valid_form)
         self.assertFalse(user_form.is_valid())
 
-    def test_UserRegisterForm_password_invalid(self):
-        self.invalid_form['password'] = 'aaa'
+    def test_UserRegisterForm_password_min_size_invalid(self):
+        self.invalid_form['password'] = 'pas'
+        user_form = UserRegisterForm(self.invalid_form)
+        self.assertFalse(user_form.is_valid())
+
+    def test_UserRegisterForm_password_max_size_invalid(self):
+        self.invalid_form['password'] = 'passwordInvalid'
         user_form = UserRegisterForm(self.invalid_form)
         self.assertFalse(user_form.is_valid())
 

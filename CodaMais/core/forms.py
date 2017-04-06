@@ -41,13 +41,17 @@ class UserRegisterForm(forms.ModelForm):
         if username_from_database.exists():
             raise forms.ValidationError(_(constants.USERNAME_REGISTERED))
         elif len(username) < constants.USERNAME_MIN_LENGTH:
-            raise forms.ValidationError(_(constants.USERNAME_MIN_SIZE))
+            raise forms.ValidationError(_(constants.USERNAME_SIZE))
+        elif len(username) > constants.USERNAME_MAX_LENGHT:
+            raise forms.ValidationError(_(constants.USERNAME_SIZE))
         elif not re.match(r'^[A-Za-z ]+$', first_name):
             raise forms.ValidationError(_(constants.USERNAME_FORMAT))
         elif email_from_database.exists():
             raise ValidationError(_(constants.EMAIL_REGISTERED))
         elif len(password) < constants.PASSWORD_MIN_LENGTH:
-            raise forms.ValidationError(_(constants.PASSWORD_MIN_SIZE))
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        elif len(password) > constants.PASSWORD_MAX_LENGTH:
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
         elif password != password_confirmation:
             raise forms.ValidationError(_(constants.PASSWORD_NOT_EQUAL))
 

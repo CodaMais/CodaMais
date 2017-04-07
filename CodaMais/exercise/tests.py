@@ -1,28 +1,35 @@
 from django.test import TestCase
-from exercise.form import  ExerciseForm
+from django.test.client import RequestFactory
+from exercise.models import  Exercise
+from exercise.views import *
 
 
-class TestExerciseRegistration(TestCase):
-    title = 'Basic Exercise'
-    category = 1
-    text = 'Text Basic Exercise.'
-    score = 10
-    image = None
-    deprecated = 0
-    input_exercise = 'Input Basic Exercise.'
-    output_exercise = 'Output Basic Exercise.'
-    form_valid = {}
+class TestRequestExercise(TestCase):
 
-    def setup(self):
-        self.form_valid = {'title' : self.title,
-                     'category' : self.category,
-                     'text' : self.text,
-                     'score' : self.score,
-                     'image' : self.image,
-                     'deprecated' : self.deprecated,
-                     'input_exercise' : self.input_exercise,
-                     'output_exercise' : self.output_exercise}
+    exercise = Exercise()
 
-    def test_ExerciseForm_valid(self):
-        exercise_form = ExerciseForm(self.form_valid)
-        self.assertTrue(exercise_form.is_valid)
+    def setUp(self):
+        self.exercise.title = 'Basic Exercise'
+        self.exercise.category = 2
+        self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
+        self.exercise.score = 10
+        self.exercise.deprecated = 0
+        self.exercise.input_exercise = 'Input Basic Exercise.'
+        self.exercise.output_exercise = 'Output Basic Exercise.'
+        self.factory = RequestFactory()
+
+    def test_if_the_list_all_exercises_is_showing(self):
+        request = self.factory.get('/exercise')
+        response = list_all_exercises(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_if_the_list_exercises_is_not_deprecated(self):
+        request = self.factory.get('/exercise')
+        response = list_exercises_not_deprecated(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_if_the_exercise_is_showing(self):
+        self.exercise.save()
+        request = self.factory.get('/exercise/')
+        response = show_exercise(request, self.exercise.id)
+        self.assertEqual(response.status_code, 200)

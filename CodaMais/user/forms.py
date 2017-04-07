@@ -1,6 +1,3 @@
-# standard library
-import re
-
 # Django.
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -13,6 +10,11 @@ from .import constants
 
 class UserRegisterForm(forms.ModelForm):
     # Form Fields.
+    username = forms.CharField(label=constants.USERNAME,
+                               max_length=constants.USERNAME_MAX_LENGHT)
+
+    email = forms.EmailField(label=constants.EMAIL)
+
     password = forms.CharField(widget=forms.PasswordInput,
                                label=_('Password'))
 
@@ -30,7 +32,6 @@ class UserRegisterForm(forms.ModelForm):
     # Front-end validation function for register page.
     def clean(self, *args, **kwargs):
         email = self.cleaned_data.get('email')
-        first_name = self.cleaned_data.get('first_name')
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
         password_confirmation = self.cleaned_data.get('password_confirmation')
@@ -40,12 +41,6 @@ class UserRegisterForm(forms.ModelForm):
 
         if username_from_database.exists():
             raise forms.ValidationError(_(constants.USERNAME_REGISTERED))
-        elif len(username) < constants.USERNAME_MIN_LENGTH:
-            raise forms.ValidationError(_(constants.USERNAME_SIZE))
-        elif len(username) > constants.USERNAME_MAX_LENGHT:
-            raise forms.ValidationError(_(constants.USERNAME_SIZE))
-        elif not re.match(r'^[A-Za-z ]+$', first_name):
-            raise forms.ValidationError(_(constants.USERNAME_FORMAT))
         elif email_from_database.exists():
             raise ValidationError(_(constants.EMAIL_REGISTERED))
         elif len(password) < constants.PASSWORD_MIN_LENGTH:

@@ -1,27 +1,41 @@
 # USERNAME FIELDS.
-USERNAME_FIELD_LENGTH = 30
+USERNAME = 'Username'
+USERNAME_FIELD_LENGTH = 12
 USERNAME_MIN_LENGTH = 6
 USERNAME_MAX_LENGHT = 12
-FIRST_NAME_FIELD_LENGTH = 30
-USER_IMAGE = 'CodaMais/core/media/user_default.png'
+USER_IMAGE = 'CodaMais/user/media/user_default.png'
 
-# PASSWORDS FIELDS.
-PASSWORD_FIELD_LENGTH = 30
-PASSWORD_MIN_LENGTH = 8
-PASSWORD_MAX_LENGTH = 12
-
-# EMAIL FIELDS.
-EMAIL_FIELD_LENGTH = 30
-
-# VALIDATION MESSAGES.
+# USERNAME VALIDATION MESSAGES.
 USERNAME_REGISTERED = 'Nickname already registered'
 USERNAME_SIZE = 'Username must be between 6 and 12 characteres'
 USERNAME_FORMAT = 'Your name must have just letters'
 
-EMAIL_REGISTERED = 'This Email has been already registered'
+# FIRST NAME FIELDS.
+FIRST_NAME_FIELD_LENGTH = 30
+
+# FIRST NAME VALIDATION MESSAGES
+FIRST_NAME_SIZE = 'Your name exceeds 30 characteres'
+FIRST_NAME_CHARACTERS = 'Your name can\'t have special characters'
+
+# PASSWORDS FIELDS.
+PASSWORD = 'Password'
+PASSWORD_FIELD_LENGTH = 30
+PASSWORD_MIN_LENGTH = 8
+PASSWORD_MAX_LENGTH = 12
+
+# PASSWORD VALIDATION MESSAGES.
 
 PASSWORD_SIZE = 'Password must be between 8 and 12 characters'
 PASSWORD_NOT_EQUAL = 'Passwords do not match.'
+
+# EMAIL FIELDS.
+EMAIL = 'Email'
+EMAIL_FIELD_LENGTH = 30
+
+# EMAIL VALIDATION MESSAGES.
+
+EMAIL_REGISTERED = 'This Email has been already registered'
+EMAIL_FORMAT = 'Enter a valid email address'
 
 # ACCOUNT VERIFICATION EMAIL INFO.
 EMAIL_CONFIRMATION_SUBJECT = 'Confirmação da Conta'

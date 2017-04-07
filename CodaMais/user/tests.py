@@ -12,21 +12,25 @@ from .forms import UserRegisterForm
 
 class UserTest(TestCase):
     email = "user@user.com"
+    wrong_email = "useruser.com"
     password = "userpassword"
-    first_name = "User"
+    first_name = "TestUser"
     username = "Username"
 
-    def setUp(self):
+    def test_user_get_short_name(self):
         User.objects.create_user(email=self.email,
                                  password=self.password,
                                  first_name=self.first_name,
                                  username=self.username)
 
-    def test_user_get_short_name(self):
         user = User.objects.get(email=self.email)
         self.assertEqual(self.email, user.get_short_name())
 
     def test_user_get_full_name(self):
+        User.objects.create_user(email=self.email,
+                                 password=self.password,
+                                 first_name=self.first_name,
+                                 username=self.username)
         user = User.objects.get(email=self.email)
         self.assertEqual(self.email, user.get_full_name())
 
@@ -123,7 +127,7 @@ class UserRegisterFormTest(TestCase):
         self.assertFalse(user_form.is_valid())
 
     def test_UserRegisterForm_username_max_size_invalid(self):
-        self.invalid_form['username'] = 'usernameInvalid'
+        self.invalid_form['username'] = '1234567890111'
         user_form = UserRegisterForm(self.invalid_form)
         self.assertFalse(user_form.is_valid())
 

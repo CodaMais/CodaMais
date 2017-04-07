@@ -1,0 +1,33 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.571429;
+    margin: 0;
+    color: #757575;
+}
+
+.form-control {
+    font-size: 14px;
+    line-height: 1.571429;
+    display: block;
+    width: 100%;
+    padding: .429rem .929rem;
+    color: #757575;
+    border: 1px solid #e0e0e0;
+    border-radius: .215rem;
+    background-color: #fff;
+    background-image: none;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+.jumbotron {
+    border-radius: 0;
+    background-image: url('https://static.pexels.com/photos/90807/pexels-photo-90807.jpeg');
+    background-size: cover;
+}
+
+.jumbotron {
+    color: #FFF;
+}

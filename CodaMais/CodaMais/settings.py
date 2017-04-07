@@ -135,7 +135,10 @@ REDACTOR_OPTIONS = {'lang': 'en',
                     'minHeight': theory_constants.MIN_REDACTOR_HEIGHT,
                     'buttonsHide': ['file', 'video'],
                     'imageResizable': True,
-                    'imagePosition': True}
+                    'imagePosition': True,
+                    'plugins': ['inlinestyle',
+                                'table',
+                                'source']}
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),

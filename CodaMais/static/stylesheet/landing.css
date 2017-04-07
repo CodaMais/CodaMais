@@ -24,10 +24,17 @@ body {
 
 .jumbotron {
     border-radius: 0;
-    background-image: url('https://static.pexels.com/photos/90807/pexels-photo-90807.jpeg');
+    background-image: url('http://i.imgur.com/1oPJe5O.jpg');
     background-size: cover;
 }
 
 .jumbotron {
     color: #FFF;
+}
+
+.icon {
+    font-size: 5rem;
+}
+.dropdown-toggle::after{
+  display: none;
 }

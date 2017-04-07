@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'exercise',
+    'redactor',
 ]
 
 MIDDLEWARE = [
@@ -120,8 +121,19 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# Media directory
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
+# Configurations for the wysiwyg editor: Redactor WYSIWYG editor
+# https://imperavi.com/redactor/
 
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'images')
+REDACTOR_OPTIONS = {'lang': 'en'}
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
+
+REDACTOR_UPLOAD = 'uploads/'
+
+REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.SimpleUploader'

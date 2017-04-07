@@ -10,12 +10,17 @@
 
   </header>
   <body>
-    <ol>
-      {{exercise.title}}<br>
-      {{exercise.score}}<br>
-      {{exercise.text}}<br>
-      {{exercise.get_category_display}}<br>
-    </ol>
+    <h1>
+        {{exercise.title}}
+      </h1>
+      <h3>
+        Category: {{exercise.get_category_display}}
+      </h3>
+      <h3>
+        Score: {{exercise.score}}
+      </h3>
+
+      {{exercise.statement_question|safe}}
       <table class="table" >
         <tr>
           <th>
@@ -34,11 +39,6 @@
           </td>
         </tr>
       </table>
-      {% if exercise.image.url != None %}
-        <img src='{{exercise.image.url}}' class='img-resp'/>
-      {% else %}
-        <!-- Nothing to do -->
-      {% endif %}
 
   </body>
 </html>

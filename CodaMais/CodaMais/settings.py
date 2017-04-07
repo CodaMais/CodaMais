@@ -138,7 +138,11 @@ REDACTOR_OPTIONS = {'lang': 'en',
                     'imagePosition': True,
                     'plugins': ['inlinestyle',
                                 'table',
-                                'source']}
+                                'source',
+                                'fontcolor',
+                                'fontfamily',
+                                'fontsize',
+                                'fullscreen']}
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),

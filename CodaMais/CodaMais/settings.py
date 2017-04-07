@@ -1,3 +1,9 @@
+# Standart Library.
+import os
+
+# Local Django.
+from theory import constants as theory_constants
+
 """
 Django settings for CodaMais project.
 
@@ -9,8 +15,6 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
-import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +32,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
+# Application definition.
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -72,7 +76,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CodaMais.wsgi.application'
 
 
-# Database
+# Database.
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
@@ -83,7 +87,7 @@ DATABASES = {
 }
 
 
-# Password validation
+# Password validation.
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -102,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# Internationalization.
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -116,16 +120,22 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files (CSS, Java, Images).
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
 
 
-# Configurations for the wysiwyg editor: Redactor WYSIWYG editor
-# https://imperavi.com/redactor/
+# Configurations for the django-wysiwyg-redactor: Redactor WYSIWYG editor.
+# https://imperavi.com/redactor/.
 
-REDACTOR_OPTIONS = {'lang': 'en'}
+REDACTOR_OPTIONS = {'lang': 'en',
+                    'focus': True,
+                    'placeholder': theory_constants.REDACTOR_PLACEHOLDER,
+                    'minHeight': theory_constants.MIN_REDACTOR_HEIGHT,
+                    'buttonsHide': ['file', 'video'],
+                    'imageResizable': True,
+                    'imagePosition': True}
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),

@@ -1,0 +1,9 @@
+Django==1.10.6
+django-ckeditor==5.2.1
+django-wysiwyg-redactor==0.5.1
+flake8==3.3.0
+mccabe==0.6.1
+olefile==0.44
+Pillow==4.0.0
+pycodestyle==2.3.1
+pyflakes==1.5.0

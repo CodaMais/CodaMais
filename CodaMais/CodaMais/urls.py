@@ -13,10 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
+# Django.
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.conf import settings
 from django.views.static import serve
+
+# Local Django.
 from theory.views import list_all_contents
 
 urlpatterns = [
@@ -26,7 +30,7 @@ urlpatterns = [
 ]
 
 # When using the Django's dev server, static files are served by default but
-# not media files, so you here we're force the server to consider them
+# not media files, so you here we're force the server to consider them.
 if settings.DEBUG:
     urlpatterns += [
         url(r'^media/(?P<path>.*)$', serve, {

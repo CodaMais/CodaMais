@@ -3,10 +3,6 @@
     <title>
       Exercícios
     </title>
-    <meta charset="utf-8">
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   </header>
   <body>
@@ -17,11 +13,10 @@
         Category: {{exercise.get_category_display}}
       </h3>
       <h3>
-        Score: {{exercise.score}}
+        Score: {{exercise.score}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/media/tmp/engrenagem.jpg" width="25px" height="25px"></img>
       </h3>
-
       {{exercise.statement_question|safe}}
-      <table class="table" >
+      <table border="2" >
         <tr>
           <th>
             Entrada

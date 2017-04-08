@@ -51,3 +51,20 @@ class UserRegisterForm(forms.ModelForm):
             raise forms.ValidationError(_(constants.PASSWORD_NOT_EQUAL))
 
         return super(UserRegisterForm, self).clean(*args, **kwargs)
+
+
+class UserLoginForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean(self, *args, **kwargs):
+        password = self.cleaned_data.get("password")
+
+        if len(password) < constants.PASSWORD_MIN_LENGTH:
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        elif len(password) > constants.PASSWORD_MAX_LENGTH:
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        else:
+            pass
+
+        return super(UserLoginForm, self).clean(*args, **kwargs)

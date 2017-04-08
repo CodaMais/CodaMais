@@ -1,3 +1,4 @@
 coverage==4.3.4
 Django==1.10.6
 requests==2.13.0
+ -e git://github.com/darklow/django-suit.git@v2#egg=django-suit

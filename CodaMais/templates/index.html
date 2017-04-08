@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Coda+</title>
+    {% csrf_token %} 
     {% load static %}
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
@@ -40,7 +41,7 @@
                     <button class="btn dropdown-toggle btn-outline-success" type="button" id="dropdownMenuButton" data-toggle="dropdown">Login</button>
                     <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="dropdown01" style="width: 300px;">
                         <!-- import login form -->
-                        <form>
+                        <form action="http://0.0.0.0:8000/" method="get">
                             <div class="form-group row">
                                 <div class="col-lg-12">
                                     <input type="email" class="form-control" id="inputEmail3" placeholder="Email">

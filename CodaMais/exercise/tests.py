@@ -66,6 +66,7 @@ class TestExerciseRegistration(TestCase):
 class TestRequestExercise(TestCase):
 
     exercise = Exercise()
+    REQUEST_SUCCEEDED = 200 # 200 is return with success response.
 
     def setUp(self):
         self.exercise.title = 'Basic Exercise'
@@ -77,18 +78,19 @@ class TestRequestExercise(TestCase):
         self.exercise.output_exercise = 'Output Basic Exercise.'
         self.factory = RequestFactory()
 
+
     def test_list_all_exercises(self):
         request = self.factory.get('/exercise')
         response = list_all_exercises(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
 
     def test_list_exercises_not_deprecated(self):
         request = self.factory.get('/exercise')
         response = list_exercises_not_deprecated(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
 
     def test_show_exercise(self):
         self.exercise.save()
         request = self.factory.get('/exercise/')
         response = show_exercise(request, self.exercise.id)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+
+<title>
+  Theories List
+</title>
+
+<body>
+    <center><h1> Theories List </h1></center><br><br>
+
+    <div class="container">
+      <div class="list-group">
+        {% for theory in theory_list %}
+          <center><a href="{% url 'show_theory' theory.id theory.title %}" class="list-group-item">{{theory.title}}</a><br><br></center>
+        {% endfor %}
+      </div>
+    </div>
+
+</body>
+
+</html>

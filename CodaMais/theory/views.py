@@ -2,8 +2,13 @@ from django.shortcuts import render
 from theory.models import Theory
 
 
-def list_all_contents(request):
-    content_list = Theory.objects.all().order_by('-id')
+def list_all_theories(request):
+    theory_list = Theory.objects.all().order_by('-id')
     return render(request,
-                  'contents_page.html',
-                  {'content_list': content_list})
+                  'theories_page.html',
+                  {'theory_list': theory_list})
+
+
+def show_theory(request, id, title):
+    theory = Theory.objects.get(id=id)
+    return render(request, 'theory_details.html', {'theory': theory})

@@ -21,12 +21,14 @@ from django.contrib import admin
 from django.views.static import serve
 
 # Local Django.
-from theory.views import list_all_contents
+from theory.views import list_all_theories, show_theory
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^redactor/', include('redactor.urls')),
-    url(r'^contents/$', list_all_contents),
+    url(r'^theories/$', list_all_theories),
+    url(r'^theory/(?P<id>\d+)/(?P<title>[\w|\W]+)/$', show_theory,
+        name='show_theory'),
 ]
 
 # When using the Django's dev server, static files are served by default but

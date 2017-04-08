@@ -148,10 +148,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-MEDIA_URL = '/media/'
-
-REDACTOR_UPLOAD = 'uploads/'
-
+REDACTOR_UPLOAD = 'redactor_uploads/'
 REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.SimpleUploader'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'

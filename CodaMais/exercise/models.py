@@ -1,6 +1,11 @@
+# Django.
 from django.db import models
 from django.core.urlresolvers import reverse
+
+# Third-Party.
 from redactor.fields import RedactorField
+
+# local Django.
 from exercise import constants
 
 

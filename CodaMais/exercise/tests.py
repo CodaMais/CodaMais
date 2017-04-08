@@ -1,5 +1,9 @@
+# Django.
 from django.test import TestCase
 from django.test.client import RequestFactory
+
+# local Django.
+from exercise import constants
 from exercise.models import  Exercise
 from exercise.views import *
 
@@ -82,15 +86,15 @@ class TestRequestExercise(TestCase):
     def test_list_all_exercises(self):
         request = self.factory.get('/exercise')
         response = list_all_exercises(request)
-        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
+        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
     def test_list_exercises_not_deprecated(self):
         request = self.factory.get('/exercise')
         response = list_exercises_not_deprecated(request)
-        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
+        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
     def test_show_exercise(self):
         self.exercise.save()
         request = self.factory.get('/exercise/')
         response = show_exercise(request, self.exercise.id)
-        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
+        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)

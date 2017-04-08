@@ -1,6 +1,10 @@
+
+# Django.
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
+
+# local Django.
 from exercise.models import Exercise
 from exercise import constants
 

@@ -38,3 +38,13 @@ body {
 .dropdown-toggle::after{
   display: none;
 }
+
+.hero {
+  padding-top: 40px;
+}
+.hero h1 {
+  font-size: 4rem;
+}
+.hero p {
+  font-size: 16px;
+}

@@ -118,3 +118,10 @@ def login_view(request):
         pass
     # TODO(João) Change this render to landpage
     return render(request, "login/login_form.html", {"form": form})
+
+
+# TODO(João) Change this return to landpage
+def logout_view(request):
+    logger.info("User Logout.")
+    auth.logout(request)
+    return render(request, "login/login_form.html", {})

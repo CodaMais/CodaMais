@@ -36,6 +36,15 @@ class LoginViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class LogoutViewTest(TestCase):
+    factory = RequestFactory()
+
+    def test_if_logout_page_is_showing(self):
+        request = self.factory.get('/register')
+        response = register_view(request)
+        self.assertEqual(response.status_code, 200)
+
+
 class UserTest(TestCase):
     email = "user@user.com"
     wrong_email = "useruser.com"

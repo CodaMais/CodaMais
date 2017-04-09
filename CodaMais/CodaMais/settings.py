@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'exercise',
+    'redactor',
 ]
 
 # Authentication backends
@@ -70,7 +72,7 @@ ROOT_URLCONF = 'CodaMais.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['user/templates', ],
+        'DIRS': ['user/templates', 'exercise/templates_exercise',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -169,3 +171,20 @@ LOGGING = {
         },
     },
 }
+
+# Configurations for the wysiwyg editor: Redactor WYSIWYG editor
+# https://imperavi.com/redactor/
+
+REDACTOR_OPTIONS = {'lang': 'en'}
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
+
+REDACTOR_UPLOAD = 'uploads/'
+
+REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.SimpleUploader'

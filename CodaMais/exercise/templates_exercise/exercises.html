@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Exercises</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Lista de Exercícios</h2>
+  <div class="list-group">
+    {% for exercise in list_exercises %}
+      <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
+    {% endfor %}
+  </div>
+</div>
+
+</body>
+</html>

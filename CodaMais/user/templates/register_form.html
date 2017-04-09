@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>User Register</title>
+</head>
+
+<body>
+  <h1>User Register</h1>
+
+  <form method="post" action=".">
+      {% csrf_token %}
+       {{ form.as_p }}
+
+      <input type="hidden" name="next" value="/" />
+      <input type="submit" value="Register" />
+  </form>
+
+</body>
+
+</html>

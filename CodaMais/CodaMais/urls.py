@@ -13,9 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
+# Django
 from django.conf.urls import url
+from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 
-urlpatterns = [
+# Local Django
+from user import views
+
+urlpatterns = i18n_patterns(
     url(r'^admin/', admin.site.urls),
-]
+    url(r'^register/', views.register_view, name='register_view'),
+    url(r'^confirm/(?P<activation_key>\w+)/', views.register_confirm,
+        name='confirm_account'),
+)

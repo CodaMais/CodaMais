@@ -12,6 +12,15 @@ from .forms import UserRegisterForm
 from user.views import register_view
 
 
+class LoginViewTest(TestCase):
+    factory = RequestFactory()
+
+    def test_if_login_page_is_showing(self):
+        request = self.factory.get('/login')
+        response = register_view(request)
+        self.assertEqual(response.status_code, 200)
+        
+        
 class RegisterViewTest(TestCase):
     user = User()
     email = "user@user.com"

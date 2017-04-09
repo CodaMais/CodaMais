@@ -48,11 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-# Authentication backends
-AUTHENTICATION_BACKENDS = [
-        'django.contrib.auth.backends.ModelBackend',
-]
-
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',

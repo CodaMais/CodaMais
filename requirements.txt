@@ -4,3 +4,4 @@ django-wysiwyg-redactor==0.5.1
 olefile==0.44
 Pillow==4.1.0
 requests==2.13.0
+ -e git://github.com/darklow/django-suit.git@v2#egg=django-suit

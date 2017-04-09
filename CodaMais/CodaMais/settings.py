@@ -33,7 +33,7 @@ SECRET_KEY = 't_z444##g_z!_)x!(f5rp!4noy=gevqit)25n4iv((vx(iofq9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'exercise',
     'redactor',
+    'landing',
 ]
 
 # Authentication backends
@@ -72,7 +73,7 @@ ROOT_URLCONF = 'CodaMais.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['user/templates', 'exercise/templates_exercise',],
+        'DIRS': ['templates', 'user/templates', 'exercise/templates_exercise'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -30,5 +30,4 @@ urlpatterns = i18n_patterns(
         name='confirm_account'),
     # TODO(João) Change this url to landpage, and delete this url
     url(r'^login/', views.login_view, name='login_view'),
-    url(r'^logout/', views.logout_view, name='logout_view'),
 )

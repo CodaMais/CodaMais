@@ -19,6 +19,21 @@ class LoginViewTest(TestCase):
         request = self.factory.get('/login')
         response = register_view(request)
         self.assertEqual(response.status_code, 200)
+        
+        
+class RegisterViewTest(TestCase):
+    user = User()
+    email = "user@user.com"
+    wrong_email = "useruser.com"
+    password = "userpassword"
+    first_name = "TestUser"
+    username = "Username"
+    factory = RequestFactory()
+
+    def test_if_register_page_is_showing(self):
+        request = self.factory.get('/register')
+        response = register_view(request)
+        self.assertEqual(response.status_code, 200)
 
 
 class UserTest(TestCase):

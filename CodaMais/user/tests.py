@@ -3,6 +3,7 @@ import datetime
 
 # Django
 from django.test import TestCase
+from django.test.client import RequestFactory
 
 # local Django
 from .models import User
@@ -16,6 +17,30 @@ class LogoutViewTest(TestCase):
     factory = RequestFactory()
 
     def test_if_logout_page_is_showing(self):
+      request = self.factory.get('/register')
+      response = register_view(request)
+      self.assertEqual(response.status_code, 200)
+
+
+class LoginViewTest(TestCase):
+    factory = RequestFactory()
+
+    def test_if_login_page_is_showing(self):
+        request = self.factory.get('/login')
+        response = register_view(request)
+        self.assertEqual(response.status_code, 200)
+        
+        
+class RegisterViewTest(TestCase):
+    user = User()
+    email = "user@user.com"
+    wrong_email = "useruser.com"
+    password = "userpassword"
+    first_name = "TestUser"
+    username = "Username"
+    factory = RequestFactory()
+
+    def test_if_register_page_is_showing(self):
         request = self.factory.get('/register')
         response = register_view(request)
         self.assertEqual(response.status_code, 200)

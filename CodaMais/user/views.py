@@ -10,9 +10,10 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponse
+from django.contrib import auth
 
 # local Django
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, UserLoginForm
 from .models import User
 from .models import UserProfile
 from . import constants
@@ -78,7 +79,7 @@ def register_confirm(request, activation_key):
     # of expired registration.
 
     if user_profile.key_expires < timezone.now():
-        return render_to_response('user_profile/confirm_expired.html')
+        return HttpResponse("Time to confirm account expirated")
     else:
         # Nothing to do.
         pass
@@ -91,3 +92,29 @@ def register_confirm(request, activation_key):
     user.save()
 
     return render_to_response('confirmed_account.html')
+
+
+def login_view(request):
+    form = UserLoginForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            email = request.POST['email']
+            password = request.POST['password']
+            user = auth.authenticate(email=email, password=password)
+
+            if user is not None:
+                if user.is_active:
+                    auth.login(request, user)
+                    # TODO(João) Change this return to user page html
+                    return render_to_response('login/login_success.html')
+                else:
+                    pass
+            else:
+                pass
+        else:
+            pass
+    else:
+        pass
+    # TODO(João) Change this render to landpage
+    return render(request, "login/login_form.html", {"form": form})

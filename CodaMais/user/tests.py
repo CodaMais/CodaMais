@@ -10,6 +10,16 @@ from .models import User
 from .models import UserProfile
 from .forms import UserRegisterForm
 from user.views import register_view
+from django.test.client import RequestFactory
+
+
+class LogoutViewTest(TestCase):
+    factory = RequestFactory()
+
+    def test_if_logout_page_is_showing(self):
+      request = self.factory.get('/register')
+      response = register_view(request)
+      self.assertEqual(response.status_code, 200)
 
 
 class LoginViewTest(TestCase):

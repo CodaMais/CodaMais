@@ -1,0 +1,39 @@
+<html>
+  <header>
+    <title>
+      Exercícios
+    </title>
+
+  </header>
+  <body>
+    <h1>
+        {{exercise.title}}
+      </h1>
+      <h3>
+        Category: {{exercise.get_category_display}}
+      </h3>
+      <h3>
+        Score: {{exercise.score}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="/media/tmp/engrenagem.jpg" width="25px" height="25px"></img>
+      </h3>
+      {{exercise.statement_question|safe}}
+      <table border="2" >
+        <tr>
+          <th>
+            Entrada
+          </th>
+          <th>
+            Saída
+          </th>
+        </tr>
+        <tr>
+          <td>
+            {{exercise.input_exercise}}
+          </td>
+          <td>
+            {{exercise.output_exercise}}
+          </td>
+        </tr>
+      </table>
+
+  </body>
+</html>

@@ -33,7 +33,7 @@ SECRET_KEY = 't_z444##g_z!_)x!(f5rp!4noy=gevqit)25n4iv((vx(iofq9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
 
 # Application definition
@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'exercise',
+    'redactor',
+    'landing',
 ]
 
 # Authentication backends
@@ -70,7 +73,7 @@ ROOT_URLCONF = 'CodaMais.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['user/templates', ],
+        'DIRS': ['templates', 'user/templates', 'exercise/templates_exercise'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -169,3 +172,20 @@ LOGGING = {
         },
     },
 }
+
+# Configurations for the wysiwyg editor: Redactor WYSIWYG editor
+# https://imperavi.com/redactor/
+
+REDACTOR_OPTIONS = {'lang': 'en'}
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static/'),
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+MEDIA_URL = '/media/'
+
+REDACTOR_UPLOAD = 'uploads/'
+
+REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.SimpleUploader'

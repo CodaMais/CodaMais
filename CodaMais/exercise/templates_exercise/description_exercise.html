@@ -34,7 +34,7 @@
           </td>
         </tr>
       </table>
-
+      {{ api_response }}
       <form method="post" action=".">
           {% csrf_token %}
            {{ form.as_p }}

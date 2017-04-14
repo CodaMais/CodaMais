@@ -42,3 +42,20 @@ class UserExercise(models.Model):
         Exercise,
         on_delete=models.CASCADE,
     )
+    time = models.CharField(max_length=constants.MAX_LENGTH_TIME)
+
+    def update_or_creates(self, source_code, exercise, user, time):
+        if self:
+            # update the current exercise of the user
+            self.code = source_code
+            self.status = 0
+            self.number_submission += 1
+        else:
+            # create the current exercise for the user
+            self = UserExercise()
+            self.user = user
+            self.exercise = exercise
+
+        self.time = time
+        self.code = source_code
+        self.save()

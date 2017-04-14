@@ -5,7 +5,8 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 
 # local Django.
-from exercise.models import Exercise
+from exercise.models import *
+from user.models import UserProfile
 from exercise import constants
 from exercise.forms import SubmitExerciseForm
 
@@ -29,18 +30,31 @@ def list_exercises_not_deprecated(request):
 def show_exercise(request, id):
     exercise = Exercise.objects.get(id=id, deprecated=0)
     form = SubmitExerciseForm(request.POST or None)
-    api_response = ''
+    # TODO: mostrar o codigo do usuário no formulário. Se existir.
+
+    # get current logged user
+    user = request.user
+    # get the current exercise of the user
+    user_exercise = UserExercise.objects.get(user = user, exercise = exercise)
+
     if form.is_valid():
-        api_response = submit_exercise(exercise, form.cleaned_data.get('code'))
-        # form.save()
+        # source code sent by the user
+        source_code = form.cleaned_data.get('code')
+
+        # receives the JSON response from API
+        api_result = submit_exercise(exercise, source_code)
+
+        # TODO: change variable time
+        user_exercise.update_or_creates(source_code, exercise, user, "0.0")
+
     else:
         # Nothing to do.
         pass
 
     return render(request, 'description_exercise.html', {
         'exercise':exercise,
-        'form':form,
-        'api_response': api_response
+        # 'user_exercise': user_exercise,
+        'form':form
     })
 
 def submit_exercise(excercise, source_code):
@@ -58,5 +72,5 @@ def submit_exercise(excercise, source_code):
         "accept": "application/json",
         "content-type": "application/x-www-form-urlencoded"
     })
-    response = conn.getresponse()
-    return response.read()
+    result = conn.getresponse().read()
+    return result

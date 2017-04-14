@@ -44,18 +44,20 @@ class UserExercise(models.Model):
     )
     time = models.CharField(max_length=constants.MAX_LENGTH_TIME)
 
-    def update_or_creates(self, source_code, exercise, user, time):
+    def update_or_creates(self, source_code, exercise, user, time, status):
         if self:
             # update the current exercise of the user
-            self.code = source_code
-            self.status = 0
             self.number_submission += 1
         else:
             # create the current exercise for the user
             self = UserExercise()
-            self.user = user
-            self.exercise = exercise
 
+        self.user = user
+        self.exercise = exercise
+        self.status = status
         self.time = time
         self.code = source_code
         self.save()
+
+    def __str__(self):
+        return self.user.email + "-" + str(self.exercise.id)

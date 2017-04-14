@@ -7,6 +7,7 @@ from redactor.fields import RedactorField
 
 # local Django.
 from exercise import constants
+from user.models import User
 
 
 class Exercise(models.Model):
@@ -24,3 +25,20 @@ class Exercise(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class UserExercise(models.Model):
+    class Meta:
+        unique_together = (('user', 'exercise'),)
+
+    number_submission = models.PositiveIntegerField(default = 1)
+    code = models.TextField()
+    status = models.BooleanField(default = False)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    exercise = models.ForeignKey(
+        Exercise,
+        on_delete=models.CASCADE,
+    )

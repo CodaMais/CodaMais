@@ -7,6 +7,7 @@ from django.http import HttpResponse
 # local Django.
 from exercise.models import Exercise
 from exercise import constants
+from exercise.forms import SubmitExerciseForm
 
 
 def list_all_exercises(request):
@@ -21,4 +22,13 @@ def list_exercises_not_deprecated(request):
 
 def show_exercise(request, id):
     exercise = Exercise.objects.get(id=id, deprecated=0)
-    return render(request, 'description_exercise.html', {'exercise':exercise})
+    form = SubmitExerciseForm(request.POST or None)
+
+    if form.is_valid():
+
+        form.save()
+    else:
+        # Nothing to do.
+        pass
+
+    return render(request, 'description_exercise.html', {'exercise':exercise, 'form':form})

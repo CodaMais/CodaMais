@@ -14,14 +14,12 @@ class Exercise(models.Model):
     title = models.CharField(max_length=constants.MAX_LENGTH_TITLE)
     category = models.PositiveIntegerField(choices=constants.CATEGORY_CHOICES)
     statement_question  = RedactorField(verbose_name=u'Text',
-                                        allow_file_upload=False,    # Represents the text and, if any, images referring.
+                                        allow_file_upload=False,    # Represents the text and, if any, images referring
                                         allow_image_upload=True,    # to the statement of the exercise.
                                         redactor_options={'lang': 'en', 'focus': True},
                                         upload_to='tmp/')
     score = models.PositiveIntegerField()
     deprecated = models.PositiveIntegerField(choices=constants.DEPRECATED_CHOICES)
-    input_exercise = models.CharField(max_length=constants.MAX_LENGTH_INPUT)
-    output_exercise = models.CharField(max_length=constants.MAX_LENGTH_OUTPUT)
 
     def __str__(self):
         return self.title
@@ -42,14 +40,15 @@ class UserExercise(models.Model):
         Exercise,
         on_delete=models.CASCADE,
     )
+    # the unit of measurement of time is seconds
     time = models.CharField(max_length=constants.MAX_LENGTH_TIME)
 
     def update_or_creates(self, source_code, exercise, user, time, status):
         if self:
-            # update the current exercise of the user
+            # Update the current exercise of the user.
             self.number_submission += 1
         else:
-            # create the current exercise for the user
+            # Create the current exercise for the user.
             self = UserExercise()
 
         self.user = user
@@ -61,3 +60,16 @@ class UserExercise(models.Model):
 
     def __str__(self):
         return self.user.email + "-" + str(self.exercise.id)
+
+
+class TestCase(models.Model):
+    input_exercise = models.TextField(max_length=constants.MAX_LENGTH_INPUT)
+    output_exercise = models.TextField(max_length=constants.MAX_LENGTH_OUTPUT)
+    exercise = models.ForeignKey(
+        Exercise,
+        on_delete=models.CASCADE,
+        related_name="test_cases",
+    )
+
+    def __str__(self):
+        return self.input_exercise + "-" + self.output_exercise

@@ -70,11 +70,11 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
 
-class RecoverPassword(forms.Form):
+class RecoverPasswordForm(forms.Form):
     email = forms.EmailField()
 
 
-class ConfirmPassword(forms.Form):
+class ConfirmPasswordForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput,
                                label=_(constants.PASSWORD))
 
@@ -95,4 +95,4 @@ class ConfirmPassword(forms.Form):
         else:
             pass
 
-        return super(ConfirmPassword, self).clean(*args, **kwargs)
+        return super(ConfirmPasswordForm, self).clean(*args, **kwargs)

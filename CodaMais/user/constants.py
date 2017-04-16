@@ -45,5 +45,10 @@ EMAIL_CONFIRMATION_BODY = """
                           Para ativar sua conta clique nesse link em menos de
                           48 horas: http://127.0.0.1:8000/confirm/%s
                           """
-
+PASSWORD_RECOVER_SUBJECT = 'Recuperar senha'
+PASSWORD_RECOVER_BODY = """
+                         Usuario: %s
+                         Para recuperar sua senha clique nesse link em menos de
+                         48 horas: http://127.0.0.1:8000/recover/%s
+                          """
 CODAMAIS_EMAIL = 'codamaisapp@gmail.com'

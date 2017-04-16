@@ -14,8 +14,10 @@ from django.contrib import auth
 
 # local Django
 from .forms import UserRegisterForm, UserLoginForm
+from .forms import RecoverPasswordForm, ConfirmPasswordForm
 from .models import User
 from .models import UserProfile
+from .models import RecoverPasswordProfile
 from . import constants
 
 logging.basicConfig(level=logging.INFO)
@@ -125,3 +127,51 @@ def logout_view(request):
     logger.info("User Logout.")
     auth.logout(request)
     return render(request, "login/login_form.html", {})
+
+
+def recover_password(request):
+    form = RecoverPasswordForm(request.POST or None)
+    logger.info("Rendering Register Page.")
+    if form.is_valid():
+
+        email = form.cleaned_data.get('email')
+        user = User.objects.get(email=email)
+        salt = hashlib.sha1(str(random.random()).
+                            encode('utf-8')).hexdigest()[:5]
+        activation_key = hashlib.sha1(str(salt+email).
+                                      encode('utf‌​-8')).hexdigest()
+
+        new_profile = RecoverPasswordProfile(user=user,
+                                             activation_key=activation_key)
+        new_profile.save()
+        # Send account confirmation email.
+        email_subject = (constants.PASSWORD_RECOVER_SUBJECT)
+        email_body = constants.PASSWORD_RECOVER_BODY % (user.username,
+                                                        activation_key)
+
+        send_mail(email_subject, email_body, constants.CODAMAIS_EMAIL, [email],
+                  fail_silently=False)
+    else:
+        pass
+
+    return render(request, 'recover_password.html', {"form": form})
+
+
+def recover_password_confirm(request, activation_key):
+
+    form = ConfirmPasswordForm(request.POST or None)
+    user_profile = get_object_or_404(RecoverPasswordProfile,
+                                     activation_key=activation_key)
+    user = user_profile.user
+
+    if request.method == "POST":
+        if form.is_valid():
+            user.set_password(form.cleaned_data.get('password'))
+            user.save()
+            user_profile.delete()
+        else:
+            pass
+    else:
+        pass
+
+    return render(request, "confirmpassword.html", {"form": form})

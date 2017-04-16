@@ -18,6 +18,7 @@ FIRST_NAME_SIZE = 'Your name exceeds 30 characteres'
 FIRST_NAME_CHARACTERS = 'Your name can\'t have special characters'
 
 # PASSWORDS FIELDS.
+PASSWORD_CONFIRMATION = 'Password Confirmation'
 PASSWORD = 'Password'
 PASSWORD_FIELD_LENGTH = 30
 PASSWORD_MIN_LENGTH = 8

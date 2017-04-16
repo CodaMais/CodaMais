@@ -42,7 +42,8 @@ urlpatterns = i18n_patterns(
     url(r'^logout/', views.logout_view, name='logout_view'),
     # Exercise.
     url(r'^exercise/(?P<id>\d+)/$', show_exercise, name='show_exercise'),
-    url(r'^exercise/$', list_exercises_not_deprecated, name='list_exercises_not_deprecated'),
+    url(r'^exercise/$', list_exercises_not_deprecated,
+        name='list_exercises_not_deprecated'),
     url(r'^redactor/', include('redactor.urls')),
 )
 
@@ -53,4 +54,4 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT
         }),
-]
+        ]

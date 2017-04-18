@@ -125,3 +125,8 @@ def logout_view(request):
     logger.info("User Logout.")
     auth.logout(request)
     return render(request, "login/login_form.html", {})
+
+
+def profile(request, username):
+    user = User.objects.get(username=username)
+    return render(request, 'profile.html', {'user': user})

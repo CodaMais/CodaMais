@@ -3,7 +3,7 @@ USERNAME = 'Username'
 USERNAME_FIELD_LENGTH = 12
 USERNAME_MIN_LENGTH = 6
 USERNAME_MAX_LENGHT = 12
-USER_IMAGE = 'CodaMais/user/media/user_default.png'
+USER_IMAGE = 'user_default.png'
 
 # USERNAME VALIDATION MESSAGES.
 USERNAME_REGISTERED = 'Nickname already registered'

@@ -33,7 +33,7 @@ SECRET_KEY = 't_z444##g_z!_)x!(f5rp!4noy=gevqit)25n4iv((vx(iofq9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'exercise',
     'redactor',
     'landing',
+    'forum',
 ]
 
 # Authentication backends

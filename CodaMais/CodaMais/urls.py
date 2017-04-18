@@ -44,6 +44,8 @@ urlpatterns = i18n_patterns(
     url(r'^exercise/(?P<id>\d+)/$', show_exercise, name='show_exercise'),
     url(r'^exercise/$', list_exercises_not_deprecated, name='list_exercises_not_deprecated'),
     url(r'^redactor/', include('redactor.urls')),
+    # Forum
+    # url(r'^topic/$', list_topic, name='list_topic'),
 )
 
 # When using the Django's dev server, static files are served by default but
@@ -53,4 +55,4 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT
         }),
-]
+        ]

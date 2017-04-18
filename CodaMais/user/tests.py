@@ -10,6 +10,28 @@ from .models import User
 from .models import UserProfile
 from .forms import UserRegisterForm
 from user.views import register_view
+from user.views import profile_view
+from user.views import logout_view
+from user.views import login_view
+
+
+class ProfileViewTest(TestCase):
+    email = "user@user.com"
+    password = "userpassword"
+    first_name = "Username"
+    username = "Username"
+    factory = RequestFactory()
+
+    def setUp(self):
+        User.objects.create_user(email=self.email,
+                                 password=self.password,
+                                 first_name=self.first_name,
+                                 username=self.username)
+
+    def test_if_profile_page_is_showing(self):
+        request = self.factory.get('/' + self.username)
+        response = profile_view(request, username=self.username)
+        self.assertEqual(response.status_code, 200)
 
 
 class RegisterViewTest(TestCase):
@@ -32,16 +54,7 @@ class LoginViewTest(TestCase):
 
     def test_if_login_page_is_showing(self):
         request = self.factory.get('/login')
-        response = register_view(request)
-        self.assertEqual(response.status_code, 200)
-
-
-class LogoutViewTest(TestCase):
-    factory = RequestFactory()
-
-    def test_if_logout_page_is_showing(self):
-        request = self.factory.get('/register')
-        response = register_view(request)
+        response = login_view(request)
         self.assertEqual(response.status_code, 200)
 
 

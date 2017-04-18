@@ -127,6 +127,6 @@ def logout_view(request):
     return render(request, "login/login_form.html", {})
 
 
-def profile(request, username):
+def profile_view(request, username):
     user = User.objects.get(username=username)
     return render(request, 'profile.html', {'user': user})

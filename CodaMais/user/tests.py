@@ -8,7 +8,11 @@ from django.test.client import RequestFactory
 # local Django
 from .models import User
 from .models import UserProfile
+from .models import RecoverPasswordProfile
+from .forms import ConfirmPasswordForm
+from .forms import RecoverPasswordForm
 from .forms import UserRegisterForm
+from .forms import UserLoginForm
 from user.views import register_view
 
 
@@ -194,3 +198,111 @@ class UserRegisterFormTest(TestCase):
         self.invalid_form['password_confirmation'] = 'userpasswordd'
         user_form = UserRegisterForm(self.invalid_form)
         self.assertFalse(user_form.is_valid())
+
+
+class RecoverPasswordProfileTest(TestCase):
+    email = "user@user.com"
+    password = "userpassword"
+    first_name = "User"
+    username = "Username"
+    user = User()
+    # key_expires = datetime.datetime.today() + datetime.timedelta(2)
+    activation_key = "5c262e9f57ce25652eaefb4ca697191f395f39eb"
+    new_profile = RecoverPasswordProfile()
+
+    def setUp(self):
+        self.user = User.objects.create_user(email=self.email,
+                                             password=self.password,
+                                             first_name=self.first_name,
+                                             username=self.username)
+
+        self.new_profile = RecoverPasswordProfile(user=self.user,
+                                                  activation_key=self.activation_key)
+
+    def test_if_profile_is_not_null(self):
+        self.assertIsNotNone(self.new_profile)
+
+    def test_str(self):
+        self.assertEqual(self.new_profile.__str__(), self.username)
+
+
+class RecoverPasswordFormTest(TestCase):
+    email = "user@user.com"
+    valid_form = {}
+    invalid_form = {}
+
+    def setUp(self):
+        self.valid_form = {'email': self.email}
+
+        self.invalid_form = {'email': ''}
+
+    def test_UserRegisterForm_valid(self):
+        recover_password_form = RecoverPasswordForm(self.valid_form)
+        self.assertTrue(recover_password_form.is_valid())
+
+    def test_UserRegisterForm_email_invalid(self):
+        recover_password_form = RecoverPasswordForm(self.invalid_form)
+        self.assertFalse(recover_password_form.is_valid())
+
+
+class ConfirmPasswordFormTest(TestCase):
+    password = "userpassword"
+    password_confirmation = "userpassword"
+    valid_form = {}
+    invalid_form = {}
+
+    def setUp(self):
+        self.valid_form = {'password': self.password,
+                           'password_confirmation': self.password_confirmation}
+
+        self.invalid_form = {'password': self.password,
+                             'password_confirmation': self.password_confirmation}
+
+    def test_ConfirmPasswordForm_password_min_size_invalid(self):
+        self.invalid_form['password'] = 'pas'
+        confirm_password_form = ConfirmPasswordForm(self.invalid_form)
+        self.assertFalse(confirm_password_form.is_valid())
+
+    def test_ConfirmPasswordForm_password_max_size_invalid(self):
+        self.invalid_form['password'] = 'passwordInvalid'
+        confirm_password_form = ConfirmPasswordForm(self.invalid_form)
+        self.assertFalse(confirm_password_form.is_valid())
+
+    def test_ConfirmPasswordForm_confirm_password_invalid(self):
+        self.invalid_form['password_confirmation'] = 'userpasswo'
+        confirm_password_form = ConfirmPasswordForm(self.invalid_form)
+        self.assertFalse(confirm_password_form.is_valid())
+
+    def test_ConfirmPasswordForm_confirm_password_valid(self):
+        self.invalid_form['password_confirmation'] = 'userpassword'
+        confirm_password_form = ConfirmPasswordForm(self.invalid_form)
+        self.assertTrue(confirm_password_form.is_valid())
+
+
+class UserLoginFormTest(TestCase):
+    password = "userpassword"
+    password_confirmation = "userpassword"
+    valid_form = {}
+    invalid_form = {}
+
+    def setUp(self):
+        self.valid_form = {'password': self.password,
+                           'password_confirmation': self.password_confirmation}
+
+        self.invalid_form = {'password': self.password,
+                             'password_confirmation': self.password_confirmation}
+
+    def test_UserLoginForm_password_min_size_invalid(self):
+        self.invalid_form['password'] = 'pas'
+        user_login_form = UserLoginForm(self.invalid_form)
+        self.assertFalse(user_login_form.is_valid())
+
+    def test_UserLoginForm_password_max_size_invalid(self):
+        self.invalid_form['password'] = 'passwordInvalid'
+        user_login_form = UserLoginForm(self.invalid_form)
+        self.assertFalse(user_login_form.is_valid())
+
+    def test_UserLoginForm_confirm_password_invalid(self):
+        self.invalid_form['password_confirmation'] = 'userpasswordd'
+        user_login_form = UserLoginForm(self.invalid_form)
+        self.assertFalse(user_login_form.is_valid())

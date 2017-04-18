@@ -81,7 +81,8 @@ def register_confirm(request, activation_key):
     # of expired registration.
 
     if user_profile.key_expires < timezone.now():
-        return HttpResponse("Time to confirm account expirated")
+        user_profile.delete()
+        return HttpResponse("Tempo para confirmar conta expirou.Crie novamente")
     else:
         # Nothing to do.
         pass
@@ -131,7 +132,7 @@ def logout_view(request):
 
 def recover_password(request):
     form = RecoverPasswordForm(request.POST or None)
-    logger.info("Rendering Register Page.")
+    logger.info("Rendering Recover Password Page.")
     if form.is_valid():
 
         email = form.cleaned_data.get('email')
@@ -140,9 +141,11 @@ def recover_password(request):
                             encode('utf-8')).hexdigest()[:5]
         activation_key = hashlib.sha1(str(salt+email).
                                       encode('utf‌​-8')).hexdigest()
+        key_expires = datetime.datetime.today() + datetime.timedelta(2)
 
         new_profile = RecoverPasswordProfile(user=user,
-                                             activation_key=activation_key)
+                                             activation_key=activation_key,
+                                             key_expires=key_expires)
         new_profile.save()
         # Send account confirmation email.
         email_subject = (constants.PASSWORD_RECOVER_SUBJECT)
@@ -162,7 +165,15 @@ def recover_password_confirm(request, activation_key):
     form = ConfirmPasswordForm(request.POST or None)
     user_profile = get_object_or_404(RecoverPasswordProfile,
                                      activation_key=activation_key)
+
     user = user_profile.user
+
+    if user_profile.key_expires < timezone.now():
+        user_profile.delete()
+        return HttpResponse("Tempo para mudar a senha expirou!Peça novamente")
+    else:
+        # Nothing to do.
+        pass
 
     if request.method == "POST":
         if form.is_valid():

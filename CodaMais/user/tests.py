@@ -206,7 +206,7 @@ class RecoverPasswordProfileTest(TestCase):
     first_name = "User"
     username = "Username"
     user = User()
-    # key_expires = datetime.datetime.today() + datetime.timedelta(2)
+    key_expires = datetime.datetime.today() + datetime.timedelta(2)
     activation_key = "5c262e9f57ce25652eaefb4ca697191f395f39eb"
     new_profile = RecoverPasswordProfile()
 
@@ -217,7 +217,8 @@ class RecoverPasswordProfileTest(TestCase):
                                              username=self.username)
 
         self.new_profile = RecoverPasswordProfile(user=self.user,
-                                                  activation_key=self.activation_key)
+                                                  activation_key=self.activation_key,
+                                                  key_expires=self.key_expires)
 
     def test_if_profile_is_not_null(self):
         self.assertIsNotNone(self.new_profile)

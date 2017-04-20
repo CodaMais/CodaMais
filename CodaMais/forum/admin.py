@@ -7,4 +7,4 @@ class ForumAdmin(admin.ModelAdmin):
                     'dateTopic']
 
 
-admin.site.register(Topic,ForumAdmin)
+admin.site.register(Topic, ForumAdmin)

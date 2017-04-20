@@ -4,9 +4,6 @@ from django.db import models
 # Third-Party.
 from redactor.fields import RedactorField
 
-# Import datetime class.
-from datetime import date
-
 # local Django.
 from forum import constants
 

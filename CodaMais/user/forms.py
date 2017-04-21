@@ -68,3 +68,27 @@ class UserLoginForm(forms.Form):
             pass
 
         return super(UserLoginForm, self).clean(*args, **kwargs)
+
+
+class UserEditForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput,
+                               label=_('Password'))
+
+    class Meta:
+        model = User
+        fields = [
+            'first_name'
+            'user_image'
+        ]
+
+    def clean(self, *args, **kwargs):
+        password = self.cleaned_data.get("password")
+
+        if len(password) < constants.PASSWORD_MIN_LENGTH:
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        elif len(password) > constants.PASSWORD_MAX_LENGTH:
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        else:
+            pass
+
+        return super(UserRegisterForm, self).clean(*args, **kwargs)

@@ -8,6 +8,9 @@
 
   </header>
   <body>
+    {% if user.is_authenticated %}
+    <a href="{% url 'edit' user.username %}"> Edit </a>
+    {% endif %}
     <h1>
         Nickname: {{user.username}}
         <br>

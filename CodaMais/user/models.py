@@ -14,8 +14,7 @@ from .managers import UserManager
 
 
 class Email(EmailField):
-    validator = validators.EmailValidator(
-                    message=constants.EMAIL_FORMAT)
+    validator = validators.EmailValidator(message=constants.EMAIL_FORMAT)
 
     default_validators = [validator]
 

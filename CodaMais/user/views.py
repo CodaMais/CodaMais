@@ -130,3 +130,9 @@ def logout_view(request):
 def profile_view(request, username):
     user = User.objects.get(username=username)
     return render(request, 'profile.html', {'user': user})
+
+
+def edit_profile_view(request, username):
+    logger.info("Entering edit profile page.")
+    user = User.objects.get(username=username)
+    return render(request, 'edit_profile_form.html', {'user': user})

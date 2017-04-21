@@ -14,7 +14,7 @@
   <h2>Tópicos Criados</h2>
   <div class="list-group">
     {% for topic in list_topics %}
-      <a href="#" class="list-group-item">{{topic.title}}  -  {{topic.dateTopic.date}} </a>
+      <a href="{% url 'show_topic' topic.id %}"  class="list-group-item">{{topic.title}}  -  {{topic.dateTopic.date}} </a>
     {% endfor %}
   </div>
 </div>

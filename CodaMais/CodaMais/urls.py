@@ -48,6 +48,7 @@ urlpatterns = i18n_patterns(
     # Forum
     url(r'^topics/$', list_all_topics, name='list_all_topics'),
     url(r'^topics/(?P<id>\d+)/$', show_topic, name='show_topic'),
+    url(r'^newtopic/$', create_topic, name='create_topic'),
 )
 
 # When using the Django's dev server, static files are served by default but

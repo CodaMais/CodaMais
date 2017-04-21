@@ -20,12 +20,13 @@ FIRST_NAME_CHARACTERS = 'Your name can\'t have special characters'
 # PASSWORDS FIELDS.
 PASSWORD_CONFIRMATION = 'Password Confirmation'
 PASSWORD = 'Password'
+PASSWORD_RECOVER = 'Recover Password'
+PASSWORD_CHANGE = 'Change password'
 PASSWORD_FIELD_LENGTH = 30
 PASSWORD_MIN_LENGTH = 8
 PASSWORD_MAX_LENGTH = 12
 
 # PASSWORD VALIDATION MESSAGES.
-
 PASSWORD_SIZE = 'Password must be between 8 and 12 characters'
 PASSWORD_NOT_EQUAL = 'Passwords do not match.'
 
@@ -37,6 +38,7 @@ EMAIL_FIELD_LENGTH = 30
 
 EMAIL_REGISTERED = 'This Email has been already registered'
 EMAIL_FORMAT = 'Enter a valid email address'
+EMAIL_NOT_REGISTERED = 'This email has not been already registered'
 
 # ACCOUNT VERIFICATION EMAIL INFO.
 EMAIL_CONFIRMATION_SUBJECT = 'Confirmação da Conta'

@@ -71,16 +71,26 @@ class UserLoginForm(forms.Form):
 
 
 class RecoverPasswordForm(forms.Form):
-    email = forms.EmailField()
+    email = forms.EmailField(label=constants.EMAIL)
+
+    def clean(self, *args, **kwargs):
+        email = self.cleaned_data.get('email')
+        email_from_database = User.objects.filter(email=email)
+
+        if email_from_database.exists():
+            pass
+        else:
+            raise forms.ValidationError(_(constants.EMAIL_NOT_REGISTERED))
+
+        return super(RecoverPasswordForm, self).clean(*args, **kwargs)
 
 
 class ConfirmPasswordForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput,
-                               label=_(constants.PASSWORD))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': _(constants.PASSWORD)}),
+                               label='')
 
-    password_confirmation = forms.CharField(widget=forms.PasswordInput,
-                                            label=_
-                                            (constants.PASSWORD_CONFIRMATION))
+    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':
+                                                                       _(constants.PASSWORD_CONFIRMATION)}), label='')
 
     def clean(self, *args, **kwargs):
         password = self.cleaned_data.get('password')

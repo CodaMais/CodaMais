@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Coda+</title>
-    {% csrf_token %} 
+    {% csrf_token %}
     {% load static %}
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
@@ -58,21 +58,10 @@
                                 </div>
                             </div>
                         </form>
+                        <a href="{% url 'recover_password' %}" class='btn btn-lg'>Esqueceu sua Senha?</a>
                         <!-- import login form -->
                     </div>
                 </div>
-
-                <div class="dropdown">
-                    <ul class="navbar-nav">
-                        <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">username</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Perfil</a>
-                            <a class="dropdown-item" href="#">Configurações</a>
-                            <a class="dropdown-item" href="#">Sair</a>
-                        </div>
-                    </ul>
-                </div>
-
             </div>
         </nav>
     </div>

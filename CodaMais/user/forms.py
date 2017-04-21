@@ -70,15 +70,15 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
 
-class UserEditForm(forms.Form):
+class UserEditForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput,
                                label=_('Password'))
 
     class Meta:
         model = User
         fields = [
-            'first_name'
-            'user_image'
+            'first_name',
+            'user_image',
         ]
 
     def clean(self, *args, **kwargs):
@@ -91,4 +91,4 @@ class UserEditForm(forms.Form):
         else:
             pass
 
-        return super(UserRegisterForm, self).clean(*args, **kwargs)
+        return super(UserEditForm, self).clean(*args, **kwargs)

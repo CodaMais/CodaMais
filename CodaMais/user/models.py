@@ -70,7 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # User Profile Image
     user_image = models.ImageField(default=constants.USER_IMAGE,
-                                   editable=False)
+                                   editable=True)
 
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

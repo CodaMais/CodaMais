@@ -13,7 +13,9 @@ from django.http import HttpResponse
 from django.contrib import auth
 
 # local Django
-from .forms import UserRegisterForm, UserLoginForm
+from .forms import (
+                    UserRegisterForm, UserLoginForm, UserEditForm,
+                    )
 from .models import User
 from .models import UserProfile
 from . import constants
@@ -134,5 +136,6 @@ def profile_view(request, username):
 
 def edit_profile_view(request, username):
     logger.info("Entering edit profile page.")
+    form = UserEditForm(request.POST or None)
     user = User.objects.get(username=username)
-    return render(request, 'edit_profile_form.html', {'user': user})
+    return render(request, 'edit_profile_form.html', {'form': form, 'user': user})

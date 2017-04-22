@@ -21,7 +21,7 @@ from .models import UserProfile
 from . import constants
 
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger('CodaMais')
+logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 def register_view(request):
@@ -146,8 +146,8 @@ def profile_view(request, username):
 
 def edit_profile_view(request, username):
     logger.debug("Rendering edit profile page.")
-    form = UserEditForm(request.POST or None)
     user = User.objects.get(username=username)
+    form = UserEditForm(request.POST or None, request.FILES or None)
 
     if request.method == "POST":
         logger.debug("Edit profile view request is POST.")
@@ -155,9 +155,11 @@ def edit_profile_view(request, username):
             logger.debug("Valid edit form.")
             password = form.cleaned_data.get('password')
             first_name = form.cleaned_data.get('first_name')
-
+            new_user_image = request.FILES['user_image']
+            logger.info(new_user_image)
             user.password = password
             user.first_name = first_name
+            user.user_image = new_user_image
 
             user.save()
 

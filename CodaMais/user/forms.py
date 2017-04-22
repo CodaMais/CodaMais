@@ -1,3 +1,6 @@
+# standard library.
+import logging
+
 # Django.
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -6,6 +9,9 @@ from django.core.exceptions import ValidationError
 # Local Django.
 from .models import User
 from .import constants
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 class UserRegisterForm(forms.ModelForm):
@@ -78,11 +84,11 @@ class UserEditForm(forms.ModelForm):
         model = User
         fields = [
             'first_name',
+            'user_image',
         ]
 
     def clean(self, *args, **kwargs):
-        password = self.cleaned_data.get("password")
-
+        password = self.cleaned_data.get('password')
         if len(password) < constants.PASSWORD_MIN_LENGTH:
             raise forms.ValidationError(_(constants.PASSWORD_SIZE))
         elif len(password) > constants.PASSWORD_MAX_LENGTH:

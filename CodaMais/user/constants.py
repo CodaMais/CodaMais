@@ -1,3 +1,6 @@
+# Project name.
+PROJECT_NAME = 'CodaMais'
+
 # USERNAME FIELDS.
 USERNAME = 'Username'
 USERNAME_FIELD_LENGTH = 12

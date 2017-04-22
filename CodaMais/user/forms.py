@@ -102,15 +102,21 @@ class UserEditForm(forms.ModelForm):
         password = self.cleaned_data.get('password')
         password_confirmation = self.cleaned_data.get('password_confirmation')
 
+        logger.debug("User password: " + password)
+        logger.debug("User password confirmation: " + password_confirmation)
+
         if len(password) != constants.NULL_FIELD:
+            logger.debug("Trying to alter user password.")
             if len(password) < constants.PASSWORD_MIN_LENGTH:
                 raise forms.ValidationError(_(constants.PASSWORD_SIZE))
             elif len(password) > constants.PASSWORD_MAX_LENGTH:
                 raise forms.ValidationError(_(constants.PASSWORD_SIZE))
             elif password != password_confirmation:
+                logger.debug("Password don't match with password confirmation.")
                 raise forms.ValidationError(_(constants.PASSWORD_NOT_EQUAL))
             else:
-                pass
+                logger.debug("User password: " + password)
+                logger.debug("User password confirmation: " + password_confirmation)
         else:
             pass
 

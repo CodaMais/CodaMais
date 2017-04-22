@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 # local Django
 from .forms import (
@@ -137,52 +138,70 @@ def logout_view(request):
 
 
 def profile_view(request, username):
+
+    editable_profile = False  # Variable to define if user will see a button to edit his profile page.
+
     if request.method == "GET":
         user = User.objects.get(username=username)
+        # Check if logged user is visiting his own profile page.
+        if request.user.username == user.username:
+            logger.debug("Profile page should be editable")
+            editable_profile = True
+        else:
+            logger.debug("Profile page shouldn't be editable.")
+            # Nothing to do.
     else:
+        logger.debug("Profile view request: POST")
         user = User()
-    return render(request, 'profile.html', {'user': user})
+
+    logger.debug("Profile page is editable? " + str(editable_profile))
+    return render(request, 'profile.html', {'user': user, 'editable_profile': editable_profile})
 
 
+@login_required
 def edit_profile_view(request, username):
     logger.debug("Rendering edit profile page.")
     user = User.objects.get(username=username)
     form = UserEditForm(request.POST or None, request.FILES or None)
 
-    if request.method == "POST":
-        logger.debug("Edit profile view request is POST.")
-        if form.is_valid():
-            logger.debug("Valid edit form.")
-            password = form.cleaned_data.get('password')
-            first_name = form.cleaned_data.get('first_name')
-            new_user_image = request.FILES.get('user_image', None)
+    if request.user.username == user.username:
+        if request.method == "POST":
+            logger.debug("Edit profile view request is POST.")
+            if form.is_valid():
+                logger.debug("Valid edit form.")
+                password = form.cleaned_data.get('password')
+                first_name = form.cleaned_data.get('first_name')
+                new_user_image = request.FILES.get('user_image', None)
 
-            # User changed password.
-            if len(password) != constants.NULL_FIELD:
-                user.password = password
-            # User did not change password.
-            else:
-                pass
-            # User changed first name.
-            if len(first_name) != constants.NULL_FIELD:
-                user.first_name = first_name
-            # User did not change first name.
-            else:
-                pass
-            # User changed user image.
-            if new_user_image is not None:
-                user.user_image = new_user_image
-            # User did not change user image.
-            else:
-                pass
+                # User changed password.
+                if len(password) != constants.NULL_FIELD:
+                    user.password = password
+                # User did not change password.
+                else:
+                    pass
+                # User changed first name.
+                if len(first_name) != constants.NULL_FIELD:
+                    user.first_name = first_name
+                # User did not change first name.
+                else:
+                    pass
+                # User changed user image.
+                if new_user_image is not None:
+                    user.user_image = new_user_image
+                # User did not change user image.
+                else:
+                    pass
 
-            user.save()
+                user.save()
 
-            return HttpResponse("Data altered.")
+                return HttpResponse("Data altered.")
+            else:
+                logger.debug("Invalid edit form.")
+                pass
         else:
-            logger.debug("Invalid edit form.")
+            logger.debug("Edit profile view request is GET.")
             pass
     else:
-        logger.debug("Edit profile view request is GET.")
-        pass
+        logger.debug("User can't edit other users information.")
+        return HttpResponse("Oops! You don't have acess to this page.")
     return render(request, 'edit_profile_form.html', {'form': form, 'user': user})

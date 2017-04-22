@@ -1,34 +1,42 @@
-# Django.
-from django.shortcuts import render
-from django.shortcuts import redirect
-from django.http import HttpResponse
-from django.core.exceptions import ObjectDoesNotExist
+# standard library
+import http.client
+import urllib
+import json
+import logging
 
-# local Django.
-from exercise.models import *
-from user.models import UserProfile
+# Django
+from django.shortcuts import render
+
+# local Django
+from exercise.models import (
+    Exercise, UserExercise, TestCaseExercise
+)
 from exercise import constants
 from exercise.forms import SubmitExerciseForm
 
-# python
-import http.client
-import urllib
-import decimal
-import json
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def list_all_exercises(request):
+    logger.info("List all exercises page.")
     data = {}
     data['list_exercises'] = Exercise.objects.all()
     return render(request, 'exercises.html', data)
 
+
 def list_exercises_not_deprecated(request):
     data = {}
-    data['list_exercises'] = Exercise.objects.filter(deprecated=constants.IS_NOT_DEPRECATED)
+    logger.info("List exercises not deprecated page.")
+    data['list_exercises'] = Exercise.objects.filter(
+                             deprecated=constants.IS_NOT_DEPRECATED)
     return render(request, 'exercises.html', data)
+
 
 def show_exercise(request, id):
     exercise = Exercise.objects.get(id=id, deprecated=0)
+    logger.info("Show exercises not deprecated page.")
 
     # Get current logged user.
     user = request.user
@@ -37,7 +45,9 @@ def show_exercise(request, id):
     user_exercise = get_current_user_exercise(user, exercise)
 
     # Show the user code in the field if the code exists.
-    form = SubmitExerciseForm(request.POST or None, initial={constants.CODE_NAME:user_exercise.code})
+    form = SubmitExerciseForm(
+                            request.POST or None,
+                            initial={constants.CODE_NAME: user_exercise.code})
 
     # String list for the JSON.
     input_exercise = get_all_input_exercise(exercise)
@@ -46,7 +56,7 @@ def show_exercise(request, id):
     output_exercise = get_all_output_exercise(exercise)
 
     if form.is_valid():
-
+        logger.info("Code form was valid.")
         # Source code sent by the user.
         source_code = form.cleaned_data.get(constants.CODE_NAME)
 
@@ -56,27 +66,31 @@ def show_exercise(request, id):
         # Sum all runtime of test cases.
         runtime = extract_time(api_result)
 
-        user_exercise.update_or_creates(source_code, exercise, user, runtime, False)
-
+        user_exercise.update_or_creates(
+                                        source_code, exercise,
+                                        user, runtime, False)
+        logger.info("The code form was valid.")
     else:
+        logger.info("The code form was invalid.")
         # Nothing to do.
         pass
 
     return render(request, 'description_exercise.html', {
-        'exercise':exercise,
+        'exercise': exercise,
         'user_exercise': user_exercise,
         'form': form,
         'input_exercise': input_exercise[0],
         'output_exercise': output_exercise[0]
     })
 
+
 def get_current_user_exercise(user, exercise):
     try:
         user_exercise = UserExercise.objects.get(user=user, exercise=exercise)
     except UserExercise.DoesNotExist:
         user_exercise = UserExercise()
+    return user_exercise
 
-    return user_exercise;
 
 def submit_exercise(exercise, source_code, input_exercise):
     conn = http.client.HTTPConnection("api.hackerrank.com")
@@ -91,9 +105,11 @@ def submit_exercise(exercise, source_code, input_exercise):
         "accept": "application/json",
         "content-type": "application/x-www-form-urlencoded"
     })
+    logger.info("The exercise submission and the API response were made.")
     result = conn.getresponse().read().decode('utf-8')
 
     return result
+
 
 def extract_time(result):
     list_time = json.loads(result)['result']['time']
@@ -101,25 +117,29 @@ def extract_time(result):
 
     for time in list_time:
         sum_time += time
-
+    logger.info("The runtime extraction was taken from the API response.")
     return sum_time
 
+
 def get_all_input_exercise(exercise):
-    test_cases = TestCase.objects.filter(exercise=exercise)
+    test_cases = TestCaseExercise.objects.filter(exercise=exercise)
     list_input_exercise = []
 
     for test_case in test_cases:
         current_input_exercise = str(test_case.input_exercise)
         list_input_exercise.append(current_input_exercise)
 
+    logger.info("The inputs for the exercise from database have been organized.")
     return list_input_exercise
 
+
 def get_all_output_exercise(exercise):
-    test_cases = TestCase.objects.filter(exercise=exercise)
+    test_cases = TestCaseExercise.objects.filter(exercise=exercise)
     list_output_exercise = []
 
     for test_case in test_cases:
         current_output_exercise = str(test_case.output_exercise)
         list_output_exercise.append(current_output_exercise)
 
+    logger.info("The outputs for the exercise from database have been organized.")
     return list_output_exercise

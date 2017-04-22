@@ -1,11 +1,14 @@
-# Django.
+# Django
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-# local Django.
+# local Django
 from exercise import constants
-from exercise.models import  Exercise
-from exercise.views import *
+from exercise.models import (
+    Exercise, UserExercise, TestCaseExercise
+)
+from user.models import User
+from exercise import views
 
 
 class TestExerciseRegistration(TestCase):
@@ -18,13 +21,11 @@ class TestExerciseRegistration(TestCase):
         self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
         self.exercise.score = 10
         self.exercise.deprecated = 0
-        self.exercise.input_exercise = 'Input Basic Exercise.'
-        self.exercise.output_exercise = 'Output Basic Exercise.'
 
     def test_str_is_correct(self):
         self.exercise.save()
-        exercise_database = exercise_database = Exercise.objects.get(id=self.exercise.id)
-        self.assertEqual(str(exercise_database),str(self.exercise))
+        exercise_database = Exercise.objects.get(id=self.exercise.id)
+        self.assertEqual(str(exercise_database), str(self.exercise))
 
     def test_if_exercise_is_saved_database(self):
         self.exercise.save()
@@ -44,7 +45,9 @@ class TestExerciseRegistration(TestCase):
     def test_exercise_get_statement_question(self):
         self.exercise.save()
         exercise_database = Exercise.objects.get(id=self.exercise.id)
-        self.assertEqual(exercise_database.statement_question, self.exercise.statement_question)
+        self.assertEqual(
+                        exercise_database.statement_question,
+                        self.exercise.statement_question)
 
     def test_exercise_get_score(self):
         self.exercise.save()
@@ -54,23 +57,105 @@ class TestExerciseRegistration(TestCase):
     def test_exercise_get_deprecated(self):
         self.exercise.save()
         exercise_database = Exercise.objects.get(id=self.exercise.id)
-        self.assertEqual(exercise_database.deprecated, self.exercise.deprecated)
+        self.assertEqual(
+            exercise_database.deprecated,
+            self.exercise.deprecated)
 
-    def test_exercise_get_input_exercise(self):
-        self.exercise.save()
-        exercise_database = Exercise.objects.get(id=self.exercise.id)
-        self.assertEqual(exercise_database.input_exercise, self.exercise.input_exercise)
 
-    def test_exercise_get_output_exercise(self):
+class TestUserExerciseRegistration(TestCase):
+
+    exercise = Exercise()
+    test_case_exercise = TestCaseExercise()
+    user_exercise = UserExercise()
+    user = User()
+
+    def setUp(self):
+        self.exercise.title = 'Basic Exercise'
+        self.exercise.category = 2
+        self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
+        self.exercise.score = 10
+        self.exercise.deprecated = 0
+        self.test_case_exercise.input_exercise = "1 2\n"
+        self.test_case_exercise.output_exercise = "2 1\n"
+        self.user.email = "user@user.com"
+        self.user.password = "userpassword"
+        self.user.first_name = "TestUser"
+        self.user.username = "Username"
+        self.user.is_active = True
+        self.user_exercise.code = """
+                                    #include <stdio.h>
+                                    int main () {
+                                        int a = 0, b = 0;
+                                        scanf("%d %d", &a, &b);
+                                        printf ("%d %d\n", b, a);
+                                        return 0;
+                                    }
+                                    """
+
+    def test_if_relation_user_exercise_saved_database(self):
         self.exercise.save()
-        exercise_database = Exercise.objects.get(id=self.exercise.id)
-        self.assertEqual(exercise_database.output_exercise, self.exercise.output_exercise)
+        self.test_case_exercise.exercise = self.exercise
+        self.test_case_exercise.save()
+        self.user.save()
+        self.user_exercise.user = self.user
+        self.user_exercise.exercise = self.exercise
+        self.user_exercise.update_or_creates(
+                                            self.user_exercise.code,
+                                            self.user_exercise.exercise,
+                                            self.user_exercise.user,
+                                            self.user_exercise.time,
+                                            self.user_exercise.status)
+        user_exercise_database = UserExercise.objects.get(
+                                user=self.user,
+                                exercise=self.exercise)
+        self.assertEqual(str(user_exercise_database), str(self.user_exercise))
+
+    def test_if_relation_user_exercise_is_updated(self):
+        self.exercise.save()
+        self.test_case_exercise.exercise = self.exercise
+        self.test_case_exercise.save()
+        self.user.save()
+        self.user_exercise.user = self.user
+        self.user_exercise.exercise = self.exercise
+        self.user_exercise.save()
+        self.user_exercise.update_or_creates(
+                                            self.user_exercise.code,
+                                            self.user_exercise.exercise,
+                                            self.user_exercise.user,
+                                            self.user_exercise.time,
+                                            self.user_exercise.status)
+        user_exercise_database = UserExercise.objects.get(
+                                 user=self.user,
+                                 exercise=self.exercise)
+        self.assertEqual(str(user_exercise_database), str(self.user_exercise))
+
+
+class TestCaseExerciseRegistration(TestCase):
+    exercise = Exercise()
+    test_case_exercise = TestCaseExercise()
+
+    def setUp(self):
+        self.exercise.title = 'Basic Exercise'
+        self.exercise.category = 2
+        self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
+        self.exercise.score = 10
+        self.exercise.deprecated = 0
+        self.test_case_exercise.input_exercise = "1 2\n"
+        self.test_case_exercise.output_exercise = "2 1\n"
+
+    def test_if_user_exercise_is_saved_database(self):
+        self.exercise.save()
+        self.test_case_exercise.exercise = self.exercise
+        self.test_case_exercise.save()
+        test_case_exercise_database = TestCaseExercise.objects.get(
+                                    id=self.test_case_exercise.id)
+        self.assertEqual(
+                        str(test_case_exercise_database),
+                        str(self.test_case_exercise))
 
 
 class TestRequestExercise(TestCase):
-
     exercise = Exercise()
-    REQUEST_SUCCEEDED = 200 # 200 is return with success response.
 
     def setUp(self):
         self.exercise.title = 'Basic Exercise'
@@ -82,19 +167,18 @@ class TestRequestExercise(TestCase):
         self.exercise.output_exercise = 'Output Basic Exercise.'
         self.factory = RequestFactory()
 
-
     def test_list_all_exercises(self):
         request = self.factory.get('/exercise')
-        response = list_all_exercises(request)
+        response = views.list_all_exercises(request)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
     def test_list_exercises_not_deprecated(self):
         request = self.factory.get('/exercise')
-        response = list_exercises_not_deprecated(request)
+        response = views.list_exercises_not_deprecated(request)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
-    def test_show_exercise(self):
-        self.exercise.save()
-        request = self.factory.get('/exercise/')
-        response = show_exercise(request, self.exercise.id)
-        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
+    # def test_show_exercise(self):
+    #     self.exercise.save()
+    #     request = self.factory.get('/exercise/')
+    #     response = views.show_exercise(request, self.exercise.id)
+    #     self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)

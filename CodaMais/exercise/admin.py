@@ -1,20 +1,25 @@
+# Django
 from django.contrib import admin
-from exercise.models import *
+
+# local Django
+from exercise.models import (
+    Exercise, UserExercise, TestCaseExercise
+)
 
 
-# admin.site.register(Exercise)
 admin.site.register(UserExercise)
-# admin.site.register(TestCase)
 
 
 class TestCasesInLine(admin.TabularInline):
-    model = TestCase
+    model = TestCaseExercise
     extra = 0
+
 
 @admin.register(Exercise)
 class ProfileExercise(admin.ModelAdmin):
 
-    list_display = ("title", "category", "statement_question", "score", "deprecated", "show_test_cases")
+    list_display = ("title", "category", "statement_question", "score",
+                    "deprecated", "show_test_cases")
 
     search_fields = ["title"]
 

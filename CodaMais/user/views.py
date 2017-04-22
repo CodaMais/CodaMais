@@ -138,6 +138,7 @@ def logout_view(request):
 def recover_password(request):
     form = RecoverPasswordForm(request.POST or None)
     logger.info("Rendering Recover Password Page.")
+    button_text = constants.CONFIRM_BUTTON
 
     if form.is_valid():
 
@@ -147,34 +148,39 @@ def recover_password(request):
             user = User.objects.get(email=email)
         except:
             logger.info("This email don't exist in database.")
-            return render(request, 'recover_password.html', {"form": form})
+            return render(request, 'recover_password.html', {"form": form, "buttonText:": button_text})
 
-        # Prepare informations to send email
-        salt = hashlib.sha1(str(random.random()).
-                            encode('utf-8')).hexdigest()[:5]
-        activation_key = hashlib.sha1(str(salt+email).
-                                      encode('utf‌​-8')).hexdigest()
-        key_expires = datetime.datetime.today() + datetime.timedelta(2)
+        try:
+            # Prepare informations to send email
+            salt = hashlib.sha1(str(random.random()).
+                                encode('utf-8')).hexdigest()[:5]
+            activation_key = hashlib.sha1(str(salt+email).
+                                          encode('utf‌​-8')).hexdigest()
+            key_expires = datetime.datetime.today() + datetime.timedelta(2)
 
-        new_profile = RecoverPasswordProfile(user=user,
-                                             activation_key=activation_key,
-                                             key_expires=key_expires)
-        new_profile.save()
+            new_profile = RecoverPasswordProfile(user=user,
+                                                 activation_key=activation_key,
+                                                 key_expires=key_expires)
+            new_profile.save()
 
-        # Send password recovery.
-        email_subject = (constants.PASSWORD_RECOVER_SUBJECT)
-        email_body = constants.PASSWORD_RECOVER_BODY % (user.username,
-                                                        activation_key)
+            # Send password recovery.
+            email_subject = (constants.PASSWORD_RECOVER_SUBJECT)
+            email_body = constants.PASSWORD_RECOVER_BODY % (user.username,
+                                                            activation_key)
 
-        send_mail(email_subject, email_body, constants.CODAMAIS_EMAIL, [email],
-                  fail_silently=False)
+            send_mail(email_subject, email_body, constants.CODAMAIS_EMAIL, [email],
+                      fail_silently=False)
 
-        logger.info("Recover password email sended.")
+            logger.info("Recover password email sended.")
+        except:
+            # TODO(João) Add some mechanism to show error message to user.
+            logger.info("This email already asked another password.")
+            return render(request, 'recover_password.html', {"form": form, "buttonText:": button_text})
     else:
         # Nothing to do.
         pass
 
-    return render(request, 'recover_password.html', {"form": form})
+    return render(request, 'recover_password.html', {"form": form, "button_text:": button_text})
 
 
 # This function will be called when user click in link sended in his email.

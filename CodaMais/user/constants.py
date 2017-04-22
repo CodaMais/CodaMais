@@ -54,3 +54,6 @@ PASSWORD_RECOVER_BODY = """
                          48 horas: http://127.0.0.1:8000/recover/%s
                           """
 CODAMAIS_EMAIL = 'codamaisapp@gmail.com'
+
+# BUTTON NAMES
+CONFIRM_BUTTON = 'Confirm'

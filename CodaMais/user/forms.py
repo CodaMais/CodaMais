@@ -78,7 +78,6 @@ class UserEditForm(forms.ModelForm):
         model = User
         fields = [
             'first_name',
-            'user_image',
         ]
 
     def clean(self, *args, **kwargs):

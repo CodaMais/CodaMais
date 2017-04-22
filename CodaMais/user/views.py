@@ -20,14 +20,15 @@ from .models import User
 from .models import UserProfile
 from . import constants
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('CodaMais')
 
 
 def register_view(request):
     form = UserRegisterForm(request.POST or None)
-    logger.info("Rendering Register Page.")
+    logger.debug("Rendering Register Page.")
     if form.is_valid():
+        logger.debug("Register form is valid.")
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
         username = form.cleaned_data.get('username')
@@ -60,7 +61,7 @@ def register_view(request):
         return render(request, "register_sucess.html")
 
     else:
-        logger.info("Register form was invalid.")
+        logger.debug("Register form was invalid.")
 
     return render(request, "register_form.html", {"form": form})
 
@@ -97,10 +98,14 @@ def register_confirm(request, activation_key):
 
 
 def login_view(request):
+    logger.debug("Rendering login page.")
     form = UserLoginForm(request.POST or None)
 
     if request.method == "POST":
+        logger.debug("Login View request is POST.")
         if form.is_valid():
+            logger.debug("Login form is valid.")
+
             email = request.POST['email']
             password = request.POST['password']
             user = auth.authenticate(email=email, password=password)
@@ -115,8 +120,10 @@ def login_view(request):
             else:
                 pass
         else:
+            logger.debug("Login form is invalid.")
             pass
     else:
+        logger.debug("Login View request is GET.")
         pass
     # TODO(João) Change this render to landpage
     return render(request, "login/login_form.html", {"form": form})
@@ -130,12 +137,35 @@ def logout_view(request):
 
 
 def profile_view(request, username):
-    user = User.objects.get(username=username)
+    if request.method == "GET":
+        user = User.objects.get(username=username)
+    else:
+        user = User()
     return render(request, 'profile.html', {'user': user})
 
 
 def edit_profile_view(request, username):
-    logger.info("Entering edit profile page.")
+    logger.debug("Rendering edit profile page.")
     form = UserEditForm(request.POST or None)
     user = User.objects.get(username=username)
+
+    if request.method == "POST":
+        logger.debug("Edit profile view request is POST.")
+        if form.is_valid():
+            logger.debug("Valid edit form.")
+            password = form.cleaned_data.get('password')
+            first_name = form.cleaned_data.get('first_name')
+
+            user.password = password
+            user.first_name = first_name
+
+            user.save()
+
+            return HttpResponse("Data altered.")
+        else:
+            logger.debug("Invalid edit form.")
+            pass
+    else:
+        logger.debug("Edit profile view request is GET.")
+        pass
     return render(request, 'edit_profile_form.html', {'form': form, 'user': user})

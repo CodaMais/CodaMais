@@ -156,9 +156,9 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'CodaMais/debug.log',
+            'filename': 'debug.log',
         },
         'console': {
             'class': 'logging.StreamHandler',
@@ -167,7 +167,7 @@ LOGGING = {
     'loggers': {
         'CodaMais': {
             'handlers': ['file'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True,
         },
     },

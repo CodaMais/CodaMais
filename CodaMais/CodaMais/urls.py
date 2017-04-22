@@ -25,27 +25,20 @@ from django.conf.urls import include
 
 
 # Local Django
-from user import views
 from exercise.views import list_exercises_not_deprecated
 from exercise.views import show_exercise
 from landing.views import home
 
 urlpatterns = i18n_patterns(
+    url('^user/', include('user.urls')),
     url(r'^$', home, name="landing_home"),
     url(r'^admin/', admin.site.urls),
-    # TODO(João) Change this url to landpage, and delete this url
-    url(r'^register/', views.register_view, name='register_view'),
-    url(r'^confirm/(?P<activation_key>\w+)/', views.register_confirm,
-        name='confirm_account'),
-    # TODO(João) Change this url to landpage, and delete this url
-    url(r'^login/', views.login_view, name='login_view'),
-    url(r'^logout/', views.logout_view, name='logout_view'),
+
     # Exercise.
     url(r'^exercise/(?P<id>\d+)/$', show_exercise, name='show_exercise'),
     url(r'^exercise/$', list_exercises_not_deprecated, name='list_exercises_not_deprecated'),
     url(r'^redactor/', include('redactor.urls')),
-    url(r'^(?P<username>[\w|\W]+)/edit', views.edit_profile_view, name='edit'),
-    url(r'^(?P<username>[\w|\W]+)/', views.profile_view, name='profile_view'),
+
 )
 
 # When using the Django's dev server, static files are served by default but

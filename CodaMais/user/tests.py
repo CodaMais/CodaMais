@@ -229,10 +229,18 @@ class RecoverPasswordProfileTest(TestCase):
 
 class RecoverPasswordFormTest(TestCase):
     email = "user@user.com"
+    password = "userpassword"
+    first_name = "User"
+    username = "Username"
     valid_form = {}
     invalid_form = {}
 
     def setUp(self):
+        self.user = User.objects.create_user(email=self.email,
+                                             password=self.password,
+                                             first_name=self.first_name,
+                                             username=self.username)
+
         self.valid_form = {'email': self.email}
 
         self.invalid_form = {'email': ''}

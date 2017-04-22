@@ -29,8 +29,10 @@ from django.conf.urls import include
 from user import views
 from exercise.views import *
 from landing.views import home
+from landing import views as landing_views
 
 urlpatterns = i18n_patterns(
+    url(r'^teste/', landing_views.teste, name='teste'),
     url(r'^$', home, name="landing_home"),
     url(r'^admin/', admin.site.urls),
     # TODO(João) Change this url to landpage, and delete this url

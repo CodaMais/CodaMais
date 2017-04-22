@@ -189,3 +189,5 @@ MEDIA_URL = '/media/'
 REDACTOR_UPLOAD = 'uploads/'
 
 REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.SimpleUploader'
+
+LOGIN_URL = '/'

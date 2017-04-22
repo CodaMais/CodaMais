@@ -1,0 +1,5 @@
+.sidebar .nav > li.active-about {
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+}

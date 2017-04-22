@@ -6,9 +6,8 @@ import logging
 from forum.models import Topic
 from forum.forms import TopicForm
 from django.contrib.auth.decorators import login_required
-from user.models import User
 
-
+# Required to access the information log.
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -28,13 +27,13 @@ def show_topic(request, id):
 def create_topic(request):
 
     form = TopicForm(request.POST or None)
-    # user = User.objects.get(username=username)
-    username = request.user.username
+    username = request.user.username  # Automaticlly get usrname that is logged.
     logger.info("user: " + username)
+
     if form.is_valid():
-        post = form.save(commit=False)
+        post = form.save(commit=False)  # Pausing the Django auto-save to enter username.
         post.autor = username
-        post.save()
+        post.save()  # Posting date is generated automaticlly by the Model.
         return redirect('list_all_topics')
     else:
-        return render(request, 'new_topic.html', {'form': form})
+        return render(request, 'new_topic.html', {'form': form})  # Re-using data if something has been speeled wrong.

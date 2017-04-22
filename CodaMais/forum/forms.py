@@ -9,4 +9,4 @@ class TopicForm(ModelForm):
 
     class Meta:
         model = Topic
-        exclude = ['autor', 'dateTopic']
+        exclude = ['author', 'dateTopic']

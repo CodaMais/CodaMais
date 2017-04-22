@@ -22,10 +22,10 @@ class UserRegisterForm(forms.ModelForm):
     email = forms.EmailField(label=constants.EMAIL)
 
     password = forms.CharField(widget=forms.PasswordInput,
-                               label=_('Password'))
+                               label=_(constants.PASSWORD))
 
     password_confirmation = forms.CharField(widget=forms.PasswordInput,
-                                            label=_('Password Confirmation'))
+                                            label=_(constants.PASSWORD_CONFIRMATION))
 
     class Meta:
         model = User
@@ -78,12 +78,17 @@ class UserLoginForm(forms.Form):
 
 class UserEditForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput,
-                               label=_('Password'),
+                               label=_(constants.NEW_PASSWORD),
                                required=False)
+
+    password_confirmation = forms.CharField(widget=forms.PasswordInput,
+                                            label=_(constants.PASSWORD_CONFIRMATION))
+
     first_name = forms.CharField(label=constants.FIRST_NAME,
                                  max_length=constants.FIRST_NAME_FIELD_LENGTH,
                                  required=False)
-    user_image = forms.ImageField(label=constants.USER_IMAGE,
+
+    user_image = forms.ImageField(label=constants.USER_IMAGE_FIELD,
                                   required=False)
 
     class Meta:
@@ -95,11 +100,15 @@ class UserEditForm(forms.ModelForm):
 
     def clean(self, *args, **kwargs):
         password = self.cleaned_data.get('password')
+        password_confirmation = self.cleaned_data.get('password_confirmation')
+
         if len(password) != constants.NULL_FIELD:
             if len(password) < constants.PASSWORD_MIN_LENGTH:
                 raise forms.ValidationError(_(constants.PASSWORD_SIZE))
             elif len(password) > constants.PASSWORD_MAX_LENGTH:
                 raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+            elif password != password_confirmation:
+                raise forms.ValidationError(_(constants.PASSWORD_NOT_EQUAL))
             else:
                 pass
         else:

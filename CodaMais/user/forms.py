@@ -86,11 +86,13 @@ class RecoverPasswordForm(forms.Form):
 
 
 class ConfirmPasswordForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': _(constants.PASSWORD)}),
-                               label='')
+    password = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={'placeholder': _(constants.PASSWORD)}), label='')
 
-    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':
-                                                                       _(constants.PASSWORD_CONFIRMATION)}), label='')
+    password_confirmation = forms.CharField(
+        widget=forms.PasswordInput(
+            attrs={'placeholder': _(constants.PASSWORD_CONFIRMATION)}), label='')
 
     def clean(self, *args, **kwargs):
         password = self.cleaned_data.get('password')

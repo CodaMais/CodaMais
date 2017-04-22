@@ -44,7 +44,7 @@ def show_exercise(request, id):
 
     # Get current logged user.
     user = request.user
-    assert(user != None, "User not logged in.")
+    assert user is not None, "User not logged in."
 
     # Get the current exercise of the user.
     user_exercise = get_current_user_exercise(user, exercise)
@@ -59,8 +59,6 @@ def show_exercise(request, id):
 
     # String list to compare with response.
     output_exercise = get_all_output_exercise(exercise)
-
-    print(output_exercise)
 
     if form.is_valid():
         logger.info("Code form was valid.")
@@ -121,9 +119,11 @@ def submit_exercise(source_code, input_exercise):
 def extract_time(result):
     list_time = json.loads(result)['result']['time']
     sum_time = constants.INITIAL_SUM
-
-    for time in list_time:
-        sum_time += time
+    if list_time is not None:
+        for time in list_time:
+            sum_time += time
+    else:
+        sum_time = None
     logger.info("The runtime extraction was taken from the API response.")
     return sum_time
 

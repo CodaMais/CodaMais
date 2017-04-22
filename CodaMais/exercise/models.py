@@ -35,7 +35,7 @@ class UserExercise(models.Model):
     class Meta:
         unique_together = (('user', 'exercise'),)
 
-    number_submission = models.PositiveIntegerField(default=1)
+    number_submission = models.PositiveIntegerField(default=0)
 
     code = models.TextField(blank=False, null=False)
 

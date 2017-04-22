@@ -215,29 +215,3 @@ class TestRequestExercise(TestCase):
         request.user = self.user
         response = views.show_exercise(request, self.exercise.id)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
-
-
-class TestSubmitExerciseForm(TestCase):
-    valid_form = {}
-    invalid_form = {}
-    source_code = """
-    #include <stdio.h>
-    int main () {
-    char c;
-    scanf("%c", &c);
-    printf("B");
-    return 0;
-    }
-    """
-
-    def setup(self):
-        self.valid_form = {'code': self.source_code}
-        self.invalid_form = {'code': ""}
-
-    def test_if_source_code_is_valid(self):
-        submit_exercise_form = SubmitExerciseForm(self.valid_form)
-        self.assertTrue(submit_exercise_form.is_valid())
-
-    # def test_if_source_code_is_invalid(self):
-    #     submit_exercise_form = SubmitExerciseForm(self.invalid_form)
-    #     self.assertFalse(submit_exercise_form.is_valid())

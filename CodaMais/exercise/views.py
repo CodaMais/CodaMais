@@ -6,6 +6,7 @@ import logging
 
 # Django
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 # local Django
 from exercise.models import (
@@ -19,6 +20,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+@login_required
 def list_all_exercises(request):
     logger.info("List all exercises page.")
     data = {}
@@ -26,6 +28,7 @@ def list_all_exercises(request):
     return render(request, 'exercises.html', data)
 
 
+@login_required
 def list_exercises_not_deprecated(request):
     data = {}
     logger.info("List exercises not deprecated page.")
@@ -34,12 +37,14 @@ def list_exercises_not_deprecated(request):
     return render(request, 'exercises.html', data)
 
 
+@login_required
 def show_exercise(request, id):
     exercise = Exercise.objects.get(id=id, deprecated=0)
     logger.info("Show exercises not deprecated page.")
 
     # Get current logged user.
     user = request.user
+    assert(user != None, "User not logged in.")
 
     # Get the current exercise of the user.
     user_exercise = get_current_user_exercise(user, exercise)
@@ -55,13 +60,15 @@ def show_exercise(request, id):
     # String list to compare with response.
     output_exercise = get_all_output_exercise(exercise)
 
+    print(output_exercise)
+
     if form.is_valid():
         logger.info("Code form was valid.")
         # Source code sent by the user.
         source_code = form.cleaned_data.get(constants.CODE_NAME)
 
         # Receives the JSON response from API.
-        api_result = submit_exercise(exercise, source_code, input_exercise)
+        api_result = submit_exercise(source_code, input_exercise)
 
         # Sum all runtime of test cases.
         runtime = extract_time(api_result)
@@ -92,7 +99,7 @@ def get_current_user_exercise(user, exercise):
     return user_exercise
 
 
-def submit_exercise(exercise, source_code, input_exercise):
+def submit_exercise(source_code, input_exercise):
     conn = http.client.HTTPConnection("api.hackerrank.com")
     conn.request("POST", "/checker/submission.json", urllib.parse.urlencode({
         "source": source_code,

@@ -1,46 +1,64 @@
 <html>
-  <header>
-    <title>
-      Exercícios
-    </title>
+<head>
+  <title>
+    Exercícios
+  </title>
+  <style type="text/css" media="screen">
+      #editor {
+          width: 500px;
+          height: 200px;
+      }
+  </style>
+</head>
 
-  </header>
-  <body>
-    <h1>
+<body>
+  <h1>
         {{exercise.title}}
       </h1>
-      <h3>
+  <h3>
         Category: {{exercise.get_category_display}}
       </h3>
-      <h3>
+  <h3>
         Score: {{exercise.score}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      </h3>
-      {{exercise.statement_question|safe}}
-      <table border="2" >
-        <tr>
-          <th>
-            Entrada
-          </th>
-          <th>
-            Saída
-          </th>
-        </tr>
-        <tr>
-          <td>
-            {{input_exercise}}
-          </td>
-          <td>
-            {{output_exercise}}
-          </td>
-        </tr>
-      </table>
-      {{ api_response }}
-      <form method="post" action=".">
-          {% csrf_token %}
-           {{ form.as_p }}
+      </h3> {{exercise.statement_question|safe}}
+  <table border="2">
+    <tr>
+      <th>
+        Entrada
+      </th>
+      <th>
+        Saída
+      </th>
+    </tr>
+    <tr>
+      <td>
+        {{input_exercise}}
+      </td>
+      <td>
+        {{output_exercise}}
+      </td>
+    </tr>
+  </table>
+  {{ api_response }}
+  <form method="post" action=".">
+    {% csrf_token %} {{ form.as_p }}
+    <div id="editor"></div>
+    <input type="submit" value="Submit" />
+  </form>
 
-          <input type="submit" value="Submit" />
-      </form>
+</body>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/g/ace@1.2.6(min/ace.js+min/mode-c_cpp.js+min/ext-beautify.js+min/theme-monokai.js)" type="text/javascript" charset="utf-8"></script>
+<script>
+  var editor = ace.edit("editor");
+  editor.setTheme("ace/theme/monokai");
+  editor.getSession().setMode("ace/mode/c_cpp");
 
-  </body>
+  const $textarea = $('#id_code').hide();
+  editor.getSession().setValue($textarea.val());
+  editor.getSession().on('change', function(){
+    $textarea.val(editor.getSession().getValue());
+  });
+</script>
+
 </html>

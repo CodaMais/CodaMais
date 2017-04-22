@@ -1,4 +1,5 @@
 # Django
+from django.contrib import auth
 from django.test import TestCase
 from django.test.client import RequestFactory
 
@@ -75,8 +76,8 @@ class TestUserExerciseRegistration(TestCase):
         self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
         self.exercise.score = 10
         self.exercise.deprecated = 0
-        self.test_case_exercise.input_exercise = "1 2\n"
-        self.test_case_exercise.output_exercise = "2 1\n"
+        self.test_case_exercise.input_exercise = "a\n"
+        self.test_case_exercise.output_exercise = "B\n"
         self.user.email = "user@user.com"
         self.user.password = "userpassword"
         self.user.first_name = "TestUser"
@@ -85,9 +86,9 @@ class TestUserExerciseRegistration(TestCase):
         self.user_exercise.code = """
                                     #include <stdio.h>
                                     int main () {
-                                        int a = 0, b = 0;
-                                        scanf("%d %d", &a, &b);
-                                        printf ("%d %d\n", b, a);
+                                        char c;
+                                        scanf("%c", &c);
+                                        printf("B");
                                         return 0;
                                     }
                                     """
@@ -129,6 +130,14 @@ class TestUserExerciseRegistration(TestCase):
                                  exercise=self.exercise)
         self.assertEqual(str(user_exercise_database), str(self.user_exercise))
 
+    def test_if_exercise_is_submitted(self):
+        exercise_inputs = ['a\n', 'b\n']
+        response = views.submit_exercise(
+                                        self.user_exercise.code,
+                                        exercise_inputs)
+        self.assertIn("result", response)
+
+
 
 class TestCaseExerciseRegistration(TestCase):
     exercise = Exercise()
@@ -154,28 +163,46 @@ class TestCaseExerciseRegistration(TestCase):
                         str(self.test_case_exercise))
 
 
-class TestRequestExercise(TestCase):
-    exercise = Exercise()
-
-    def setUp(self):
-        self.exercise.title = 'Basic Exercise'
-        self.exercise.category = 2
-        self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
-        self.exercise.score = 10
-        self.exercise.deprecated = 0
-        self.exercise.input_exercise = 'Input Basic Exercise.'
-        self.exercise.output_exercise = 'Output Basic Exercise.'
-        self.factory = RequestFactory()
-
-    def test_list_all_exercises(self):
-        request = self.factory.get('/exercise')
-        response = views.list_all_exercises(request)
-        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
-
-    def test_list_exercises_not_deprecated(self):
-        request = self.factory.get('/exercise')
-        response = views.list_exercises_not_deprecated(request)
-        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
+# class TestRequestExercise(TestCase):
+#     exercise = Exercise()
+#     test_case_exercise = TestCaseExercise()
+#     user = User()
+#
+#     def setUp(self):
+#         self.user.email = "user@user.com"
+#         self.user.password = "userpassword"
+#         self.user.first_name = "TestUser"
+#         self.user.username = "Username"
+#         self.user.is_active = True
+#         self.exercise.title = 'Basic Exercise'
+#         self.exercise.category = 2
+#         self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
+#         self.exercise.score = 10
+#         self.exercise.deprecated = 0
+#         self.test_case_exercise.input_exercise = "a\n"
+#         self.test_case_exercise.output_exercise = "B\n"
+#         self.factory = RequestFactory()
+#         self.user.save()
+#         self.exercise.save()
+#
+#         self.test_case_exercise.exercise = self.exercise
+#
+#         self.test_case_exercise.save()
+#         auth = self.authenticate(
+#                                 email=self.user.email,
+#                                 password=self.user.password)
+#         auth.is_authenticated()
+#
+#
+#     def test_list_all_exercises(self):
+#         request = self.factory.get('/exercise')
+#         response = views.list_all_exercises(request)
+#         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
+#
+#     def test_list_exercises_not_deprecated(self):
+#         request = self.factory.get('/exercise')
+#         response = views.list_exercises_not_deprecated(request)
+#         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
     # def test_show_exercise(self):
     #     self.exercise.save()

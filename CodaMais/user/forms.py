@@ -68,3 +68,41 @@ class UserLoginForm(forms.Form):
             pass
 
         return super(UserLoginForm, self).clean(*args, **kwargs)
+
+
+class RecoverPasswordForm(forms.Form):
+    email = forms.EmailField(label=constants.EMAIL)
+
+    def clean(self, *args, **kwargs):
+        email = self.cleaned_data.get('email')
+        email_from_database = User.objects.filter(email=email)
+
+        if email_from_database.exists():
+            pass
+        else:
+            raise forms.ValidationError(_(constants.EMAIL_NOT_REGISTERED))
+
+        return super(RecoverPasswordForm, self).clean(*args, **kwargs)
+
+
+class ConfirmPasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': _(constants.PASSWORD)}),
+                               label='')
+
+    password_confirmation = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':
+                                                                       _(constants.PASSWORD_CONFIRMATION)}), label='')
+
+    def clean(self, *args, **kwargs):
+        password = self.cleaned_data.get('password')
+        password_confirmation = self.cleaned_data.get('password_confirmation')
+
+        if len(password) < constants.PASSWORD_MIN_LENGTH:
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        elif len(password) > constants.PASSWORD_MAX_LENGTH:
+            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        elif password != password_confirmation:
+            raise forms.ValidationError(_(constants.PASSWORD_NOT_EQUAL))
+        else:
+            pass
+
+        return super(ConfirmPasswordForm, self).clean(*args, **kwargs)

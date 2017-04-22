@@ -37,12 +37,18 @@ urlpatterns = i18n_patterns(
     url(r'^register/', views.register_view, name='register_view'),
     url(r'^confirm/(?P<activation_key>\w+)/', views.register_confirm,
         name='confirm_account'),
+    # Recover password.
+    url(r'^recoverpassword/', views.recover_password, name='recover_password'),
+    url(r'^recover/(?P<activation_key>\w+)/', views.recover_password_confirm,
+        name='recover_password_confirm'),
+
     # TODO(João) Change this url to landpage, and delete this url
     url(r'^login/', views.login_view, name='login_view'),
     url(r'^logout/', views.logout_view, name='logout_view'),
     # Exercise.
     url(r'^exercise/(?P<id>\d+)/$', show_exercise, name='show_exercise'),
-    url(r'^exercise/$', list_exercises_not_deprecated, name='list_exercises_not_deprecated'),
+    url(r'^exercise/$', list_exercises_not_deprecated,
+        name='list_exercises_not_deprecated'),
     url(r'^redactor/', include('redactor.urls')),
 )
 
@@ -53,4 +59,4 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT
         }),
-]
+        ]

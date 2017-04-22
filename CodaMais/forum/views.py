@@ -31,9 +31,14 @@ def create_topic(request):
     logger.info("user: " + username)
 
     if form.is_valid():
+
+        logger.info("Create topic form was valid.")
+
         post = form.save(commit=False)  # Pausing the Django auto-save to enter username.
-        post.autor = username
+        post.author = username
         post.save()  # Posting date is generated automaticlly by the Model.
         return redirect('list_all_topics')
     else:
+        logger.info("Create topic form was invalid.")
+
         return render(request, 'new_topic.html', {'form': form})  # Re-using data if something has been speeled wrong.

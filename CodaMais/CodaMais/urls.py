@@ -29,6 +29,7 @@ from django.conf.urls import include
 from user import views
 from exercise.views import *
 from landing.views import home
+from forum.views import *
 
 urlpatterns = i18n_patterns(
     url(r'^$', home, name="landing_home"),
@@ -50,6 +51,10 @@ urlpatterns = i18n_patterns(
     url(r'^exercise/$', list_exercises_not_deprecated,
         name='list_exercises_not_deprecated'),
     url(r'^redactor/', include('redactor.urls')),
+    # Forum
+    url(r'^topics/$', list_all_topics, name='list_all_topics'),
+    url(r'^topics/(?P<id>\d+)/$', show_topic, name='show_topic'),
+    url(r'^newtopic/$', create_topic, name='create_topic'),
 )
 
 # When using the Django's dev server, static files are served by default but

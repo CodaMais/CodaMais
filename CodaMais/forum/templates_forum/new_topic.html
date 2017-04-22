@@ -1,0 +1,18 @@
+<html>
+<head>
+  <title>Create Topic</title>
+</head>
+
+<body>
+  <h1>Create Topic</h1>
+
+  <form method="post" action=".">
+      {% csrf_token %}
+       {{ form.as_p }}
+
+      <input type="submit" value="Salvar" />
+  </form>
+
+</body>
+
+</html>

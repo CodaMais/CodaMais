@@ -1,6 +1,9 @@
 # Project name.
 PROJECT_NAME = 'CodaMais'
 
+# GENERAL FIELD CONSTANTS.
+NULL_FIELD = 0
+
 # USERNAME FIELDS.
 USERNAME = 'Username'
 USERNAME_FIELD_LENGTH = 12
@@ -15,6 +18,7 @@ USERNAME_FORMAT = 'Your name must have just letters'
 
 # FIRST NAME FIELDS.
 FIRST_NAME_FIELD_LENGTH = 30
+FIRST_NAME = 'First name'
 
 # FIRST NAME VALIDATION MESSAGES
 FIRST_NAME_SIZE = 'Your name exceeds 30 characteres'
@@ -49,3 +53,6 @@ EMAIL_CONFIRMATION_BODY = """
                           """
 
 CODAMAIS_EMAIL = 'codamaisapp@gmail.com'
+
+# USER IMAGE FIELDS.
+USER_IMAGE = 'User image'

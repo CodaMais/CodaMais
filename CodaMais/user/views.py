@@ -14,8 +14,8 @@ from django.contrib import auth
 
 # local Django
 from .forms import (
-                    UserRegisterForm, UserLoginForm, UserEditForm,
-                    )
+    UserRegisterForm, UserLoginForm, UserEditForm,
+    )
 from .models import User
 from .models import UserProfile
 from . import constants
@@ -155,11 +155,26 @@ def edit_profile_view(request, username):
             logger.debug("Valid edit form.")
             password = form.cleaned_data.get('password')
             first_name = form.cleaned_data.get('first_name')
-            new_user_image = request.FILES['user_image']
-            logger.info(new_user_image)
-            user.password = password
-            user.first_name = first_name
-            user.user_image = new_user_image
+            new_user_image = request.FILES.get('user_image', None)
+
+            # User changed password.
+            if len(password) != constants.NULL_FIELD:
+                user.password = password
+            # User did not change password.
+            else:
+                pass
+            # User changed first name.
+            if len(first_name) != constants.NULL_FIELD:
+                user.first_name = first_name
+            # User did not change first name.
+            else:
+                pass
+            # User changed user image.
+            if new_user_image is not None:
+                user.user_image = new_user_image
+            # User did not change user image.
+            else:
+                pass
 
             user.save()
 

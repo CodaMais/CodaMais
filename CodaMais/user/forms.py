@@ -78,7 +78,13 @@ class UserLoginForm(forms.Form):
 
 class UserEditForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput,
-                               label=_('Password'))
+                               label=_('Password'),
+                               required=False)
+    first_name = forms.CharField(label=constants.FIRST_NAME,
+                                 max_length=constants.FIRST_NAME_FIELD_LENGTH,
+                                 required=False)
+    user_image = forms.ImageField(label=constants.USER_IMAGE,
+                                  required=False)
 
     class Meta:
         model = User
@@ -89,10 +95,13 @@ class UserEditForm(forms.ModelForm):
 
     def clean(self, *args, **kwargs):
         password = self.cleaned_data.get('password')
-        if len(password) < constants.PASSWORD_MIN_LENGTH:
-            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
-        elif len(password) > constants.PASSWORD_MAX_LENGTH:
-            raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+        if len(password) != constants.NULL_FIELD:
+            if len(password) < constants.PASSWORD_MIN_LENGTH:
+                raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+            elif len(password) > constants.PASSWORD_MAX_LENGTH:
+                raise forms.ValidationError(_(constants.PASSWORD_SIZE))
+            else:
+                pass
         else:
             pass
 

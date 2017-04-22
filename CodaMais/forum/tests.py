@@ -14,7 +14,7 @@ class TestTopicCreation(TestCase):
     def setUp(self):
         self.topic.title = 'Basic Topic'
         self.topic.subtilte = 'How test in Django'
-        self.topic.autor = 'User'
+        self.topic.author = 'User'
         self.topic.description = '<p>Text Basic Exercise.</p>'
 
     def test_str_is_correct(self):
@@ -37,10 +37,10 @@ class TestTopicCreation(TestCase):
         topic_database = Topic.objects.get(id=self.topic.id)
         self.assertEqual(topic_database.subtilte, self.topic.subtilte)
 
-    def test_topic_get_autor(self):
+    def test_topic_get_author(self):
         self.topic.save()
         topic_database = Topic.objects.get(id=self.topic.id)
-        self.assertEqual(topic_database.autor, self.topic.autor)
+        self.assertEqual(topic_database.author, self.topic.author)
 
     def test_topic_get_description(self):
         self.topic.save()
@@ -55,7 +55,7 @@ class TestRequestTopic(TestCase):
         def setUp(self):
             self.topic.title = 'Basic Topic'
             self.topic.subtilte = 'How test in Django'
-            self.topic.autor = 'User'
+            self.topic.author = 'User'
             self.topic.description = '<p>Text Basic Exercise.</p>'
             self.factory = RequestFactory()
 

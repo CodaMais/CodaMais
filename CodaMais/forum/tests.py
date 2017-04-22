@@ -5,7 +5,8 @@ from django.test.client import RequestFactory
 # local Django.
 from forum import constants
 from forum.models import Topic
-from forum.views import list_all_topics, show_topic
+from user.models import User
+from forum.views import list_all_topics, show_topic, create_topic
 
 
 class TestTopicCreation(TestCase):
@@ -51,13 +52,20 @@ class TestTopicCreation(TestCase):
 class TestRequestTopic(TestCase):
 
         topic = Topic()
+        user = User()
 
         def setUp(self):
+            self.user.email = "user@user.com"
+            self.user.first_name = "TestUser"
+            self.user.username = "Username"
+            self.user.is_active = True
             self.topic.title = 'Basic Topic'
             self.topic.subtilte = 'How test in Django'
             self.topic.author = 'User'
             self.topic.description = '<p>Text Basic Exercise.</p>'
             self.factory = RequestFactory()
+            self.user.set_password('userpassword')
+            self.user.save()
 
         def test_list_all_topics(self):
             request = self.factory.get('/forum')
@@ -68,4 +76,10 @@ class TestRequestTopic(TestCase):
             self.topic.save()
             request = self.factory.get('/forum')
             response = show_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
+
+        def test_create_topic(self):
+            request = self.factory.get('/forum/')
+            request.user = self.user
+            response = create_topic(request)
             self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)

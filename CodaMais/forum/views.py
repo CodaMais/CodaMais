@@ -27,7 +27,7 @@ def show_topic(request, id):
 def create_topic(request):
 
     form = TopicForm(request.POST or None)
-    username = request.user.username  # Automaticlly get usrname that is logged.
+    username = request.user.username  # Automaticlly get uswrname that is logged.
     logger.info("user: " + username)
 
     if form.is_valid():

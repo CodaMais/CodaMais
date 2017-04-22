@@ -37,7 +37,7 @@ class UserExercise(models.Model):
 
     number_submission = models.PositiveIntegerField(default=1)
 
-    code = models.TextField()
+    code = models.TextField(blank=False, null=False)
 
     status = models.BooleanField(default=False)
 

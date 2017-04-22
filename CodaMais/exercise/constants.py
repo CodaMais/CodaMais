@@ -29,6 +29,8 @@ MAX_LENGTH_TIME = 10
 
 # CODE FIELD.
 CODE_NAME = 'code'
+MIN_LENGTH_CODE = 10
+CODE_SIZE = "You source code must have at least 10 characters."
 
 # INITIAL SUM.
 INITIAL_SUM = 0.0

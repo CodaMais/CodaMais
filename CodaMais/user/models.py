@@ -3,8 +3,9 @@ import datetime
 
 # Django.
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser, PermissionsMixin,
+)
 from django.db.models import EmailField
 from django.core import validators
 
@@ -14,8 +15,7 @@ from .managers import UserManager
 
 
 class Email(EmailField):
-    validator = validators.EmailValidator(
-                    message=constants.EMAIL_FORMAT)
+    validator = validators.EmailValidator(message=constants.EMAIL_FORMAT)
 
     default_validators = [validator]
 
@@ -71,7 +71,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # User Profile Image
     user_image = models.ImageField(default=constants.USER_IMAGE,
-                                   editable=False)
+                                   editable=True)
 
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

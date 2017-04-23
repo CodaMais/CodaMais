@@ -8,6 +8,9 @@
 
   </header>
   <body>
+    {% ifequal editable_profile 1 %}
+      <a href="{% url 'edit' user.username %}"> Edit </a>
+    {% endifequal %}
     <h1>
         Nickname: {{user.username}}
         <br>

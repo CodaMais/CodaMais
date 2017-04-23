@@ -3,13 +3,14 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 
 # local Django
-from exercise import constants
-from exercise.models import (
-    Exercise, UserExercise, TestCaseExercise
+from exercise import(
+    constants, views,
 )
+from exercise.models import (
+    Exercise, UserExercise, TestCaseExercise,
+)
+
 from user.models import User
-from exercise import views
-from exercise.forms import SubmitExerciseForm
 
 
 class TestExerciseRegistration(TestCase):

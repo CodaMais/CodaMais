@@ -6,17 +6,17 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 
 # local Django
-from .models import User
-from .models import UserProfile
-from .models import RecoverPasswordProfile
-from .forms import ConfirmPasswordForm
-from .forms import RecoverPasswordForm
-from .forms import UserRegisterForm
-from .forms import UserLoginForm
-from user.views import register_view
-from user.views import profile_view
-from user.views import logout_view
-from user.views import login_view
+
+from user.views import (
+    register_view, login_view
+)
+from .models import(
+    User, UserProfile, RecoverPasswordProfile,
+)
+from .forms import(
+    UserRegisterForm, UserEditForm, ConfirmPasswordForm, RecoverPasswordForm, UserLoginForm,
+)
+from django.test import Client
 
 
 class ProfileViewTest(TestCase):
@@ -27,14 +27,14 @@ class ProfileViewTest(TestCase):
     factory = RequestFactory()
 
     def setUp(self):
-        User.objects.create_user(email=self.email,
-                                 password=self.password,
-                                 first_name=self.first_name,
-                                 username=self.username)
+        self.user = User.objects.create_user(email=self.email,
+                                             password=self.password,
+                                             first_name=self.first_name,
+                                             username=self.username)
 
     def test_if_profile_page_is_showing(self):
-        request = self.factory.get('/' + self.username)
-        response = profile_view(request, username=self.username)
+        c = Client()
+        response = c.get("/pt-br/user/Username/")
         self.assertEqual(response.status_code, 200)
 
 
@@ -328,3 +328,50 @@ class UserLoginFormTest(TestCase):
         self.invalid_form['password_confirmation'] = 'userpasswordd'
         user_login_form = UserLoginForm(self.invalid_form)
         self.assertFalse(user_login_form.is_valid())
+
+
+class UserEditFormTest(TestCase):
+    email = "user@user.com"
+    wrong_email = "useruser.com"
+    password = "userpassword"
+    wrong_password = "userpassw"
+    wrong_password_max = 'userpasswordd'
+    wrong_password_min = 'pas'
+    first_name = "TestUser"
+    wrong_first_name = "#123#sas,"
+    username = "Username"
+    valid_form = {}
+
+    def setUp(self):
+        User.objects.create_user(email=self.email,
+                                 password=self.password,
+                                 first_name=self.first_name,
+                                 username=self.username)
+
+        self.valid_form = {'first_name': self.first_name,
+                           'password': self.password,
+                           'password_confirmation': self.password}
+
+    def test_UserEditForm_valid(self):
+        form = UserEditForm(self.valid_form)
+        self.assertTrue(form.is_valid())
+
+    def test_UserEditForm_password_min_size_invalid(self):
+        self.valid_form['password'] = self.wrong_password_min
+        form = UserEditForm(self.valid_form)
+        self.assertFalse(form.is_valid())
+
+    def test_UserEditForm_password_max_size_invalid(self):
+        self.valid_form['password'] = self.wrong_password_max
+        form = UserEditForm(self.valid_form)
+        self.assertFalse(form.is_valid())
+
+    def test_UserEditForm_password_confirmation_invalid(self):
+        self.valid_form['password'] = 'codaMenos'
+        form = UserEditForm(self.valid_form)
+        self.assertFalse(form.is_valid())
+
+    def test_UserEditForm_valid_null_password(self):
+        self.valid_form['password'] = ''
+        form = UserEditForm(self.valid_form)
+        self.assertTrue(form.is_valid())

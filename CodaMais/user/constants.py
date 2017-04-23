@@ -1,3 +1,9 @@
+# Project name.
+PROJECT_NAME = 'CodaMais'
+
+# GENERAL FIELD CONSTANTS.
+NULL_FIELD = 0
+
 # USERNAME FIELDS.
 USERNAME = 'Username'
 USERNAME_FIELD_LENGTH = 12
@@ -12,6 +18,7 @@ USERNAME_FORMAT = 'Your name must have just letters'
 
 # FIRST NAME FIELDS.
 FIRST_NAME_FIELD_LENGTH = 30
+FIRST_NAME = 'First name'
 
 # FIRST NAME VALIDATION MESSAGES
 FIRST_NAME_SIZE = 'Your name exceeds 30 characteres'
@@ -25,6 +32,8 @@ PASSWORD_CHANGE = 'Change password'
 PASSWORD_FIELD_LENGTH = 30
 PASSWORD_MIN_LENGTH = 8
 PASSWORD_MAX_LENGTH = 12
+PASSWORD_CONFIRMATION = 'Password confirmation'
+NEW_PASSWORD = 'New password'
 
 # PASSWORD VALIDATION MESSAGES.
 PASSWORD_SIZE = 'Password must be between 8 and 12 characters'
@@ -55,5 +64,9 @@ PASSWORD_RECOVER_BODY = """
                           """
 CODAMAIS_EMAIL = 'codamaisapp@gmail.com'
 
+
 # BUTTON NAMES
 CONFIRM_BUTTON = 'Confirm'
+
+# USER IMAGE FIELDS.
+USER_IMAGE_FIELD = 'User image'

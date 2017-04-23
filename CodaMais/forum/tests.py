@@ -6,7 +6,9 @@ from django.test.client import RequestFactory
 from forum import constants
 from forum.models import Topic
 from user.models import User
-from forum.views import list_all_topics, show_topic, create_topic
+from forum.views import (
+    list_all_topics, show_topic, create_topic,
+)
 
 
 class TestTopicCreation(TestCase):

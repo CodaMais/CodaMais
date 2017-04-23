@@ -23,6 +23,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.views.static import serve
 from django.conf.urls import include
+from django.contrib.auth.decorators import login_required
 
 
 # Local Django
@@ -39,7 +40,7 @@ urlpatterns = i18n_patterns(
     url(r'^register/', views.register_view, name='register_view'),
     url(r'^confirm/(?P<activation_key>\w+)/', views.register_confirm,
         name='confirm_account'),
-    url(r'^dashboard/', dashboard, name='dashboard'),
+    url(r'^dashboard/', login_required(dashboard), name='dashboard'),
     # Recover password.
     url(r'^recoverpassword/', views.recover_password, name='recover_password'),
     url(r'^recover/(?P<activation_key>\w+)/', views.recover_password_confirm,

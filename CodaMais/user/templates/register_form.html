@@ -1,19 +1,42 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <title>User Register</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static "register/register.css" %}">
+  {% include "landing/head.html" %}
 </head>
 
 <body>
-  <h1>User Register</h1>
+    <div class="container">
+        {% include "landing/navigation_bar.html" %}
+    </div>
+    <!-- import registration form -->
 
-  <form method="post" action=".">
-      {% csrf_token %}
-       {{ form.as_p }}
 
-      <input type="hidden" name="next" value="/" />
-      <input type="submit" value="Register" />
-  </form>
+  <div class="imageBackground">
+              <br>
+              <br>
+              <br
+              <div class="container">
+                <div class = "row" >
+                      <div class="form">
+                          <form method="post" action=".">
+                              {% csrf_token %}
+                               {{ form.as_p }}
+                              <button>Register</button>
+                          </form>
+                      </div>
+              </div>
+            </div>
+
+  </div>
+
+    <div class="container">
+        {% include "landing/footer.html" %}
+    </div>
+
 
 </body>
-
+{% include "landing/javascript.html" %}
 </html>

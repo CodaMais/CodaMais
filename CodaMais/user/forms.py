@@ -55,7 +55,7 @@ class UserRegisterForm(forms.ModelForm):
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput, label=_(constants.PASSWORD))
 
     def clean(self, *args, **kwargs):
         password = self.cleaned_data.get("password")

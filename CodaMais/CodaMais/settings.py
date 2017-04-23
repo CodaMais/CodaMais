@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'exercise',
     'redactor',
     'landing',
+    'dashboard',
 ]
 
 # Authentication backends

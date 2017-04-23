@@ -110,7 +110,7 @@ def login_view(request):
                 if user.is_active:
                     auth.login(request, user)
                     # TODO(João) Change this return to user page html
-                    return render_to_response('login/login_success.html')
+                    return render_to_response('dashboard.html')
                 else:
                     # Nothing to do.
                     pass
@@ -131,7 +131,7 @@ def login_view(request):
 def logout_view(request):
     logger.info("User Logout.")
     auth.logout(request)
-    return render(request, "login/login_form.html", {})
+    return render(request, "/")
 
 
 # This function will be called when user forgot his password, and ask a new.

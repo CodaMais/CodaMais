@@ -1,4 +1,4 @@
 [run]
 branch = True
-source = user
-omit = */apps.py
+source = user, exercise, forum
+omit = */apps.py, */migrations/*, */__init__.py

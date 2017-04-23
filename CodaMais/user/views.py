@@ -218,3 +218,8 @@ def recover_password_confirm(request, activation_key):
         pass
     # TODO(João) Change this html to "beautiful way".
     return render(request, "confirmpassword.html", {"form": form, "title": title, "button_text": button_text})
+
+
+def profile_view(request, username):
+    user = User.objects.get(username=username)
+    return render(request, 'profile.html', {'user': user})

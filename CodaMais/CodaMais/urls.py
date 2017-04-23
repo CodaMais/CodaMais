@@ -17,7 +17,6 @@ Including another URLconf
 
 # Django
 from django.conf import settings
-from django.conf.urls.static import static
 from django.conf.urls import url
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
@@ -27,7 +26,8 @@ from django.conf.urls import include
 
 # Local Django
 from user import views
-from exercise.views import *
+from exercise.views import list_exercises_not_deprecated
+from exercise.views import show_exercise
 from landing.views import home
 from forum.views import *
 
@@ -51,10 +51,14 @@ urlpatterns = i18n_patterns(
     url(r'^exercise/$', list_exercises_not_deprecated,
         name='list_exercises_not_deprecated'),
     url(r'^redactor/', include('redactor.urls')),
+
     # Forum
     url(r'^topics/$', list_all_topics, name='list_all_topics'),
     url(r'^topics/(?P<id>\d+)/$', show_topic, name='show_topic'),
     url(r'^newtopic/$', create_topic, name='create_topic'),
+
+    url(r'^(?P<username>[\w|\W]+)/', views.profile_view, name='profile_view')
+
 )
 
 # When using the Django's dev server, static files are served by default but
@@ -64,4 +68,5 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT
         }),
+
         ]

@@ -22,6 +22,7 @@ class Exercise(models.Model):
                         allow_image_upload=True,
                         redactor_options={'lang': 'en', 'focus': True},
                         upload_to='tmp/')
+
     score = models.PositiveIntegerField()
 
     deprecated = models.PositiveIntegerField(

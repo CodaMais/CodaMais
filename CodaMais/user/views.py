@@ -5,29 +5,34 @@ import datetime
 import random
 
 # Django
-from django.shortcuts import render, redirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import (
+    render, redirect, render_to_response, get_object_or_404
+)
+
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 # local Django
-from .forms import UserRegisterForm, UserLoginForm
-from .forms import RecoverPasswordForm, ConfirmPasswordForm
-from .models import User
-from .models import UserProfile
-from .models import RecoverPasswordProfile
+from .forms import (
+    UserRegisterForm, UserLoginForm, UserEditForm, RecoverPasswordForm, ConfirmPasswordForm
+)
+from .models import(
+    User, UserProfile, RecoverPasswordProfile
+)
 from . import constants
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 def register_view(request):
     form = UserRegisterForm(request.POST or None)
-    logger.info("Rendering Register Page.")
+    logger.debug("Rendering Register Page.")
     if form.is_valid():
+        logger.debug("Register form is valid.")
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
         username = form.cleaned_data.get('username')
@@ -60,7 +65,7 @@ def register_view(request):
         return render(request, "register_sucess.html")
 
     else:
-        logger.info("Register form was invalid.")
+        logger.debug("Register form was invalid.")
 
     return render(request, "register_form.html", {"form": form})
 
@@ -98,10 +103,14 @@ def register_confirm(request, activation_key):
 
 
 def login_view(request):
+    logger.debug("Rendering login page.")
     form = UserLoginForm(request.POST or None)
 
     if request.method == "POST":
+        logger.debug("Login View request is POST.")
         if form.is_valid():
+            logger.debug("Login form is valid.")
+
             email = request.POST['email']
             password = request.POST['password']
             user = auth.authenticate(email=email, password=password)
@@ -119,10 +128,12 @@ def login_view(request):
                 pass
         else:
             # Nothing to do.
+            logger.debug("Login form is invalid.")
             pass
     else:
-        # Nothing to do.
+        logger.debug("Login View request is GET.")
         pass
+
     # TODO(João) Change this render to landpage
     return render(request, "login/login_form.html", {"form": form})
 
@@ -218,3 +229,73 @@ def recover_password_confirm(request, activation_key):
         pass
     # TODO(João) Change this html to "beautiful way".
     return render(request, "confirmpassword.html", {"form": form, "title": title, "button_text": button_text})
+
+
+def profile_view(request, username):
+
+    editable_profile = False  # Variable to define if user will see a button to edit his profile page.
+
+    if request.method == "GET":
+        user = User.objects.get(username=username)
+        # Check if logged user is visiting his own profile page.
+        if request.user.username == user.username:
+            logger.debug("Profile page should be editable")
+            editable_profile = True
+        else:
+            logger.debug("Profile page shouldn't be editable.")
+            # Nothing to do.
+    else:
+        logger.debug("Profile view request: POST")
+        user = User()
+
+    logger.debug("Profile page is editable? " + str(editable_profile))
+    return render(request, 'profile.html', {'user': user, 'editable_profile': editable_profile})
+
+
+@login_required
+def edit_profile_view(request, username):
+    logger.debug("Rendering edit profile page.")
+    user = User.objects.get(username=username)
+    form = UserEditForm(request.POST or None, request.FILES or None)
+
+    if request.user.username == user.username:
+        if request.method == "POST":
+            logger.debug("Edit profile view request is POST.")
+            if form.is_valid():
+                logger.debug("Valid edit form.")
+                password = form.cleaned_data.get('password')
+                first_name = form.cleaned_data.get('first_name')
+                new_user_image = request.FILES.get('user_image', None)
+
+                # User changed password.
+                if len(password) != constants.NULL_FIELD:
+                    user.password = password
+                # User did not change password.
+                else:
+                    pass
+                # User changed first name.
+                if len(first_name) != constants.NULL_FIELD:
+                    user.first_name = first_name
+                # User did not change first name.
+                else:
+                    pass
+                # User changed user image.
+                if new_user_image is not None:
+                    user.user_image = new_user_image
+                # User did not change user image.
+                else:
+                    pass
+
+                user.save()
+
+                return HttpResponse("Data altered.")
+            else:
+                logger.debug("Invalid edit form.")
+                pass
+        else:
+            logger.debug("Edit profile view request is GET.")
+            pass
+    else:
+        logger.debug("User can't edit other users information.")
+        return HttpResponse("Oops! You don't have acess to this page.")
+    return render(request, 'edit_profile_form.html', {'form': form, 'user': user})

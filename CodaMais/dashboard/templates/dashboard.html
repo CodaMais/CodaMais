@@ -1,0 +1,113 @@
+{% extends "general/template.html" %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Top 5 - Ranking</h4>
+                <p class="category">Lista Dinâmica estilo Tabela</p>
+            </div>
+            <div class="content">
+                <!-- Content Structure -->
+                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+
+                <div class="footer">
+                    <hr>
+                    <div class="stats">
+                        <i class="fa fa-history"></i> Atualizado X minutos atrás
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Quantidade de Exercícios por Dia</h4>
+                <p class="category">Gráfico Dinâmico</p>
+            </div>
+            <div class="content">
+                <!-- Content Structure -->
+                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                <div class="footer">
+                    <hr>
+                    <div class="stats">
+                        <i class="fa fa-history"></i>Atualizado X minutos atrás
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card ">
+            <div class="header">
+                <h4 class="title">Últimos exercícios realizados</h4>
+                <p class="category">Lista Dinâmica estilo Tabela (Máx 5 exerc.)</p>
+            </div>
+            <div class="content">
+                <!-- Content Structure -->
+                <div id="chartActivity" class="ct-chart"></div>
+                <div class="footer">
+                    <hr>
+                    <div class="stats">
+                        <i class="fa fa-history"></i>Atualizado X minutos atrás
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4">
+        <div class="card ">
+            <div class="header">
+                <h4 class="title">Últimos uploads de exercícios</h4>
+                <p class="category">Lista Dinâmica estilo Tabela (Máx 5 exerc.)</p>
+            </div>
+            <div class="content">
+                <!-- Content Structure -->
+                <div id="chartActivity" class="ct-chart"></div>
+                <div class="footer">
+                    <hr>
+                    <div class="stats">
+                        <i class="fa fa-history"></i>Atualizado X minutos atrás
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4">
+        <div class="card ">
+            <div class="header">
+                <h4 class="title">Novos Tópicos no Fórum</h4>
+                <p class="category">Lista Dinâmica estilo Tabela (Máx 5 exerc.)</p>
+            </div>
+            <div class="content">
+                <!-- Content Structure -->
+                <div id="chartActivity" class="ct-chart"></div>
+                <div class="footer">
+                    <hr>
+                    <div class="stats">
+                        <i class="fa fa-history"></i>Atualizado X minutos atrás
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

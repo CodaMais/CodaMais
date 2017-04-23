@@ -27,23 +27,23 @@ from django.conf.urls import include
 
 # Local Django
 from user import views
-from exercise.views import *
+from exercise.views import show_exercise
+from exercise.views import list_exercises_not_deprecated
 from landing.views import home
-from landing import views as landing_views
+from dashboard.views import dashboard
 
 urlpatterns = i18n_patterns(
-    url(r'^teste/', landing_views.teste, name='teste'),
     url(r'^$', home, name="landing_home"),
     url(r'^admin/', admin.site.urls),
     # TODO(João) Change this url to landpage, and delete this url
     url(r'^register/', views.register_view, name='register_view'),
     url(r'^confirm/(?P<activation_key>\w+)/', views.register_confirm,
         name='confirm_account'),
+    url(r'^dashboard/', dashboard, name='dashboard'),
     # Recover password.
     url(r'^recoverpassword/', views.recover_password, name='recover_password'),
     url(r'^recover/(?P<activation_key>\w+)/', views.recover_password_confirm,
         name='recover_password_confirm'),
-
     # TODO(João) Change this url to landpage, and delete this url
     url(r'^login/', views.login_view, name='login_view'),
     url(r'^logout/', views.logout_view, name='logout_view'),

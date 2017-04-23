@@ -1,11 +1,7 @@
-<html>
-  <header>
-    <title>
-      Exercícios
-    </title>
+{% extends "general/template.html" %}
 
-  </header>
-  <body>
+{% block content %}
+
     <h1>
         {{exercise.title}}
       </h1>
@@ -35,5 +31,4 @@
         </tr>
       </table>
 
-  </body>
-</html>
+{% endblock %}

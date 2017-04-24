@@ -47,7 +47,7 @@ urlpatterns = i18n_patterns(
         name='recover_password_confirm'),
     # TODO(João) Change this url to landpage, and delete this url
     url(r'^login/', views.login_view, name='login_view'),
-    url(r'^logout/', views.logout_view, name='logout_view'),
+    url(r'^logout/', views.logout_view, name='logout'),
     # Exercise.
     url(r'^exercise/(?P<id>\d+)/$', show_exercise, name='show_exercise'),
     url(r'^exercise/$', list_exercises_not_deprecated,

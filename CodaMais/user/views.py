@@ -6,7 +6,7 @@ import random
 
 # Django
 from django.shortcuts import render, redirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.utils import timezone
 from django.http import HttpResponse
@@ -25,6 +25,12 @@ logger = logging.getLogger(__name__)
 
 
 def register_view(request):
+    if request.user.is_authenticated():
+        return redirect('/dashboard')
+    else:
+        # Nothing to do
+        pass
+
     form = UserRegisterForm(request.POST or None)
     logger.info("Rendering Register Page.")
     if form.is_valid():
@@ -57,17 +63,19 @@ def register_view(request):
         send_mail(email_subject, email_body, constants.CODAMAIS_EMAIL, [email],
                   fail_silently=False)
 
-        return render(request, "register_sucess.html")
+        logger.info("Email sended to user.")
+        return redirect('/')
 
     else:
         logger.info("Register form was invalid.")
 
-    return render(request, "register_form.html", {"form": form})
+    return render(request, "register/register_form.html", {"form": form})
 
 
 def register_confirm(request, activation_key):
     # Verify if user is already confirmed.
     if request.user.is_authenticated():
+        # TODO(João) Redirect to landing page with alert message.
         HttpResponse('Conta ja confirmada')
     else:
         # Nothing to do
@@ -82,6 +90,7 @@ def register_confirm(request, activation_key):
 
     if user_profile.key_expires < timezone.now():
         user_profile.delete()
+        # TODO(João) Redirect to landing page with alert message.
         return HttpResponse("Tempo para confirmar conta expirou.Crie novamente")
     else:
         # Nothing to do.
@@ -94,10 +103,17 @@ def register_confirm(request, activation_key):
     user.is_active = True
     user.save()
 
-    return render_to_response('confirmed_account.html')
+    # TODO(Allan) Add alert message telling that account was confirmed.
+    return redirect('/')
 
 
 def login_view(request):
+    if request.user.is_authenticated():
+        return redirect('/dashboard')
+    else:
+        # Nothing to do
+        pass
+
     form = UserLoginForm(request.POST or None)
 
     if request.method == "POST":
@@ -110,7 +126,7 @@ def login_view(request):
                 if user.is_active:
                     auth.login(request, user)
                     # TODO(João) Change this return to user page html
-                    return render_to_response('dashboard.html')
+                    return redirect('/dashboard')
                 else:
                     # Nothing to do.
                     pass
@@ -123,19 +139,24 @@ def login_view(request):
     else:
         # Nothing to do.
         pass
-    # TODO(João) Change this render to landpage
+
     return render(request, "login/login_form.html", {"form": form})
 
 
-# TODO(João) Change this return to landpage.
 def logout_view(request):
     logger.info("User Logout.")
     auth.logout(request)
-    return render(request, "/")
+    return redirect('/')
 
 
 # This function will be called when user forgot his password, and ask a new.
 def recover_password(request):
+    if request.user.is_authenticated():
+        return redirect('/dashboard')
+    else:
+        # Nothing to do
+        pass
+
     form = RecoverPasswordForm(request.POST or None)
     logger.info("Rendering Recover Password Page.")
     button_text = constants.CONFIRM_BUTTON
@@ -148,7 +169,8 @@ def recover_password(request):
             user = User.objects.get(email=email)
         except:
             logger.info("This email don't exist in database.")
-            return render(request, 'recover_password.html', {"form": form, "buttonText:": button_text})
+            return render(request, 'recover_password/recover_password.html',
+                          {"form": form, "buttonText:": button_text})
 
         try:
             # Prepare informations to send email
@@ -172,15 +194,18 @@ def recover_password(request):
                       fail_silently=False)
 
             logger.info("Recover password email sended.")
+            # TODO(João) Add some mechanism to show message to user that the email was sended
+            return redirect('/')
         except:
             # TODO(João) Add some mechanism to show error message to user.
             logger.info("This email already asked another password.")
-            return render(request, 'recover_password.html', {"form": form, "buttonText:": button_text})
+            return render(request, 'recover_password/recover_password.html',
+                          {"form": form, "buttonText:": button_text})
     else:
         # Nothing to do.
         pass
 
-    return render(request, 'recover_password.html', {"form": form, "button_text:": button_text})
+    return render(request, 'recover_password/recover_password.html', {"form": form, "button_text:": button_text})
 
 
 # This function will be called when user click in link sended in his email.
@@ -197,7 +222,8 @@ def recover_password_confirm(request, activation_key):
     if user_profile.key_expires < timezone.now():
         logger.info("Time do change password expired.")
         user_profile.delete()
-        return HttpResponse("Tempo para mudar a senha expirou!Peça novamente")
+        # TODO(João) Show message alert to user.
+        return redirect('/')
     else:
         # Nothing to do.
         pass
@@ -209,6 +235,7 @@ def recover_password_confirm(request, activation_key):
             user.set_password(form.cleaned_data.get('password'))
             user.save()
             user_profile.delete()
+            # TODO(João) Show message alert to user telling that passsword was succesfull changed.
             return redirect('/')
         else:
             # Nothing to do.
@@ -216,5 +243,6 @@ def recover_password_confirm(request, activation_key):
     else:
         # Nothing to do.
         pass
-    # TODO(João) Change this html to "beautiful way".
-    return render(request, "confirmpassword.html", {"form": form, "title": title, "button_text": button_text})
+
+    return render(request, "recover_password/confirmpassword.html",
+                  {"form": form, "title": title, "button_text": button_text})

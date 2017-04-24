@@ -5,7 +5,7 @@
       {% csrf_token %}
       {% load static %}
       {% include "landing/head.html" %}
-
+      {% block head %} {% endblock %}
 </head>
 
 <body>
@@ -15,7 +15,7 @@
     </div>
     <div class="jumbotron">
         <!-- Campo do meio -->
-        {% include "landing/middle_container.html" %}
+        {% block content %} {% endblock %}
     </div>
 
     <div class="container">

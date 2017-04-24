@@ -13,7 +13,7 @@ from .forms import ConfirmPasswordForm
 from .forms import RecoverPasswordForm
 from .forms import UserRegisterForm
 from .forms import UserLoginForm
-from user.views import register_view
+from user.views import register_view, login_view
 
 
 class RegisterViewTest(TestCase):
@@ -25,28 +25,29 @@ class RegisterViewTest(TestCase):
     username = "Username"
     factory = RequestFactory()
 
-    def test_if_register_page_is_showing(self):
+    # This will happen when user is already logged.
+    def test_if_register_page_is_not_showing(self):
         request = self.factory.get('/register')
+        request.user = self.user
         response = register_view(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 
 class LoginViewTest(TestCase):
+    user = User()
+    email = "user@user.com"
+    wrong_email = "useruser.com"
+    password = "userpassword"
+    first_name = "TestUser"
+    username = "Username"
     factory = RequestFactory()
 
-    def test_if_login_page_is_showing(self):
+    # This will happen when user is already logged.
+    def test_if_login_page_is_not_showing(self):
         request = self.factory.get('/login')
-        response = register_view(request)
-        self.assertEqual(response.status_code, 200)
-
-
-class LogoutViewTest(TestCase):
-    factory = RequestFactory()
-
-    def test_if_logout_page_is_showing(self):
-        request = self.factory.get('/register')
-        response = register_view(request)
-        self.assertEqual(response.status_code, 200)
+        request.user = self.user
+        response = login_view(request)
+        self.assertEqual(response.status_code, 302)
 
 
 class UserTest(TestCase):

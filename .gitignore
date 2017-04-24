@@ -4,8 +4,4 @@ virtual/
 db.sqlite3
 .DS_Store
 .coverage
-<<<<<<< HEAD
-images
-=======
 media
->>>>>>> US06-DashBoard

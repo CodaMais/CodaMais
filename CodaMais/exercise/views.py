@@ -123,7 +123,7 @@ def extract_time(result):
         for time in list_time:
             sum_time += time
     else:
-        sum_time = None
+        sum_time = 0
     logger.info("The runtime extraction was taken from the API response.")
     return sum_time
 

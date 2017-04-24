@@ -1,0 +1,13 @@
+{% extends "general/template.html" %}
+
+{% block content %}
+  <h1>User Edit</h1>
+  <form method="post" action="." enctype="multipart/form-data">
+      {% csrf_token %}
+       {{ form.as_p }}
+
+      <input type="hidden" name="next" value="/" />
+      <input type="submit" value="Register" />
+  </form>
+
+{% endblock %}

@@ -1,9 +1,7 @@
-<html>
-<head>
-  <title>Create Topic</title>
-</head>
+{% extends "general/template.html" %}
 
-<body>
+{% block content %}
+
   <h1>Create Topic</h1>
 
   <form method="post" action=".">
@@ -13,6 +11,4 @@
       <input type="submit" value="Salvar" />
   </form>
 
-</body>
-
-</html>
+{% endblock %}

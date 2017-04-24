@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 
 # local Django
-
 from user.views import (
     register_view, login_view
 )
@@ -34,7 +33,7 @@ class ProfileViewTest(TestCase):
 
     def test_if_profile_page_is_showing(self):
         c = Client()
-        response = c.get("/pt-br/user/Username/")
+        response = c.get("/pt-br/user/profile/Username/")
         self.assertEqual(response.status_code, 200)
 
 
@@ -47,19 +46,29 @@ class RegisterViewTest(TestCase):
     username = "Username"
     factory = RequestFactory()
 
-    def test_if_register_page_is_showing(self):
+    # This will happen when user is already logged.
+    def test_if_register_page_is_not_showing(self):
         request = self.factory.get('/register')
+        request.user = self.user
         response = register_view(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 
 class LoginViewTest(TestCase):
+    user = User()
+    email = "user@user.com"
+    wrong_email = "useruser.com"
+    password = "userpassword"
+    first_name = "TestUser"
+    username = "Username"
     factory = RequestFactory()
 
-    def test_if_login_page_is_showing(self):
+    # This will happen when user is already logged.
+    def test_if_login_page_is_not_showing(self):
         request = self.factory.get('/login')
+        request.user = self.user
         response = login_view(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
 
 class UserTest(TestCase):

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% csrf_token %}
+    {% include "general/head.html" %}
+</head>
+
+<body>
+    <div class="wrapper">
+        {% include "general/side_bar.html" %}
+        <div class="main-panel">
+            {% include "general/navigation_bar.html" %}
+            <div class="content">
+                <div class="container-fluid">
+                    {% block content %} {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% include "general/javascript.html" %}
+
+</html>

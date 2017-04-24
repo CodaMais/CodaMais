@@ -13,6 +13,8 @@ install:
 
 script:
   - cd CodaMais
+  - ./manage.py makemigrations
+  - ./manage.py migrate
   - coverage run ./manage.py test
 
 after_success:

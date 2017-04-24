@@ -1,18 +1,15 @@
-<html>
-<head>
-  <title>
-    Exercícios
-  </title>
+{% extends "general/template.html" %}
+
+{% block content %}
+
   <style type="text/css" media="screen">
       #editor {
           width: 500px;
           height: 200px;
       }
   </style>
-</head>
 
-<body>
-  <h1>
+      <h1>
         {{exercise.title}}
       </h1>
   <h3>
@@ -60,5 +57,4 @@
     $textarea.val(editor.getSession().getValue());
   });
 </script>
-
-</html>
+{% endblock %}

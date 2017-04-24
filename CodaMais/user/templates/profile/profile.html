@@ -1,0 +1,14 @@
+{% extends "general/template.html" %}
+
+{% block content %}
+    {% ifequal editable_profile 1 %}
+      <a href="{% url 'edit' user.username %}"> Edit </a>
+    {% endifequal %}
+    <h1>
+        Nickname: {{user.username}}
+        <br>
+        First name: {{user.first_name}}
+        <br>
+        <img src="{{user.user_image.url}}" width="100px" height="100px"></img>
+    </h1>
+{% endblock %}

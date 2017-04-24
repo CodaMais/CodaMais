@@ -61,7 +61,7 @@ class UserRegisterForm(forms.ModelForm):
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput, label=_(constants.PASSWORD))
 
     def clean(self, *args, **kwargs):
         password = self.cleaned_data.get("password")
@@ -119,7 +119,8 @@ class UserEditForm(forms.ModelForm):
                                required=False)
 
     password_confirmation = forms.CharField(widget=forms.PasswordInput,
-                                            label=_(constants.PASSWORD_CONFIRMATION))
+                                            label=_(constants.PASSWORD_CONFIRMATION),
+                                            required=False)
 
     first_name = forms.CharField(label=constants.FIRST_NAME,
                                  max_length=constants.FIRST_NAME_FIELD_LENGTH,

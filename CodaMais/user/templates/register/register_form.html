@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <link rel="stylesheet" href="{% static "register/register.css" %}">
+  {% include "landing/head.html" %}
+</head>
+
+<body>
+    <div class="container">
+        {% include "landing/navigation_bar.html" %}
+    </div>
+    <!-- import registration form -->
+
+  <div class="imageBackground">
+              <br>
+              <br>
+              <br
+              <div class="container">
+                <div class = "row" >
+                      <div class="form">
+                          <form method="post" action=".">
+                              {% csrf_token %}
+                               {{ form.as_p }}
+                              <button>Register</button>
+                          </form>
+                      </div>
+              </div>
+            </div>
+  </div>
+
+    <div class="container">
+        {% include "landing/footer.html" %}
+    </div>
+
+
+</body>
+{% include "landing/javascript.html" %}
+</html>

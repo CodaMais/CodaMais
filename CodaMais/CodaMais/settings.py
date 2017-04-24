@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'redactor',
     'landing',
     'forum',
+    'dashboard',
+
 ]
 
 # Authentication backends
@@ -71,7 +73,8 @@ ROOT_URLCONF = 'CodaMais.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates', 'user/templates', 'exercise/templates_exercise', 'forum/templates_forum'],
+        'DIRS': ['templates', 'user/templates', 'exercise/templates_exercise',
+                 'landing/templates', 'dashboard/templates', 'forum/templates_forum', ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

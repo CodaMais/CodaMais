@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      {% csrf_token %}
+      {% load static %}
+      {% include "landing/head.html" %}
+      {% block head %} {% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        <!-- navigation bar -->
+        {% include "landing/navigation_bar.html" %}
+    </div>
+    <div class="jumbotron">
+        <!-- Campo do meio -->
+        {% block content %} {% endblock %}
+    </div>
+
+    <div class="container">
+        <!-- parte de baixo -->
+        {% include "landing/footer.html" %}
+    </div>
+
+</body>
+{% include "landing/javascript.html" %}
+</html>

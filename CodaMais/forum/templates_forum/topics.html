@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Tópicos</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
-<body>
+{% extends "general/template.html" %}
+
+{% block content %}
 
 <div class="container">
   <h2>Tópicos Criados</h2>
@@ -19,5 +11,6 @@
   </div>
 </div>
 
-</body>
-</html>
+  <a href="{% url 'create_topic' %}">  <button class="btn dropdown-toggle btn-outline-success" type="button" >Novo Tópico</button></a>
+
+{% endblock %}

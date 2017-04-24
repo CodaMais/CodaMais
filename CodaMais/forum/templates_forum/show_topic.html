@@ -1,12 +1,8 @@
-<html>
-  <header>
-    <title>
-      Tópico
-    </title>
+{% extends "general/template.html" %}
 
-  </header>
-  <body>
-    <h1>
+{% block content %}
+
+      <h1>
         {{topic.title}}
       </h1>
       <h4>
@@ -20,6 +16,4 @@
         {{topic.description|safe}}
       </div>
 
-
-  </body>
-</html>
+{% endblock %}

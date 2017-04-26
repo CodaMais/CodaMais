@@ -12,3 +12,6 @@ MAX_LENGTH_DESCRIPTION = 1000
 
 # RESPONSE CODES.
 REQUEST_SUCCEEDED = 200  # 200 is return with success response.
+
+# ERROR MESSAGES
+DELETE_TOPIC_ASSERT = "Topic does not have an author."

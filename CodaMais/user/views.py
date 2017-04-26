@@ -30,6 +30,7 @@ logger = logging.getLogger(constants.PROJECT_NAME)
 
 def register_view(request):
     if request.user.is_authenticated():
+        logger.info("Logged user: " + request.user.username)
         return redirect('/dashboard/dashboard')
     else:
         # Nothing to do
@@ -80,6 +81,8 @@ def register_view(request):
 def register_confirm(request, activation_key):
     # Verify if user is already confirmed.
     if request.user.is_authenticated():
+        logger.info("Logged user: " + request.user.usernamef)
+
         # TODO(João) Redirect to landing page with alert message.
         HttpResponse('Conta ja confirmada')
     else:
@@ -117,6 +120,7 @@ def login_view(request):
     logger.debug("Rendering login page.")
 
     if request.user.is_authenticated():
+        logger.info("Logged user: " + request.user.username)
         return redirect('/dashboard/dashboard')
     else:
         # Nothing to do
@@ -165,6 +169,7 @@ def logout_view(request):
 # This function will be called when user forgot his password, and ask a new.
 def recover_password(request):
     if request.user.is_authenticated():
+        logger.info("Logged user: " + request.user.username)
         return redirect('/dashboard/dashboard')
     else:
         # Nothing to do

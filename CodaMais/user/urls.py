@@ -25,7 +25,7 @@ urlpatterns = (
     url(r'^logout/', logout_view, name='logout_view'),
     url(r'^edit/(?P<username>[\w|\W]+)/', edit_profile_view, name='edit'),
     url(r'^profile/(?P<username>[\w|\W]+)/', profile_view, name='profile_view'),
-
+    
     # Recover password.
     url(r'^recoverpassword/', recover_password, name='recover_password'),
     url(r'^recover/(?P<activation_key>\w+)/', recover_password_confirm,

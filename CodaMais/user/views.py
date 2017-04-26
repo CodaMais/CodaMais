@@ -29,7 +29,7 @@ logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 def register_view(request):
-    if request.user.is_authenticated():
+    if request.user is not None:
         logger.info("Logged user: " + request.user.username)
         return redirect('/dashboard/dashboard')
     else:
@@ -38,6 +38,7 @@ def register_view(request):
 
     form = UserRegisterForm(request.POST or None)
     logger.debug("Rendering Register Page.")
+
     if form.is_valid():
         logger.debug("Register form is valid.")
         email = form.cleaned_data.get('email')
@@ -80,8 +81,8 @@ def register_view(request):
 
 def register_confirm(request, activation_key):
     # Verify if user is already confirmed.
-    if request.user.is_authenticated():
-        logger.info("Logged user: " + request.user.usernamef)
+    if request.user is not None:
+        logger.info("Logged user: " + request.user.username)
 
         # TODO(João) Redirect to landing page with alert message.
         HttpResponse('Conta ja confirmada')
@@ -262,7 +263,7 @@ def recover_password_confirm(request, activation_key):
         # Nothing to do.
         pass
 
-    return render(request, "recover_password/confirm_password.html",
+    return render(request, "recover_password/confirmpassword.html",
                   {"form": form, "title": title, "button_text": button_text})
 
 

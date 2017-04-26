@@ -262,7 +262,7 @@ def recover_password_confirm(request, activation_key):
         # Nothing to do.
         pass
 
-    return render(request, "recover_password/confirmpassword.html",
+    return render(request, "recover_password/confirm_password.html",
                   {"form": form, "title": title, "button_text": button_text})
 
 

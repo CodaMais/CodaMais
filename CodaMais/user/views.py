@@ -19,7 +19,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import (
     UserRegisterForm, UserLoginForm, UserEditForm, RecoverPasswordForm, ConfirmPasswordForm
 )
-from .models import(
+from .models import (
     User, UserProfile, RecoverPasswordProfile
 )
 from . import constants
@@ -267,24 +267,32 @@ def recover_password_confirm(request, activation_key):
 
 
 def profile_view(request, username):
-
-    editable_profile = False  # Variable to define if user will see a button to edit his profile page.
-
     if request.method == "GET":
         user = User.objects.get(username=username)
         # Check if logged user is visiting his own profile page.
-        if request.user.username == user.username:
-            logger.debug("Profile page should be editable")
-            editable_profile = True
-        else:
-            logger.debug("Profile page shouldn't be editable.")
-            # Nothing to do.
+        editable_profile = show_edit_button(user.username, request.user.username)
+
     else:
         logger.debug("Profile view request: POST")
         user = User()
 
     logger.debug("Profile page is editable? " + str(editable_profile))
     return render(request, 'profile/profile.html', {'user': user, 'editable_profile': editable_profile})
+
+
+def show_edit_button(visitor_username, current_user_username):
+
+    editable_profile = False  # Variable to define if user will see a button to edit his profile page.
+
+    if current_user_username == visitor_username:
+        logger.debug("Profile page should be editable")
+        editable_profile = True
+
+    else:
+        logger.debug("Profile page shouldn't be editable.")
+        # Nothing to do.
+
+    return editable_profile
 
 
 @login_required

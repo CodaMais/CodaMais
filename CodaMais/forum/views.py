@@ -23,7 +23,24 @@ def list_all_topics(request):
 
 def show_topic(request, id):
     topic = Topic.objects.get(id=id)
-    return render(request, 'show_topic.html', {'topic': topic})
+    deletable_topic = show_delete_button(topic.author, request.user.username)
+    return render(request, 'show_topic.html', {'topic': topic, 'deletable_topic': deletable_topic})
+
+
+def show_delete_button(topic_author, current_user_username):
+
+    deletable_topic = False  # Variable to define if user will see a button to edit his profile page.
+
+    # Check if logged user is visiting his own topic page.
+    if topic_author == current_user_username:
+        logger.debug("Topic page should be deletable")
+        deletable_topic = True
+    else:
+        logger.debug("Topic page shouldn't be deletable.")
+        # Nothing to do.
+
+    logger.debug("Topic page is deletable? " + str(deletable_topic))
+    return deletable_topic
 
 
 @login_required(login_url='/')

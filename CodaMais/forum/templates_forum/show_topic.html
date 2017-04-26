@@ -15,5 +15,10 @@
       <div>
         {{topic.description|safe}}
       </div>
+      <div>
+        {% if deletable_topic %}
+            <a href="{% url 'delete_topic' topic.id %}">  <button class="btn dropdown-toggle btn-outline-success" type="button" >Deletar Tópico</button></a>
+        {% endif %}
+      </div>
 
 {% endblock %}

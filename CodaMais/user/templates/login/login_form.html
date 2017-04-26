@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+ {% extends "landing/template.html" %}
 
-<head>
-  {% load static %}
-  <link rel="stylesheet" href="{% static "recoverPassword/recoverPasswordRequest.css" %}">
-  {% include "landing/head.html" %}
-
-
-</head>
-
-<body>
-    <div class="container">
-        {% include "landing/navigation_bar.html" %}
-    </div>
-    <!-- import registration form -->
-
-
+  {% block content %}
   <div class="imageBackground">
               <br>
               <br>
@@ -37,11 +22,4 @@
             </div>
   </div>
 
-    <div class="container">
-        {% include "landing/footer.html" %}
-    </div>
-
-
-</body>
-{% include "landing/javascript.html" %}
-</html>
+  {% endblock %}

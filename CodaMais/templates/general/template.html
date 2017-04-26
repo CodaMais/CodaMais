@@ -11,6 +11,7 @@
         {% include "general/side_bar.html" %}
         <div class="main-panel">
             {% include "general/navigation_bar.html" %}
+            {% block title %} {% endblock %}
             <div class="content">
                 <div class="container-fluid">
                     {% block content %} {% endblock %}
@@ -18,6 +19,7 @@
             </div>
         </div>
     </div>
+    {% block modal %} {% endblock %}
 </body>
 
 {% include "general/javascript.html" %}

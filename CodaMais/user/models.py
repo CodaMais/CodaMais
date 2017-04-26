@@ -63,7 +63,7 @@ class First_name(models.CharField):
 
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', ]
+    REQUIRED_FIELDS = ['first_name', 'username', ]
 
     username = Username()
     first_name = First_name()

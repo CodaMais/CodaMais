@@ -62,9 +62,9 @@ class First_name(models.CharField):
 
 
 class Score(models.IntegerField):
-    validator_min_length = validators.MinLengthValidator(constants.SCORE_MIN_LENGTH)
+    validator_min_value = validators.MinValueValidator(constants.SCORE_MIN_LENGTH)
 
-    default_validators = [validator_min_length]
+    default_validators = [validator_min_value]
 
     def __init__(self, *args, **kwargs):
         kwargs['default'] = constants.SCORE_MIN_LENGTH

@@ -7,7 +7,7 @@ from django.test.client import RequestFactory
 
 # local Django
 from user.views import (
-    register_view, login_view
+    register_view, login_view,
 )
 from .models import(
     User, UserProfile, RecoverPasswordProfile,
@@ -38,37 +38,70 @@ class ProfileViewTest(TestCase):
 
 
 class RegisterViewTest(TestCase):
-    user = User()
-    email = "user@user.com"
-    wrong_email = "useruser.com"
-    password = "userpassword"
-    first_name = "TestUser"
-    username = "Username"
-    factory = RequestFactory()
+    def setUp(self):
+        self.user = User()
+        self.email = "user@user.com"
+        self.wrong_email = "useruser.com"
+        self.password = "userpassword"
+        self.first_name = "TestUser"
+        self.username = "Username"
+        self.form = (
+            {
+                'username': self.username,
+                'password': self.password,
+                'first_name': self.first_name,
+                'password_confirmation': self.password,
+                'email': self.email,
+            }
+        )
+        self.wrong_form = self.form
+        self.factory = RequestFactory()
 
     # This will happen when user is already logged.
     def test_if_register_page_is_not_showing(self):
-        request = self.factory.get('/register')
+        self.user.save()
+        request = self.factory.get('/user/register', follow=True)
         request.user = self.user
         response = register_view(request)
         self.assertEqual(response.status_code, 302)
 
+    def test_if_register_was_made(self):
+        request = self.factory.post('user/register/', self.form, follow=True)
+        request.user = User()
+        request.user.id = None
+        response = register_view(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/')
+
+    def test_if_register_was_invalid(self):
+        self.wrong_form['email'] = self.wrong_email
+        request = self.factory.post('user/register/', self.form, follow=True)
+        request.user = User()
+        request.user.id = None
+        response = register_view(request)
+
+        # If register was invalid, we reload the same page.
+        self.assertEqual(response.status_code, 200)
+
 
 class LoginViewTest(TestCase):
-    user = User()
-    email = "user@user.com"
-    wrong_email = "useruser.com"
-    password = "userpassword"
-    first_name = "TestUser"
-    username = "Username"
-    factory = RequestFactory()
+    def setUp(self):
+        self.user = User()
+        self.user.email = "user@user.com"
+        self.user.email = "useruser.com"
+        self.user.password = "userpassword"
+        self.user.first_name = "TestUser"
+        self.user.username = "Username"
+        self.factory = RequestFactory()
+        self.user.save()
 
     # This will happen when user is already logged.
     def test_if_login_page_is_not_showing(self):
-        request = self.factory.get('/login')
+        request = self.factory.get('/user/login/')
         request.user = self.user
         response = login_view(request)
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/dashboard/dashboard')
 
 
 class UserTest(TestCase):

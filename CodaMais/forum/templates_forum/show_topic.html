@@ -1,19 +1,40 @@
 {% extends "general/template.html" %}
 
 {% block content %}
+<h1>
+{{topic.title}}
+</h1>
+<h4>
+{{topic.subtitle}}
+</h4>
+<div>
+    {{topic.author}} {{topic.dateTopic}}
+</div>
+        <div>
+            {{topic.description|safe}}
+        </div>
+        <div>
+            {% if deletable_topic %}
+            <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
+        </div>
+{% endblock %}
 
-      <h1>
-        {{topic.title}}
-      </h1>
-      <h4>
-        {{topic.subtilte}}
-      </h4>
-      <div>
-        {{topic.author}}
-        {{topic.dateTopic}}
-      <div>
-      <div>
-        {{topic.description|safe}}
-      </div>
-
+{% block modal %}
+<div class="modal fade" id="delete-confirmation">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirmar Deleção</h4>
+            </div>
+            <div class="modal-body">
+                Você deseja realmente apagar seu tópico? Essa ação é irreversível.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <a href="{% url 'delete_topic' topic.id %}" class="btn btn-primary">Deletar</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.conf.urls import include
 
 # Local Django.
-from .views import(
+from .views import (
     show_exercise,
     list_exercises_not_deprecated
 )

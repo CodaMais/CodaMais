@@ -61,6 +61,16 @@ class First_name(models.CharField):
         super(models.CharField, self).__init__(*args, **kwargs)
 
 
+class Score(models.IntegerField):
+    validator_min_length = validators.MinLengthValidator(constants.SCORE_MIN_LENGTH)
+
+    default_validators = [validator_min_length]
+
+    def __init__(self, *args, **kwargs):
+        kwargs['default'] = constants.SCORE_MIN_LENGTH
+        super(models.IntegerField, self).__init__(*args, **kwargs)
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'username', ]
@@ -68,6 +78,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = Username()
     first_name = First_name()
     email = Email()
+    score = Score()
 
     # User Profile Image
     user_image = models.ImageField(default=constants.USER_IMAGE,

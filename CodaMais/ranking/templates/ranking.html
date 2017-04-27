@@ -1,0 +1,12 @@
+{% extends "general/template.html" %}
+
+{% block content %}
+
+  <center><h1>Ranking</h1></center>
+  <div class="list-group">
+    {% for user in ranking %}
+      <a href="{% url 'profile_view' user.username %}" class="list-group-item">{{user.username}}</a>
+    {% endfor %}
+  </div>
+
+{% endblock %}

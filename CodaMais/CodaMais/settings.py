@@ -74,7 +74,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['templates', 'user/templates', 'exercise/templates_exercise',
-                 'landing/templates', 'dashboard/templates', 'forum/templates_forum', ],
+                 'landing/templates', 'dashboard/templates', 'forum/templates_forum',
+                 'ranking/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

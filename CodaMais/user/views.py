@@ -29,7 +29,7 @@ logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 def register_view(request):
-    if request.user is not None:
+    if request.user.id is not None:
         logger.info("Logged user: " + request.user.username)
         return redirect('/dashboard/dashboard')
     else:
@@ -81,7 +81,7 @@ def register_view(request):
 
 def register_confirm(request, activation_key):
     # Verify if user is already confirmed.
-    if request.user is not None:
+    if request.user.id is not None:
         logger.info("Logged user: " + request.user.username)
 
         # TODO(João) Redirect to landing page with alert message.
@@ -120,7 +120,7 @@ def login_view(request):
 
     logger.debug("Rendering login page.")
 
-    if request.user.is_authenticated():
+    if request.user.id is not None:
         logger.info("Logged user: " + request.user.username)
         return redirect('/dashboard/dashboard')
     else:
@@ -169,7 +169,7 @@ def logout_view(request):
 
 # This function will be called when user forgot his password, and ask a new.
 def recover_password(request):
-    if request.user.is_authenticated():
+    if request.user.id is not None:
         logger.info("Logged user: " + request.user.username)
         return redirect('/dashboard/dashboard')
     else:

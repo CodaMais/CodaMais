@@ -6,3 +6,5 @@ db.sqlite3
 .coverage
 media
 debug.log
+*/migrations/*
+!*/migrations/__init__.py

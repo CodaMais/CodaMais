@@ -21,9 +21,10 @@ logger = logging.getLogger(__name__)
 
 
 def list_all_topics(request):
-    data = {}
-    data['list_topics'] = Topic.objects.all()
-    return render(request, 'topics.html', data)
+    topics = {}
+    topics['list_topics'] = Topic.objects.all()
+
+    return render(request, 'topics.html', topics)
 
 
 def show_topic(request, id):
@@ -35,13 +36,17 @@ def show_topic(request, id):
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
+    answers = list_all_answer(topic)
+    quantity_answer = len(answers)
     answer_topic(user, topic, form)
     deletable_topic = show_delete_button(topic.author, request.user.username)
 
     return render(request, 'show_topic.html', {
         'topic': topic,
         'deletable_topic': deletable_topic,
-        'form': form
+        'form': form,
+        'answers': answers,
+        'quantity_answer': quantity_answer
         })
 
 
@@ -114,3 +119,9 @@ def answer_topic(user, topic, form):
     else:
         # Nothing to do.
         pass
+
+
+def list_all_answer(topic):
+    answers = []
+    answers = Answer.objects.filter(topic=topic)
+    return answers

@@ -6,6 +6,8 @@ from forum import constants
 from user.models import User
 
 
+# Class: Topic
+# The class represents a topic in the site forum.
 class Topic(models.Model):
     title = models.CharField(max_length=constants.MAX_LENGTH_TITLE)
     subtitle = models.CharField(max_length=constants.MAX_LENGTH_SUBTITLE)
@@ -17,6 +19,8 @@ class Topic(models.Model):
         return self.title
 
 
+# Class: Answer
+# The class represents a answer to a topic in the site forum.
 class Answer(models.Model):
     description = models.CharField(max_length=constants.MAX_LENGTH_ANSWER_DESCRIPTION)
     user = models.ForeignKey(

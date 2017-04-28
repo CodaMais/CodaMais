@@ -27,13 +27,17 @@ def list_all_topics(request):
     return render(request, 'topics.html', topics)
 
 
+# Displays topic and user data and a space for response to the topic.
 def show_topic(request, id):
+    logger.debug("Rendering topic page.")
     form = AnswerForm(request.POST or None,
                       initial={'description': ''})
     user = request.user
+
     try:
         topic = Topic.objects.get(id=id)
     except ObjectDoesNotExist:
+        logger.exception("Topic is not exists.")
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
@@ -82,14 +86,15 @@ def create_topic(request):
         post = form.save(commit=False)  # Pausing the Django auto-save to enter username.
         post.author = username
         post.save()  # Posting date is generated automaticlly by the Model.
+
+        # Reset form.
+        form = TopicForm()
         return redirect('list_all_topics')
 
     else:
         # Create topic form was invalid.
         pass
 
-        # Reset form.
-        form = TopicForm()
         return render(request, 'new_topic.html', {'form': form})  # Re-using data if something has been speeled wrong.
 
 
@@ -98,6 +103,7 @@ def delete_topic(request, id):
     try:
         topic = Topic.objects.get(id=id)  # Topic object, from Topic model.
     except ObjectDoesNotExist:
+        logger.exception("Topic is not exists.")
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
@@ -117,23 +123,31 @@ def delete_topic(request, id):
         return redirect('list_all_topics')
 
 
+# The user answers the topic accessed.
 def answer_topic(user, topic, form):
+    assert user is not None, "User not logged in."
+    assert topic is not None, "Topic is not exists."
 
     if form.is_valid():
         answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
         answer = Answer()
         answer.creates_answer(user, topic, answer_description)
-    else:
-        # Nothing to do.
-        pass
 
-    # Reset form.
-    form = AnswerForm()
+        # Reset form.
+        form = AnswerForm()
+
+        logger.debug("Create answer form was valid.")
+    else:
+        logger.warning("Invalid answer form.")
+
     return form
 
 
 # List all answers of the topic that the user is accessing.
 def list_all_answer(topic):
+    assert topic is not None, "Topic is not exists."
+
     answers = []
     answers = Answer.objects.filter(topic=topic)
+    logger.debug("Get all answers.")
     return answers

@@ -11,3 +11,9 @@
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     background-color: #696969;
 }
+
+.typo-line {
+    padding-left: 140px;
+    margin-bottom: 40px;
+    position: relative;
+}

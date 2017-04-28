@@ -1,12 +1,39 @@
-{% extends "general/template.html" %}
-
-{% block content %}
-
-  <center><h2>Lista de Exercícios</h2></center>
-  <div class="list-group">
-    {% for exercise in list_exercises %}
-      <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
-    {% endfor %}
+{% extends "general/template.html" %} {% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="header">
+        <h4 class="title">Exercícios</h4>
+      </div>
+      <div class="content table-responsive table-full-width">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>Score</th>
+              <th>Submissões</th>
+              <th>Runtime</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for exercise in list_exercises %}
+            <tr class="clickable-row"  data-href="{% url 'show_exercise' exercise.id %}">
+              <td>{{exercise.id}}</td>
+              <td>{{exercise.title}}</td>
+              <td>{{exercise.score}}</td>
+              <td>{{exercise.score}}</td>
+              <td>{{exercise.score}}</td>
+              <td>
+                <span class="label label-success">correto</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-
+</div>
 {% endblock %}

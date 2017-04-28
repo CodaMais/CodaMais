@@ -5,7 +5,7 @@ import json
 import logging
 
 # Django
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 # local Django
@@ -50,9 +50,8 @@ def show_exercise(request, id):
     user_exercise = get_current_user_exercise(user, exercise)
 
     # Show the user code in the field if the code exists.
-    form = SubmitExerciseForm(
-                            request.POST or None,
-                            initial={constants.CODE_NAME: user_exercise.code})
+    form = SubmitExerciseForm(None,
+                              initial={constants.CODE_NAME: user_exercise.code})
 
     # String list for the JSON.
     input_exercise = get_all_input_exercise(exercise)
@@ -60,10 +59,31 @@ def show_exercise(request, id):
     # String list to compare with response.
     output_exercise = get_all_output_exercise(exercise)
 
+    return render(request, 'description_exercise.html', {
+        'exercise': exercise,
+        'user_exercise': user_exercise,
+        'form': form,
+        'input_exercise': input_exercise[0],
+        'output_exercise': output_exercise[0]
+    })
+
+
+@login_required
+def process_user_exercise(request, id):
+    user = request.user
+    form = SubmitExerciseForm(request.POST)
+    exercise = Exercise.objects.get(id=id, deprecated=0)
+
     if form.is_valid():
         logger.info("Code form was valid.")
         # Source code sent by the user.
         source_code = form.cleaned_data.get(constants.CODE_NAME)
+
+        # String list for the JSON.
+        input_exercise = get_all_input_exercise(exercise)
+
+        # Get the current exercise of the user.
+        user_exercise = get_current_user_exercise(user, exercise)
 
         # Receives the JSON response from API.
         api_result = submit_exercise(source_code, input_exercise)
@@ -80,13 +100,7 @@ def show_exercise(request, id):
         # Nothing to do.
         pass
 
-    return render(request, 'description_exercise.html', {
-        'exercise': exercise,
-        'user_exercise': user_exercise,
-        'form': form,
-        'input_exercise': input_exercise[0],
-        'output_exercise': output_exercise[0]
-    })
+    return redirect('show_exercise', id=id)
 
 
 def get_current_user_exercise(user, exercise):

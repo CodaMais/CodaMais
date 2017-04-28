@@ -9,7 +9,7 @@ from forum.models import (
 )
 from user.models import User
 from forum.views import (
-    list_all_topics, show_topic, create_topic, delete_topic, answer_topic, list_all_answer
+    list_all_topics, show_topic, create_topic, delete_topic, list_all_answer
 )
 
 # RESPONSE CODES.
@@ -165,7 +165,6 @@ class TestAnswerCreation(TestCase):
         self.topic.subtitle = 'How test in Django'
         self.topic.author = 'Username'
         self.topic.description = '<p>Text Basic Exercise.</p>'
-        self.factory = RequestFactory()
         self.user.set_password('userpassword')
         self.user.save()
         self.topic.save()
@@ -203,4 +202,35 @@ class TestAnswerCreation(TestCase):
         self.assertEqual(answer_database.topic, self.answer.topic)
 
 
-#class TestAnswerTopic(TestCase):
+class TestAnswerTopic(TestCase):
+    answer = Answer()
+    topic = Topic()
+    user = User()
+
+    def setUp(self):
+        self.answer.description = "<p>Description answer.</p>"
+        self.user.email = "user@user.com"
+        self.user.first_name = "TestUser"
+        self.user.username = "Username"
+        self.user.is_active = True
+        self.topic.title = 'Basic Topic'
+        self.topic.subtitle = 'How test in Django'
+        self.topic.author = 'Username'
+        self.topic.description = '<p>Text Basic Exercise.</p>'
+        self.factory = RequestFactory()
+        self.user.set_password('userpassword')
+        self.user.save()
+        self.topic.save()
+        self.answer_creation_form = {
+            'description': self.answer.description,
+        }
+
+    def test_answer_topic(self):
+        request = self.factory.post('/forum/topics/1/', self.answer_creation_form)
+        request.user = self.user
+        response = show_topic(request, 1)
+        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
+
+    def test_list_all_answer(self):
+        list_answers = list_all_answer(self.topic)
+        self.assertEqual(len(list_answers), 0)

@@ -1,31 +1,43 @@
 {% extends "general/template.html" %}
 
 {% block content %}
+<div class="card">
+    <div class="header" id=header>
+        <h4 class="title"> Create Topic</h4><br>
+    </div>
+    <div class="content">
 
-<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=updlo0r454d4jrh4kff0wnptddzz2tl2ybqvqi5fyq7262kk"></script>
-<script>
- tinyMCE.init({
-        selector:'#id_description',
-        menubar:false
- });
+        <form method="post" action=".">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group">
+                {% for error in form.title.errors %}
+                <div class="alert alert-danger"role="alert">{{error}}</div>
+                {% endfor %}
+                <label for="{{ form.title.id_for_label }}">Title:</label>
+                {{ form.title }}
+            </div>
 
- tinyMCE.activeEditor.getContent();
+            <div class="form-group">
+                {% for error in form.subtitle.errors %}
+                <div class="alert alert-danger"role="alert">{{error}}</div>
+                {% endfor %}
+                <label for="{{ form.subtitle.id_for_label }}">Subtitle:</label>
+                {{ form.subtitle }}
+            </div>
 
-// Get the raw contents of the currently active editor
-tinyMCE.activeEditor.getContent({format : 'raw'});
+            <div class="form-group">
+                {% for error in form.description.errors %}
+                <div class="alert alert-danger"role="alert">{{error}}</div>
+                {% endfor %}
+                <label for="{{ form.description.id_for_label }}">Title:</label>
+                {{ form.description }}
+            </div>
 
-// Get content of a specific editor:
-tinyMCE.get('#id_description').getContent();
+            <input formnovalidate class="btn btn-fill btn-default" type="submit" value="Salvar" />
+        </form>
+    </div>
+</div>
 
-</script>
-
-  <h1>Create Topic</h1>
-
-  <form method="post" action=".">
-      {% csrf_token %}
-       {{ form.as_p }}
-
-      <input formnovalidate type="submit" value="Salvar" />
-  </form>
 
 {% endblock %}

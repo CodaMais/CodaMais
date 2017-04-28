@@ -28,7 +28,8 @@ def list_all_topics(request):
 
 
 def show_topic(request, id):
-    form = AnswerForm(request.POST or None)
+    form = AnswerForm(request.POST or None,
+                      initial={'description': ''})
     user = request.user
     try:
         topic = Topic.objects.get(id=id)
@@ -36,9 +37,9 @@ def show_topic(request, id):
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
+    form = answer_topic(user, topic, form)
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
-    answer_topic(user, topic, form)
     deletable_topic = show_delete_button(topic.author, request.user.username)
 
     return render(request, 'show_topic.html', {
@@ -67,7 +68,10 @@ def show_delete_button(topic_author, current_user_username):
 
 @login_required(login_url='/')
 def create_topic(request):
-    form = TopicForm(request.POST or None)
+    form = TopicForm(
+                    request.POST or None,
+                    initial={constants.ANSWER_DESCRIPTION_NAME: ''})
+
     username = request.user.username  # Automaticlly get username that is logged.
     logger.info("user: " + username)
 
@@ -79,10 +83,13 @@ def create_topic(request):
         post.author = username
         post.save()  # Posting date is generated automaticlly by the Model.
         return redirect('list_all_topics')
+
     else:
         # Create topic form was invalid.
         pass
 
+        # Reset form.
+        form = TopicForm()
         return render(request, 'new_topic.html', {'form': form})  # Re-using data if something has been speeled wrong.
 
 
@@ -119,6 +126,10 @@ def answer_topic(user, topic, form):
     else:
         # Nothing to do.
         pass
+
+    # Reset form.
+    form = AnswerForm()
+    return form
 
 
 # List all answers of the topic that the user is accessing.

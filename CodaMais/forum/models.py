@@ -18,7 +18,7 @@ class Topic(models.Model):
 
 
 class Answer(models.Model):
-    description = models.TextField(max_length=constants.MAX_LENGTH_ANSWER_DESCRIPTION)
+    description = models.CharField(max_length=constants.MAX_LENGTH_ANSWER_DESCRIPTION)
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,)

@@ -21,3 +21,11 @@
 .label-excercise-info {
     margin-left: 10px;
 }
+
+.label-exercise-status-False {
+  background-color: #d9534f;
+}
+
+.label-exercise-status-True {
+  background-color: #5cb85c;
+}

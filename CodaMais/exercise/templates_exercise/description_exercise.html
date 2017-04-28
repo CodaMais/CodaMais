@@ -18,9 +18,12 @@
       <div class="header">
         <h4 class="title">
           {{exercise.title}}
-          <span class="pull-right label label-warning label-excercise-info">Pendente</span>
-          <span class="pull-right label label-primary label-excercise-info">0.934</span>
-          <span class="pull-right label label-info">Score 100</span>
+          <span class="pull-right label label-exercise-status-{{ user_exercise.status }} label-excercise-info">{{ user_exercise.status }}</span>
+          {% if user_exercise.time is not 0 %}
+            <span class="pull-right label label-primary label-excercise-info">{{ user_exercise.time }}</span>
+          {% endif %}
+
+          <span class="pull-right label label-info">Score {{ exercise.score }}</span>
         </h4>
         <p class="category">{{exercise.get_category_display}}</p>
       </div>
@@ -66,7 +69,6 @@
         <p class="category text-uppercase">Editor</p>
       </div>
       <div class="content">
-        {{ api_response }}
         <form method="post" action="{% url 'process_user_exercise' exercise.id %}">
           {% csrf_token %} {{ form.as_p }}
           <div id="editor"></div>

@@ -1,6 +1,6 @@
 # Django.
 from django.conf.urls import url
-# from django.conf.urls import include
+from django.conf.urls import include
 
 # Local Django.
 from .views import (
@@ -15,4 +15,5 @@ urlpatterns = (
     url(r'^$', list_exercises_not_deprecated,
         name='list_exercises_not_deprecated'),
     url(r'^process/(?P<id>\d+)/$', process_user_exercise, name='process_user_exercise'),
+    url(r'^redactor/', include('redactor.urls'))
 )

@@ -91,9 +91,18 @@ def process_user_exercise(request, id):
         # Sum all runtime of test cases.
         runtime = extract_time(api_result)
 
+        # Get the outputs of test cases.
+        stdout = extract_stdout(api_result)
+
+        # String list to compare with response.
+        output_exercise = get_all_output_exercise(exercise)
+
+        # Define if user exercise if correct or not
+        status = exercise_status(stdout, output_exercise)
+
         user_exercise.update_or_creates(
                                         source_code, exercise,
-                                        user, runtime, False)
+                                        user, runtime, status)
         logger.info("The code form was valid.")
     else:
         logger.info("The code form was invalid.")
@@ -130,8 +139,8 @@ def submit_exercise(source_code, input_exercise):
     return result
 
 
-def extract_time(result):
-    list_time = json.loads(result)['result']['time']
+def extract_time(api_result):
+    list_time = json.loads(api_result)['result']['time']
     sum_time = constants.INITIAL_SUM
     if list_time is not None:
         for time in list_time:
@@ -140,6 +149,17 @@ def extract_time(result):
         sum_time = 0
     logger.info("The runtime extraction was taken from the API response.")
     return sum_time
+
+
+def extract_stdout(api_result):
+    stdout = json.loads(api_result)['result']['stdout']
+    return stdout
+
+
+def exercise_status(actual_output, original_output):
+    if actual_output == original_output:
+        return True
+    return False
 
 
 def get_all_input_exercise(exercise):

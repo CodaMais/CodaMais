@@ -115,12 +115,13 @@ def answer_topic(user, topic, form):
     if form.is_valid():
         answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
         answer = Answer()
-        answer.update_or_creates(user, topic, answer_description)
+        answer.creates_answer(user, topic, answer_description)
     else:
         # Nothing to do.
         pass
 
 
+# List all answers of the topic that the user is accessing.
 def list_all_answer(topic):
     answers = []
     answers = Answer.objects.filter(topic=topic)

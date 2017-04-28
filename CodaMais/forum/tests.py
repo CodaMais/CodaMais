@@ -4,10 +4,12 @@ from django.test.client import RequestFactory
 
 # local Django.
 
-from forum.models import Topic
+from forum.models import (
+    Topic, Answer
+)
 from user.models import User
 from forum.views import (
-    list_all_topics, show_topic, create_topic, delete_topic,
+    list_all_topics, show_topic, create_topic, delete_topic, answer_topic, list_all_answer
 )
 
 # RESPONSE CODES.
@@ -146,3 +148,59 @@ class TestRequestTopic(TestCase):
             response = delete_topic(request, self.topic.id)
             self.assertEqual(response.status_code, REQUEST_REDIRECT)
             self.assertEqual(response.url, '/en/forum/topics/')
+
+
+class TestAnswerCreation(TestCase):
+    answer = Answer()
+    topic = Topic()
+    user = User()
+
+    def setUp(self):
+        self.answer.description = "<p>Description answer.</p>"
+        self.user.email = "user@user.com"
+        self.user.first_name = "TestUser"
+        self.user.username = "Username"
+        self.user.is_active = True
+        self.topic.title = 'Basic Topic'
+        self.topic.subtitle = 'How test in Django'
+        self.topic.author = 'Username'
+        self.topic.description = '<p>Text Basic Exercise.</p>'
+        self.factory = RequestFactory()
+        self.user.set_password('userpassword')
+        self.user.save()
+        self.topic.save()
+
+    def test_if_answer_is_saved_database(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        answer_database = Answer.objects.get(id=self.answer.id)
+        self.assertEqual(str(answer_database), str(self.answer))
+
+    def test_if_creates_answer(self):
+        self.answer.creates_answer(self.user, self.topic, self.answer.description)
+        answer_database = Answer.objects.get(id=self.answer.id)
+        self.assertEqual(str(answer_database), str(self.answer))
+
+    def test_answer_get_description(self):
+        self.answer.creates_answer(self.user, self.topic, self.answer.description)
+        answer_database = Answer.objects.get(id=self.answer.id)
+        self.assertEqual(answer_database.description, self.answer.description)
+
+    def test_answer_get_date(self):
+        self.answer.creates_answer(self.user, self.topic, self.answer.description)
+        answer_database = Answer.objects.get(id=self.answer.id)
+        self.assertEqual(answer_database.date_answer, self.answer.date_answer)
+
+    def test_answer_get_user(self):
+        self.answer.creates_answer(self.user, self.topic, self.answer.description)
+        answer_database = Answer.objects.get(id=self.answer.id)
+        self.assertEqual(answer_database.user, self.answer.user)
+
+    def test_answer_get_topic(self):
+        self.answer.creates_answer(self.user, self.topic, self.answer.description)
+        answer_database = Answer.objects.get(id=self.answer.id)
+        self.assertEqual(answer_database.topic, self.answer.topic)
+
+
+#class TestAnswerTopic(TestCase):

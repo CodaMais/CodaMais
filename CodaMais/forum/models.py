@@ -20,19 +20,18 @@ class Topic(models.Model):
 class Answer(models.Model):
     description = models.TextField(max_length=constants.MAX_LENGTH_ANSWER_DESCRIPTION)
     user = models.ForeignKey(
-          User,
-          on_delete=models.CASCADE,)
+        User,
+        on_delete=models.CASCADE,)
     topic = models.ForeignKey(
-          Topic,
-          on_delete=models.CASCADE,)
+        Topic,
+        on_delete=models.CASCADE,)
     date_answer = models.DateTimeField(auto_now_add=True, blank=True)
 
-    def update_or_creates(self, user, topic, description):
+    def creates_answer(self, user, topic, description):
         self.user = user
         self.topic = topic
         self.description = description
         self.save()
-
 
     def __str__(self):
         return self.description

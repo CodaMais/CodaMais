@@ -7,7 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
 # local Django.
-from .models import Topic
+from .models import (
+    Topic, Answer
+)
 from .forms import (
     TopicForm, AnswerForm
 )
@@ -25,17 +27,22 @@ def list_all_topics(request):
 
 
 def show_topic(request, id):
+    form = AnswerForm(request.POST or None)
+    user = request.user
     try:
         topic = Topic.objects.get(id=id)
     except ObjectDoesNotExist:
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
+    answer_topic(user, topic, form)
     deletable_topic = show_delete_button(topic.author, request.user.username)
+
     return render(request, 'show_topic.html', {
         'topic': topic,
         'deletable_topic': deletable_topic,
-        'form': form})
+        'form': form
+        })
 
 
 def show_delete_button(topic_author, current_user_username):
@@ -98,19 +105,12 @@ def delete_topic(request, id):
         return redirect('list_all_topics')
 
 
-# @login_required
-# def answer_topic(request, id):
-#     # Show the user code in the field if the code exists.
-#     form = AnswerForm(request.POST or None)
-#
-#     # Automaticlly get username that is logged.
-#     username = request.user
-#
-#     try:
-#         topic = Topic.objects.get(id=id)  # Topic object, from Topic model.
-#     except ObjectDoesNotExist:
-#         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
-#         return redirect('list_all_topics')
-#
-#     if form.is_valid():
-#         answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
+def answer_topic(user, topic, form):
+
+    if form.is_valid():
+        answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
+        answer = Answer()
+        answer.update_or_creates(user, topic, answer_description)
+    else:
+        # Nothing to do.
+        pass

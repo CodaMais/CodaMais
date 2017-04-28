@@ -14,8 +14,10 @@
             {{topic.description|safe}}
         </div>
         <div>
+          <form method="post" action=".">
             {% csrf_token %} {{ form.as_p }}
-          <center><a> <button class="btn dropdown-toggle btn-outline-success" type="button">Responder</button></a></center>
+            <input type="submit" value="Submit" />
+          </form>
         </div>
         <div>
             {% if deletable_topic %}

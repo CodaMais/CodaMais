@@ -27,10 +27,9 @@ class Answer(models.Model):
           on_delete=models.CASCADE,)
     date_answer = models.DateTimeField(auto_now_add=True, blank=True)
 
-    def update_or_creates(self, user, topic, date_answer, description):
+    def update_or_creates(self, user, topic, description):
         self.user = user
         self.topic = topic
-        self.date_answer = date_answer
         self.description = description
         self.save()
 

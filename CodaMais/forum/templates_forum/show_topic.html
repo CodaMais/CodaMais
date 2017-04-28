@@ -16,6 +16,24 @@
 }
 </style>
 
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=updlo0r454d4jrh4kff0wnptddzz2tl2ybqvqi5fyq7262kk"></script>
+<script>
+ tinyMCE.init({
+        selector:'#id_description',
+        menubar:false
+
+ });
+
+ tinyMCE.activeEditor.getContent();
+
+// Get the raw contents of the currently active editor
+tinyMCE.activeEditor.getContent({format : 'raw'});
+
+// Get content of a specific editor:
+tinyMCE.get('#id_description').getContent();
+
+</script>
+
 <h1>
     {{topic.title}}
 </h1>
@@ -43,7 +61,7 @@
                                     <img src="{{answer.user.user_image.url}}" width="100px" height="100px"></img>
                                 </td>
                                 <td>
-                                    {{answer.description}}
+                                    {{answer.description|safe}}
                                 </td>
                             </tr>
                             <tr>
@@ -65,8 +83,9 @@
 </div>
 <div>
     <form method="post" action=".">
-        {% csrf_token %} {{ form.as_p }}
-        <input class="btn btn-outline-success" type="submit" value="Submit" />
+        {% csrf_token %} {{ form }}
+        <div id="editor"></div>
+        <input formnovalidate class="btn btn-success" type="submit" value="Submit" />
     </form>
 </div>
 <div>

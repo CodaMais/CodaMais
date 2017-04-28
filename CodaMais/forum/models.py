@@ -10,7 +10,7 @@ class Topic(models.Model):
     title = models.CharField(max_length=constants.MAX_LENGTH_TITLE)
     subtitle = models.CharField(max_length=constants.MAX_LENGTH_SUBTITLE)
     author = models.CharField(max_length=constants.MAX_LENGTH_AUTHOR)
-    description = models.CharField(max_length=constants.MAX_LENGTH_DESCRIPTION)
+    description = models.CharField(max_length=constants.MAX_LENGTH_TOPIC_DESCRIPTION)
     dateTopic = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
@@ -18,7 +18,7 @@ class Topic(models.Model):
 
 
 class Answer(models.Model):
-    description = models.CharField(max_length=constants.MAX_LENGTH_DESCRIPTION)
+    description = models.TextField(max_length=constants.MAX_LENGTH_ANSWER_DESCRIPTION)
     user = models.ForeignKey(
           User,
           on_delete=models.CASCADE,)

@@ -4,35 +4,54 @@
 <center><h1>Exercícios</h1></center>
 {% endblock %}
 
+<head>
+  {% load static %}
+    <script src="{% static "show_exercise/show_exercise.js" %}" type="text/javascript"></script>
+    <link rel="stylesheet" href="{% static "show_exercise/show_exercise.css" %}">
+</head>
+
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="header">
-                <h4 class="title">Tópicos Criados</h4>
-            </div>
-            <div class="content table-responsive table-full-width">
-              {% for exercise in list_exercises %}
-                {% if exercise.category == 1 %}
-                  <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
-                {% endif %}
-              {% endfor %}
+
+          <!-- Nav tabs category -->
+          <ul class="nav nav-tabs faq-cat-tabs">
+              <li class="active"><a href="#faq-cat-1" data-toggle="tab">Iniciante</a></li>
+              <li><a href="#faq-cat-2" data-toggle="tab">Médio</a></li>
+              <li><a href="#faq-cat-3" data-toggle="tab">Avançado</a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content faq-cat-content">
+              <div class="tab-pane active in fade" id="faq-cat-1">
+                <div class="list-group">
+                    {% for exercise in list_exercises %}
+                      {% if exercise.category == 1 %}
+                        <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
+                      {% endif %}
+                    {% endfor %}
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="faq-cat-2">
+                <div class="list-group">
+                    {% for exercise in list_exercises %}
+                      {% if exercise.category == 2 %}
+                        <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
+                      {% endif %}
+                    {% endfor %}
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="faq-cat-3">
+
+                  <div class="list-group">
+                      {% for exercise in list_exercises %}
+                        {% if exercise.category == 3 %}
+                          <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
+                        {% endif %}
+                      {% endfor %}
+                  </div>
+              </div>
+
           </div>
-          <div class="list-group">
-              {% for exercise in list_exercises %}
-                {% if exercise.category == 2 %}
-                  <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
-                {% endif %}
-              {% endfor %}
-          </div>
-          <div class="list-group">
-              {% for exercise in list_exercises %}
-                {% if exercise.category == 3 %}
-                  <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
-                {% endif %}
-              {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
+
 {% endblock %}

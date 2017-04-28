@@ -14,6 +14,10 @@
             {{topic.description|safe}}
         </div>
         <div>
+            {% csrf_token %} {{ form.as_p }}
+          <center><a> <button class="btn dropdown-toggle btn-outline-success" type="button">Responder</button></a></center>
+        </div>
+        <div>
             {% if deletable_topic %}
             <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
         </div>

@@ -59,7 +59,7 @@ def show_delete_button(topic_author, current_user_username):
     deletable_topic = False  # Variable to define if user will see a button to edit his profile page.
 
     # Check if logged user is visiting his own topic page.
-    if topic_author == current_user_username:
+    if topic_author.username == current_user_username:
         logger.debug("Topic page should be deletable")
         deletable_topic = True
     else:
@@ -76,15 +76,15 @@ def create_topic(request):
                     request.POST or None,
                     initial={constants.ANSWER_DESCRIPTION_NAME: ''})
 
-    username = request.user.username  # Automaticlly get username that is logged.
-    logger.info("user: " + username)
+    user = request.user  # Automaticlly get username that is logged.
+    logger.info("user: " + user.username)
 
     if form.is_valid():
 
         logger.info("Create topic form was valid.")
 
         post = form.save(commit=False)  # Pausing the Django auto-save to enter username.
-        post.author = username
+        post.author = user
         post.save()  # Posting date is generated automaticlly by the Model.
 
         # Reset form.
@@ -111,7 +111,7 @@ def delete_topic(request, id):
 
     assert topic.author is not None, constants.DELETE_TOPIC_ASSERT
 
-    if user.username == topic.author:
+    if user.username == topic.author.username:
         logger.debug("Deleting topic.")
         topic.delete()
 

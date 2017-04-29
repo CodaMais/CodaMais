@@ -6,13 +6,14 @@ from forum.models import (
 
 class ForumAdmin(admin.ModelAdmin):
     list_display = ['title',
-                    'dateTopic']
+                    'date_topic']
 
 
 class ForumAnswerAdmin(admin.ModelAdmin):
     list_display = ['user',
                     'topic',
                     'description']
+
 
 admin.site.register(Topic, ForumAdmin)
 admin.site.register(Answer, ForumAnswerAdmin)

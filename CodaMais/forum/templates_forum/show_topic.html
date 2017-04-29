@@ -12,24 +12,38 @@
 <style type="text/css" media="screen">
 #header {
     align:top;
-    height:30px;
 }
 </style>
+<div class="card">
+    <div class="header" id=header style="text-align:center;">
+        <h2 class="title">{{topic.title}}</h2>
+        <h4 class="title">{{topic.subtitle}}</h4>
+    </div>
+    <div class="content">
 
-<h1>
-    {{topic.title}}
-</h1>
-<h4>
-    {{topic.subtitle}}
-</h4>
-<div>
-    {{topic.author}} {{topic.dateTopic}}
+        <table class="table">
+            <tr>
+                <td id = column>
+                    <img src="{{topic.author.user_image.url}}" width="100px" height="100px"></img>
+                </td>
+                <td>
+                    {{topic.description|safe}}
+                </td>
+            </tr>
+            <tr>
+                <td id = column>
+                    <b>
+                        {{topic.author.username}}
+                    </b>
+                </td>
+                <td style = "text-align:right;">
+                    {{topic.dateTopic}}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
-<div>
-    {{topic.description|safe}}
-</div>
-<br>
-<div>
+
 
             <div class="card">
                 <div class="header" id=header>
@@ -62,7 +76,6 @@
             </div>
 
 
-        </div>
         <div class="card">
             <div class="header" id=header>
                 <h3 class="title"> Answer </h3><br>

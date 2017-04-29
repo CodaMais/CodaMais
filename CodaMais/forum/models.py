@@ -11,9 +11,11 @@ from user.models import User
 class Topic(models.Model):
     title = models.CharField(max_length=constants.MAX_LENGTH_TITLE)
     subtitle = models.CharField(max_length=constants.MAX_LENGTH_SUBTITLE)
-    author = models.CharField(max_length=constants.MAX_LENGTH_AUTHOR)
+    author = models.ForeignKey(
+          User,
+          on_delete=models.CASCADE,)
     description = models.CharField(max_length=constants.MAX_LENGTH_TOPIC_DESCRIPTION)
-    dateTopic = models.DateTimeField(auto_now_add=True, blank=True)
+    date_topic = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.title

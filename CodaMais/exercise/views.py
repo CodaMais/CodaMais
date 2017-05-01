@@ -101,12 +101,11 @@ def process_user_exercise(request, id):
         status = exercise_status(stdout, output_exercise)
 
         # Define if user has scored or not in this exercise
-        scored = scores_exercise(user_exercise, user, exercise.score, status)
+        scored = scores_exercise(user_exercise.scored, user, exercise.score, status)
 
         user_exercise.update_or_creates(
                                         source_code, exercise,
                                         user, runtime, status, scored)
-        logger.info("The code form was valid.")
     else:
         logger.info("The code form was invalid.")
         # Nothing to do.
@@ -117,16 +116,20 @@ def process_user_exercise(request, id):
 
 def scores_exercise(scored, user, score, status):
     if not scored:
+        logger.info("The user has not scored.")
         # if the user has not scored before
         if status:
+            logger.info("Set score to the user.")
             # if the exercise is correct
             user.score += score
             user.save()
             return True
         else:
-            # but it is incorret
+            logger.info("The exercise is incorrect.")
+            # but it is incorrect
             return False
     else:
+        logger.info("The user has already scored.")
         # the user has already scored in that exercise
         return True
 
@@ -163,19 +166,25 @@ def extract_time(api_result):
     sum_time = constants.INITIAL_SUM
     for time in list_time:
         sum_time += time
+
     logger.info("The runtime extraction was taken from the API response.")
     return sum_time
 
 
 def extract_stdout(api_result):
     stdout = json.loads(api_result)['result']['stdout']
+
+    logger.info("The stdout extraction was taken from the API response.")
     return stdout
 
 
 def exercise_status(actual_output, original_output):
     if actual_output == original_output:
+
+        logger.info("The exercise is correct.")
         return True
-    return False
+    else:
+        return False
 
 
 def get_all_input_exercise(exercise):

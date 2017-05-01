@@ -100,9 +100,11 @@ def process_user_exercise(request, id):
         # Define if user exercise if correct or not
         status = exercise_status(stdout, output_exercise)
 
+        scored = scores_exercise(user_exercise, user, exercise.score)
+
         user_exercise.update_or_creates(
                                         source_code, exercise,
-                                        user, runtime, status)
+                                        user, runtime, status, scored)
         logger.info("The code form was valid.")
     else:
         logger.info("The code form was invalid.")
@@ -110,6 +112,15 @@ def process_user_exercise(request, id):
         pass
 
     return redirect('show_exercise', id=id)
+
+
+def scores_exercise(user_exercise, user, score):
+    if user_exercise.scored:
+        return False
+    user.score += score
+    user.save()
+    user_exercise = True
+    return True
 
 
 def get_current_user_exercise(user, exercise):

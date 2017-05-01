@@ -54,13 +54,16 @@ class UserExercise(models.Model):
     time = models.CharField(max_length=constants.MAX_LENGTH_TIME,
                             default=0)
 
-    def update_or_creates(self, source_code, exercise, user, time, status):
+    scored = models.BooleanField(default=False)
+
+    def update_or_creates(self, source_code, exercise, user, time, status, scored):
         self.number_submission += 1
         self.user = user
         self.exercise = exercise
         self.status = status
         self.time = time
         self.code = source_code
+        self.scored = scored
         self.save()
 
     def __str__(self):

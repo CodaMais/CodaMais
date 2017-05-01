@@ -68,6 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = Username()
     first_name = First_name()
     email = Email()
+    score = models.IntegerField(default=0)
 
     # User Profile Image
     user_image = models.ImageField(default=constants.USER_IMAGE,

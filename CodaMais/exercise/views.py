@@ -161,11 +161,8 @@ def submit_exercise(source_code, input_exercise):
 def extract_time(api_result):
     list_time = json.loads(api_result)['result']['time']
     sum_time = constants.INITIAL_SUM
-    if list_time is not None:
-        for time in list_time:
-            sum_time += time
-    else:
-        sum_time = 0
+    for time in list_time:
+        sum_time += time
     logger.info("The runtime extraction was taken from the API response.")
     return sum_time
 

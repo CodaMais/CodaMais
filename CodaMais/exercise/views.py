@@ -100,7 +100,8 @@ def process_user_exercise(request, id):
         # Define if user exercise if correct or not
         status = exercise_status(stdout, output_exercise)
 
-        scored = scores_exercise(user_exercise, user, exercise.score)
+        # Define if user has scored or not in this exercise
+        scored = scores_exercise(user_exercise, user, exercise.score, status)
 
         user_exercise.update_or_creates(
                                         source_code, exercise,
@@ -114,13 +115,22 @@ def process_user_exercise(request, id):
     return redirect('show_exercise', id=id)
 
 
-def scores_exercise(user_exercise, user, score):
-    if user_exercise.scored:
-        return False
-    user.score += score
-    user.save()
-    user_exercise = True
-    return True
+def scores_exercise(user_exercise, user, score, status):
+    if user_exercise.scored is not True:
+        # if the user has not scored before
+        if status:
+            # if the exercise is correct
+            user.score += score
+            user.save()
+            user_exercise = True
+            return True
+        else:
+            # but it is incorret
+            return False
+    else:
+        # the user has already scored in that exercise
+        return True
+
 
 
 def get_current_user_exercise(user, exercise):

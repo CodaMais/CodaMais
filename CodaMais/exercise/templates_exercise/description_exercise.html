@@ -18,8 +18,10 @@
       <div class="header">
         <h4 class="title">
           {{exercise.title}}
-          <span class="pull-right label label-exercise-status-{{ user_exercise.status }} label-excercise-info">{{ user_exercise.status |yesno:"Correto, Incorreto" }}</span>
+
           {% if user_exercise.time is not 0 %}
+            <!-- show labels only if the user has submitted the exercise -->
+            <span class="pull-right label label-exercise-status-{{ user_exercise.status }} label-excercise-info">{{ user_exercise.status |yesno:"Correto, Incorreto" }}</span>
             <span class="pull-right label label-primary label-excercise-info">{{ user_exercise.time }}</span>
           {% endif %}
 

@@ -132,7 +132,6 @@ def scores_exercise(user_exercise, user, score, status):
         return True
 
 
-
 def get_current_user_exercise(user, exercise):
     try:
         user_exercise = UserExercise.objects.get(user=user, exercise=exercise)

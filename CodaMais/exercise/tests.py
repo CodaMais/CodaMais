@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 
 # local Django
-from exercise import(
+from exercise import (
     constants, views,
 )
 from exercise.models import (
@@ -78,12 +78,13 @@ class TestUserExerciseRegistration(TestCase):
         self.exercise.score = 10
         self.exercise.deprecated = 0
         self.test_case_exercise.input_exercise = "a\n"
-        self.test_case_exercise.output_exercise = "B\n"
+        self.test_case_exercise.output_exercise = ["B\n"]
         self.user.email = "user@user.com"
         self.user.password = "userpassword"
         self.user.first_name = "TestUser"
         self.user.username = "Username"
         self.user.is_active = True
+        self.user_exercise.scored = False
         self.user_exercise.code = """
                                     #include <stdio.h>
                                     int main () {
@@ -106,7 +107,8 @@ class TestUserExerciseRegistration(TestCase):
                                             self.user_exercise.exercise,
                                             self.user_exercise.user,
                                             self.user_exercise.time,
-                                            self.user_exercise.status)
+                                            self.user_exercise.status,
+                                            self.user_exercise.scored)
         user_exercise_database = UserExercise.objects.get(
                                 user=self.user,
                                 exercise=self.exercise)
@@ -118,7 +120,8 @@ class TestUserExerciseRegistration(TestCase):
                                             self.user_exercise.exercise,
                                             self.user_exercise.user,
                                             self.user_exercise.time,
-                                            self.user_exercise.status)
+                                            self.user_exercise.status,
+                                            self.user_exercise.scored)
         user_exercise_database = UserExercise.objects.get(
                                  user=self.user,
                                  exercise=self.exercise)
@@ -139,6 +142,14 @@ class TestUserExerciseRegistration(TestCase):
         runtime = views.extract_time(response)
         self.assertNotEqual(runtime, None)
 
+    def test_if_extract_stdout_exercise_is_success(self):
+        exercise_inputs = ['a\n', 'b\n']
+        response = views.submit_exercise(
+                                        self.user_exercise.code,
+                                        exercise_inputs)
+        stdout = views.extract_stdout(response)
+        self.assertNotEqual(stdout, None)
+
     def test_get_all_input_exercise(self):
         list_all_input = views.get_all_input_exercise(self.exercise)
         length = len(list_all_input)
@@ -148,6 +159,26 @@ class TestUserExerciseRegistration(TestCase):
         list_all_output = views.get_all_output_exercise(self.exercise)
         length = len(list_all_output)
         self.assertNotEqual(length, 0)
+
+    def test_if_user_exercise_is_incorrect(self):
+        input_exercise = ['a\n', 'b\n']
+        response = views.submit_exercise(
+                                        self.user_exercise.code,
+                                        input_exercise)
+        stdout = views.extract_stdout(response)
+        status = views.exercise_status(stdout, self.test_case_exercise.output_exercise)
+        self.assertFalse(status)
+
+    def test_if_user_exercise_is_correct(self):
+        input_exercise = ['B']
+        response = views.submit_exercise(
+                                        self.user_exercise.code,
+                                        input_exercise)
+        stdout = views.extract_stdout(response)
+        print(stdout)
+        status = views.exercise_status(stdout, self.test_case_exercise.output_exercise)
+        print(self.test_case_exercise.output_exercise)
+        self.assertTrue(status)
 
 
 class TestCaseExerciseRegistration(TestCase):

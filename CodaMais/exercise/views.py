@@ -115,14 +115,13 @@ def process_user_exercise(request, id):
     return redirect('show_exercise', id=id)
 
 
-def scores_exercise(user_exercise, user, score, status):
-    if user_exercise.scored is not True:
+def scores_exercise(scored, user, score, status):
+    if not scored:
         # if the user has not scored before
         if status:
             # if the exercise is correct
             user.score += score
             user.save()
-            user_exercise = True
             return True
         else:
             # but it is incorret

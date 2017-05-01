@@ -12,6 +12,8 @@ from exercise.models import (
 
 from user.models import User
 
+# 302 is the value returned from a HttpRequest status code when the URL was redirected.
+REQUEST_REDIRECT = 302
 
 class TestExerciseRegistration(TestCase):
 
@@ -72,13 +74,16 @@ class TestUserExerciseRegistration(TestCase):
     user = User()
 
     def setUp(self):
+
+        self.factory = RequestFactory()
+
         self.exercise.title = 'Basic Exercise'
         self.exercise.category = 2
         self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
         self.exercise.score = 10
         self.exercise.deprecated = 0
         self.test_case_exercise.input_exercise = "a\n"
-        self.test_case_exercise.output_exercise = ["B\n"]
+        self.test_case_exercise.output_exercise = ["B"]
         self.user.email = "user@user.com"
         self.user.password = "userpassword"
         self.user.first_name = "TestUser"
@@ -100,6 +105,14 @@ class TestUserExerciseRegistration(TestCase):
         self.user.save()
         self.user_exercise.user = self.user
         self.user_exercise.exercise = self.exercise
+
+        self.user_exercise_valid_form = {
+            'code': self.user_exercise.code
+        }
+
+        self.user_exercise_invalid_form = {
+            'code': ''
+        }
 
     def test_if_relation_user_exercise_saved_database(self):
         self.user_exercise.update_or_creates(
@@ -175,10 +188,40 @@ class TestUserExerciseRegistration(TestCase):
                                         self.user_exercise.code,
                                         input_exercise)
         stdout = views.extract_stdout(response)
-        print(stdout)
         status = views.exercise_status(stdout, self.test_case_exercise.output_exercise)
-        print(self.test_case_exercise.output_exercise)
         self.assertTrue(status)
+
+    def test_if_user_scored_exercise(self):
+        scored = False
+        status = True
+        response = views.scores_exercise(scored, self.user, self.exercise.score, status)
+        self.assertTrue(response)
+
+    def test_if_user_not_scored_exercise(self):
+        scored = False
+        status = False
+        response = views.scores_exercise(scored, self.user, self.exercise.score, status)
+        self.assertFalse(response)
+
+    def test_if_user_already_scored_exercise(self):
+        scored = True
+        status = True
+        response = views.scores_exercise(scored, self.user, self.exercise.score, status)
+        self.assertTrue(response)
+
+    def test_if_user_exercise_is_processed_valid_form(self):
+        request = self.factory.post('/exercise/process/1/', self.user_exercise_valid_form)
+        request.user = self.user
+        response = views.process_user_exercise(request, self.exercise.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/exercise/1/')
+
+    def test_if_user_exercise_is_processed_invalid_form(self):
+        request = self.factory.post('/exercise/process/1/', self.user_exercise_invalid_form)
+        request.user = self.user
+        response = views.process_user_exercise(request, self.exercise.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/exercise/1/')
 
 
 class TestCaseExerciseRegistration(TestCase):

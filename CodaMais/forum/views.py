@@ -167,18 +167,19 @@ def list_all_answer(topic):
 
 @login_required(login_url='/')
 def delete_answer(request, id):
-    logger.info("This is the id number: " + id)
+    logger.info("This is the id number: " + str(id))
     logger.info("Username" + request.user.username)
     try:
         answer = Answer.objects.get(id=id)  # Answer object, from Answer model.
     except ObjectDoesNotExist:
         logger.exception("Answer does not exists.")
+        return redirect('list_all_topics')
 
     user = request.user  # User object, from user model. Is the current online user.
 
     topic = answer.topic
 
-    assert answer.user is not None, constants.DELETE_TOPIC_ASSERT
+    assert answer.user is not None, constants.DELETE_ANSWER_ASSERT
 
     if user.username == answer.user.username:
         logger.debug("Deleting answer.")
@@ -191,6 +192,7 @@ def delete_answer(request, id):
         return redirect('show_topic', id=topic.id)
 
 
+# Only the person who whrote the anwer can delete it.
 def show_delete_answer_button(answers, topic, current_user_username):
     deletable_answers = []
 
@@ -198,9 +200,11 @@ def show_delete_answer_button(answers, topic, current_user_username):
         # Check if logged user is visiting his own topic page.
         if answer.user.username == current_user_username:
             logger.debug("Answer should be deletable")
+            # Current user is viewing his answer(s).
             is_deletable = True
         else:
             logger.debug("Answer shouldn't be deletable.")
+            # Current user is viewing other user(s) answer(s).
             is_deletable = False
 
         deletable_answers.append(is_deletable)

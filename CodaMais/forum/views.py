@@ -151,3 +151,27 @@ def list_all_answer(topic):
     answers = Answer.objects.filter(topic=topic)
     logger.debug("Get all answers.")
     return answers
+
+
+@login_required(login_url='/')
+def delete_answer(request, id):
+    logger.info("This is the id number: " + id)
+    logger.info("Username" + request.user.username)
+    try:
+        answer = Answer.objects.get(id=id)  # Answer object, from Answer model.
+    except ObjectDoesNotExist:
+        logger.exception("Answer does not exists.")
+
+    user = request.user  # User object, from user model. Is the current online user.
+
+    #assert answer.user is not None, constants.DELETE_TOPIC_ASSERT
+
+    if user.username == answer.user.username:
+        logger.debug("Deleting answer.")
+        answer.delete()
+
+        return redirect('list_all_topics')
+    else:
+        logger.info("User can't delete answer.")
+
+        return redirect('list_all_topics')

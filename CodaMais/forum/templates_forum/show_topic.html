@@ -70,6 +70,11 @@
                                     {{answer.date_answer}}
                                 </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <a href="{% url 'delete_answer' answer.id %}" type="submit" value="Submit" >Deletar Resposta</a>
+                              </td>
+                            </tr>
                             {% endfor %}
                         </table>
                     </div>
@@ -99,7 +104,7 @@
 
 <div>
     {% if deletable_topic %}
-    <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
+    <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation_topic" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
 </div>
 
 <script>
@@ -108,7 +113,7 @@
 {% endblock %}
 
 {% block modal %}
-<div class="modal fade" id="delete-confirmation">
+<div class="modal fade" id="delete-confirmation_topic">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -121,6 +126,24 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                 <a href="{% url 'delete_topic' topic.id %}" class="btn btn-primary">Deletar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-confirmation_answer">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirmar Deleção</h4>
+            </div>
+            <div class="modal-body">
+                Você deseja realmente apagar sua resposta? Essa ação é irreversível.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <a href="{% url 'delete_answer' answer.id %}" class="btn btn-primary">Deletar</a>
             </div>
         </div>
     </div>

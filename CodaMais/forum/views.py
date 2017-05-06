@@ -197,7 +197,6 @@ def show_delete_answer_button(answers, topic, current_user_username):
     deletable_answers = []
 
     for answer in answers:
-        # Check if logged user is visiting his own topic page.
         if answer.user.username == current_user_username:
             logger.debug("Answer should be deletable")
             # Current user is viewing his answer(s).

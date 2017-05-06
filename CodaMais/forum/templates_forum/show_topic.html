@@ -6,6 +6,11 @@
 #column {
   text-align:center;
   width:120px;
+  border:none;
+}
+
+#column2{
+    border:none;
 }
 </style>
 
@@ -19,14 +24,14 @@
     <h2 class="title">{{topic.title}}</h2>
     <h4 class="title">{{topic.subtitle}}</h4>
   </div>
-  <div class="content">
+  <div class="content table-responsive table-full-width">
 
-    <table class="table">
+    <table class="table table-striped">
       <tr>
         <td id = column>
           <img src="{{topic.author.user_image.url}}" width="100px" height="100px"></img>
         </td>
-        <td>
+        <td id = column2>
           {{topic.description|safe}}
         </td>
       </tr>
@@ -36,8 +41,8 @@
             {{topic.author.username}}
           </b>
         </td>
-        <td style = "text-align:right;">
-          {{topic.dateTopic}}
+        <td  id = column2 style = "text-align:right;">
+          {{topic.date_topic}}
         </td>
       </tr>
     </table>
@@ -49,14 +54,15 @@
   <div class="header" id=header>
     <h4 class="title">{{quantity_answer}} Respostas</h4><br>
   </div>
-  <div class="content table-responsive table-full-width">
+  {% for answer, delete_answer in zipped_data %}
+  <div class="card">
+  <div class="table-responsive">
     <table class="table table-striped">
-      {% for answer, delete_answer in zipped_data %}
       <tr>
         <td id = column>
           <img src="{{answer.user.user_image.url}}" width="100px" height="100px"></img>
         </td>
-        <td>
+        <td id = column2>
           {{answer.description|safe}}
         </td>
       </tr>
@@ -66,25 +72,27 @@
             {{answer.user.username}}
           </b>
         </td>
-        <td style = "text-align:right;">
+        <td id = column2 style = "text-align:right;">
           {{answer.date_answer}}
         </td>
       </tr>
       {% if delete_answer == True %}
       <tr>
-        <td>
+        <td id = column2 td colspan="2">
           <a class="btn btn-danger btn-sm"
           data-toggle="modal"
           data-target="#delete_confirmation_answer"
           data-id="{{answer.id}}"
-          data-url="{% url 'delete_answer' answer.id %}">Deletar Resposta</a>
+          data-url="{% url 'delete_answer' answer.id %}">Deletar Resposta </a>
         </td>
       </tr>
       {% endif %}
-      {% endfor %}
     </table>
   </div>
 </div>
+{% endfor %}
+</div>
+
 
 
 <div class="card">
@@ -116,6 +124,7 @@
 <script>
 tinyMCE.get('#id_description').setContent('<span>some</span> html');
 </script>
+
 {% endblock %}
 
 {% block modal %}

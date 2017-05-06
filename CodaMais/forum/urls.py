@@ -16,5 +16,5 @@ urlpatterns = (
     url(r'^topics/(?P<id>\d+)/$', show_topic, name='show_topic'),
     url(r'^newtopic/$', create_topic, name='create_topic'),
     url(r'^deletetopic/(?P<id>\d+)/$', delete_topic, name='delete_topic'),
-    url(r'^deleteanswer/(?P<id>\d+)/$', delete_answer, name='delete_answer')
+    url(r'^deleteanswer/(?P<id>\d+)/$', delete_answer, name='delete_answer'),
 )

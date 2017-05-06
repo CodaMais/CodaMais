@@ -164,14 +164,16 @@ def delete_answer(request, id):
 
     user = request.user  # User object, from user model. Is the current online user.
 
+    topic = answer.topic
+
     #assert answer.user is not None, constants.DELETE_TOPIC_ASSERT
 
     if user.username == answer.user.username:
         logger.debug("Deleting answer.")
         answer.delete()
 
-        return redirect('list_all_topics')
+        return redirect('show_topic', id=topic.id)
     else:
         logger.info("User can't delete answer.")
 
-        return redirect('list_all_topics')
+        return redirect('show_topic', id=topic.id)

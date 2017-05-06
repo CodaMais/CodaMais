@@ -72,7 +72,11 @@
                             </tr>
                             <tr>
                               <td>
-                                <a href="{% url 'delete_answer' answer.id %}" type="submit" value="Submit" >Deletar Resposta</a>
+                                <a class="btn btn-danger btn-sm"
+                                data-toggle="modal"
+                                data-target="#delete_confirmation_answer"
+                                data-id="{{answer.id}}"
+                                data-url="{% url 'delete_answer' answer.id %}">Deletar Resposta {{answer.id}}</a>
                               </td>
                             </tr>
                             {% endfor %}
@@ -131,7 +135,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="delete-confirmation_answer">
+
+<div class="modal fade" id="delete_confirmation_answer">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -142,10 +147,11 @@
                 Você deseja realmente apagar sua resposta? Essa ação é irreversível.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <a href="{% url 'delete_answer' answer.id %}" class="btn btn-primary">Deletar</a>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+                <a href="" class="btn btn-danger btn-sm" id="actualDeleteBtn">Deletar</a>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

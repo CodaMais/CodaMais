@@ -21,7 +21,7 @@
                       </thead>
                       <tbody>
                           {% for user, completed_exercises in data %}
-                          <tr class='clickable-row'>
+                          <tr class='clickable-row'  data-href="{% url 'profile_view' user.username %}">
                               <td>{{user.username}}</td>
                               <td>{{completed_exercises}}</td>
                               <td>{{user.score}}</td>

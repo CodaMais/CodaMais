@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def show_ranking(request):
+    logger.info("INSIDE show_ranking!")
     ranking_data = get_user_scores_and_completed_exercises()
     return render(request, 'ranking.html', {'data': ranking_data})
 

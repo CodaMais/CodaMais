@@ -8,7 +8,8 @@ class UserAdmin(admin.ModelAdmin):
                     'email',
                     'is_active',
                     'password',
-                    'user_image']
+                    'user_image',
+                    'score']
 
 
 admin.site.register(User, UserAdmin)

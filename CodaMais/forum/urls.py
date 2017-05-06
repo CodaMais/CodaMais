@@ -2,7 +2,7 @@
 from django.conf.urls import url
 
 # Local Django
-from .views import(
+from .views import (
     list_all_topics,
     show_topic,
     create_topic,

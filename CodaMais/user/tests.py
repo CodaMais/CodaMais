@@ -9,10 +9,10 @@ from django.test.client import RequestFactory
 from user.views import (
     register_view, login_view,
 )
-from .models import(
+from .models import (
     User, UserProfile, RecoverPasswordProfile,
 )
-from .forms import(
+from .forms import (
     UserRegisterForm, UserEditForm, ConfirmPasswordForm, RecoverPasswordForm, UserLoginForm,
 )
 from django.test import Client

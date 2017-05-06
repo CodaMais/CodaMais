@@ -44,19 +44,21 @@ def show_topic(request, id):
     form = answer_topic(user, topic, form)
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
-    deletable_topic = show_delete_button(topic.author, request.user.username)
+    deletable_topic = show_delete_topic_button(topic.author, user.username)
+    deletable_answers = show_delete_answer_button(answers, topic, user.username)
+    zipped_data = zip(answers, deletable_answers)
 
     return render(request, 'show_topic.html', {
         'topic': topic,
         'deletable_topic': deletable_topic,
         'form': form,
-        'answers': answers,
-        'quantity_answer': quantity_answer
+        'quantity_answer': quantity_answer,
+        'zipped_data': zipped_data
         })
 
 
-def show_delete_button(topic_author, current_user_username):
-    deletable_topic = False  # Variable to define if user will see a button to edit his profile page.
+def show_delete_topic_button(topic_author, current_user_username):
+    deletable_topic = False  # Variable to define if user will see a button to delete a topic.
 
     # Check if logged user is visiting his own topic page.
     if topic_author.username == current_user_username:
@@ -166,7 +168,7 @@ def delete_answer(request, id):
 
     topic = answer.topic
 
-    #assert answer.user is not None, constants.DELETE_TOPIC_ASSERT
+    assert answer.user is not None, constants.DELETE_TOPIC_ASSERT
 
     if user.username == answer.user.username:
         logger.debug("Deleting answer.")
@@ -177,3 +179,21 @@ def delete_answer(request, id):
         logger.info("User can't delete answer.")
 
         return redirect('show_topic', id=topic.id)
+
+
+def show_delete_answer_button(answers, topic, current_user_username):
+    deletable_answers = []
+
+    for answer in answers:
+        # Check if logged user is visiting his own topic page.
+        if answer.user.username == current_user_username:
+            logger.debug("Answer should be deletable")
+            is_deletable = True
+        else:
+            logger.debug("Answer shouldn't be deletable.")
+            is_deletable = False
+
+        deletable_answers.append(is_deletable)
+        logger.info("Is deletable? " + str(is_deletable))
+
+    return deletable_answers

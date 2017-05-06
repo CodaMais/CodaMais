@@ -1,22 +1,110 @@
 {% extends "general/template.html" %}
 
 {% block content %}
-<h1>
-{{topic.title}}
-</h1>
-<h4>
-{{topic.subtitle}}
-</h4>
-<div>
-    {{topic.author}} {{topic.dateTopic}}
+
+<style type="text/css" media="screen">
+#column {
+    text-align:center;
+    width:120px;
+}
+</style>
+
+<style type="text/css" media="screen">
+#header {
+    align:top;
+}
+</style>
+<div class="card">
+    <div class="header" id=header style="text-align:center;">
+        <h2 class="title">{{topic.title}}</h2>
+        <h4 class="title">{{topic.subtitle}}</h4>
+    </div>
+    <div class="content">
+
+        <table class="table">
+            <tr>
+                <td id = column>
+                    <img src="{{topic.author.user_image.url}}" width="100px" height="100px"></img>
+                </td>
+                <td>
+                    {{topic.description|safe}}
+                </td>
+            </tr>
+            <tr>
+                <td id = column>
+                    <b>
+                        {{topic.author.username}}
+                    </b>
+                </td>
+                <td style = "text-align:right;">
+                    {{topic.dateTopic}}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
-        <div>
-            {{topic.description|safe}}
+
+
+            <div class="card">
+                <div class="header" id=header>
+                    <h4 class="title">{{quantity_answer}} Respostas</h4><br>
+                </div>
+                    <div class="content table-responsive table-full-width">
+                        <table class="table table-striped">
+                            {% for answer in answers %}
+                            <tr>
+                                <td id = column>
+                                    <img src="{{answer.user.user_image.url}}" width="100px" height="100px"></img>
+                                </td>
+                                <td>
+                                    {{answer.description|safe}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id = column>
+                                    <b>
+                                        {{answer.user.username}}
+                                    </b>
+                                </td>
+                                <td style = "text-align:right;">
+                                    {{answer.date_answer}}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+            </div>
+
+
+        <div class="card">
+            <div class="header" id=header>
+                <h3 class="title"> Answer </h3><br>
+            </div>
+            <div class="content">
+
+                <form method="post" action=".">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="form-group">
+                        {% for error in form.description.errors %}
+                        <div class="alert alert-danger"role="alert">{{error}}</div>
+                        {% endfor %}
+                        {{ form.description }}
+                    </div>
+                    <input formnovalidate class="btn btn-fill btn-default" type="submit" value="Answer" />
+                </form>
+            </div>
         </div>
-        <div>
-            {% if deletable_topic %}
-            <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
-        </div>
+
+
+<div>
+    {% if deletable_topic %}
+    <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
+</div>
+
+<script>
+    tinyMCE.get('#id_description').setContent('<span>some</span> html');
+</script>
 {% endblock %}
 
 {% block modal %}

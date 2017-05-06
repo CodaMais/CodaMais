@@ -7,8 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
 # local Django.
-from .models import Topic
-from .forms import TopicForm
+from .models import (
+    Topic, Answer
+)
+from .forms import (
+    TopicForm, AnswerForm
+)
 from . import constants
 
 # Required to access the information log.
@@ -17,27 +21,45 @@ logger = logging.getLogger(__name__)
 
 
 def list_all_topics(request):
-    data = {}
-    data['list_topics'] = Topic.objects.all()
-    return render(request, 'topics.html', data)
+    topics = {}
+    topics['list_topics'] = Topic.objects.all()
+
+    return render(request, 'topics.html', topics)
 
 
+# Displays topic and user data and a space for response to the topic.
 def show_topic(request, id):
+    logger.debug("Rendering topic page.")
+    form = AnswerForm(request.POST or None,
+                      initial={'description': ''})
+    user = request.user
+
     try:
         topic = Topic.objects.get(id=id)
     except ObjectDoesNotExist:
+        logger.exception("Topic is not exists.")
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
+    form = answer_topic(user, topic, form)
+    answers = list_all_answer(topic)
+    quantity_answer = len(answers)
     deletable_topic = show_delete_button(topic.author, request.user.username)
-    return render(request, 'show_topic.html', {'topic': topic, 'deletable_topic': deletable_topic})
+
+    return render(request, 'show_topic.html', {
+        'topic': topic,
+        'deletable_topic': deletable_topic,
+        'form': form,
+        'answers': answers,
+        'quantity_answer': quantity_answer
+        })
 
 
 def show_delete_button(topic_author, current_user_username):
     deletable_topic = False  # Variable to define if user will see a button to edit his profile page.
 
     # Check if logged user is visiting his own topic page.
-    if topic_author == current_user_username:
+    if topic_author.username == current_user_username:
         logger.debug("Topic page should be deletable")
         deletable_topic = True
     else:
@@ -50,18 +72,25 @@ def show_delete_button(topic_author, current_user_username):
 
 @login_required(login_url='/')
 def create_topic(request):
-    form = TopicForm(request.POST or None)
-    username = request.user.username  # Automaticlly get username that is logged.
-    logger.info("user: " + username)
+    form = TopicForm(
+                    request.POST or None,
+                    initial={constants.ANSWER_DESCRIPTION_NAME: ''})
+
+    user = request.user  # Automaticlly get username that is logged.
+    logger.info("user: " + user.username)
 
     if form.is_valid():
 
         logger.info("Create topic form was valid.")
 
         post = form.save(commit=False)  # Pausing the Django auto-save to enter username.
-        post.author = username
+        post.author = user
         post.save()  # Posting date is generated automaticlly by the Model.
+
+        # Reset form.
+        form = TopicForm()
         return redirect('list_all_topics')
+
     else:
         # Create topic form was invalid.
         pass
@@ -74,6 +103,7 @@ def delete_topic(request, id):
     try:
         topic = Topic.objects.get(id=id)  # Topic object, from Topic model.
     except ObjectDoesNotExist:
+        logger.exception("Topic is not exists.")
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
@@ -81,7 +111,7 @@ def delete_topic(request, id):
 
     assert topic.author is not None, constants.DELETE_TOPIC_ASSERT
 
-    if user.username == topic.author:
+    if user.username == topic.author.username:
         logger.debug("Deleting topic.")
         topic.delete()
 
@@ -91,3 +121,33 @@ def delete_topic(request, id):
 
         # TODO(Roger) Create structure to alert the user that the topic isn't his.
         return redirect('list_all_topics')
+
+
+# The user answers the topic accessed.
+def answer_topic(user, topic, form):
+    assert user is not None, "User not logged in."
+    assert topic is not None, "Topic is not exists."
+
+    if form.is_valid():
+        answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
+        answer = Answer()
+        answer.creates_answer(user, topic, answer_description)
+
+        # Reset form.
+        form = AnswerForm()
+
+        logger.debug("Create answer form was valid.")
+    else:
+        logger.warning("Invalid answer form.")
+
+    return form
+
+
+# List all answers of the topic that the user is accessing.
+def list_all_answer(topic):
+    assert topic is not None, "Topic is not exists."
+
+    answers = []
+    answers = Answer.objects.filter(topic=topic)
+    logger.debug("Get all answers.")
+    return answers

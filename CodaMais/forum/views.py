@@ -5,6 +5,7 @@ import logging
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
 
 # local Django.
 from .models import (
@@ -41,7 +42,14 @@ def show_topic(request, id):
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
-    form = answer_topic(user, topic, form)
+    redirect_answer = answer_topic(user, topic, form)
+
+    if redirect_answer is not None:
+        return HttpResponseRedirect(redirect_answer)
+    else:
+        # Nothing to do
+        pass
+
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
     deletable_topic = show_delete_topic_button(topic.author, user.username)
@@ -130,19 +138,21 @@ def answer_topic(user, topic, form):
     assert user is not None, "User not logged in."
     assert topic is not None, "Topic is not exists."
 
+    redirect_answer = None
     if form.is_valid():
         answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
         answer = Answer()
         answer.creates_answer(user, topic, answer_description)
 
         # Reset form.
-        form = AnswerForm()
+        redirect_answer = "/forum/topics/" + str(topic.id)
 
         logger.debug("Create answer form was valid.")
     else:
         logger.warning("Invalid answer form.")
+        # Nothing to do
 
-    return form
+    return redirect_answer
 
 
 # List all answers of the topic that the user is accessing.

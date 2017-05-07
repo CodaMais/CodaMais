@@ -34,25 +34,7 @@ urlpatterns = i18n_patterns(
     url(r'^$', home, name="landing_home"),
     url(r'^admin/', admin.site.urls),
     url('^dashboard/', include('dashboard.urls')),
-
-    # # TODO(João) Change this url to landpage, and delete this url
-    # url(r'^register/', views.register_view, name='register_view'),
-    # url(r'^confirm/(?P<activation_key>\w+)/', views.register_confirm,
-    #     name='confirm_account'),
-    # url(r'^dashboard/', login_required(dashboard), name='dashboard'),
-    # # Recover password.
-    # url(r'^recoverpassword/', views.recover_password, name='recover_password'),
-    # url(r'^recover/(?P<activation_key>\w+)/', views.recover_password_confirm,
-    #     name='recover_password_confirm'),
-    # # TODO(João) Change this url to landpage, and delete this url
-    # url(r'^login/', views.login_view, name='login_view'),
-    # url(r'^logout/', views.logout_view, name='logout'),
-    # # Exercise.
-    # url(r'^exercise/(?P<id>\d+)/$', show_exercise, name='show_exercise'),
-    # url(r'^exercise/$', list_exercises_not_deprecated,
-    #     name='list_exercises_not_deprecated'),
-    # url(r'^redactor/', include('redactor.urls')),
-
+    url('^ranking/', include('ranking.urls')),
 )
 
 # When using the Django's dev server, static files are served by default but
@@ -62,5 +44,4 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT
         }),
-
         ]

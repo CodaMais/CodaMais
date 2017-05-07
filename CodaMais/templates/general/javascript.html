@@ -41,5 +41,10 @@
             timer: 4000
         });
 
+        $('#delete_confirmation_answer').on('shown.bs.modal', function(event) {
+            $("#answerId").text($(event.relatedTarget).data('id'));
+            $("#actualDeleteBtn").attr('href', $(event.relatedTarget).data('url'));
+        })
+
     });
 </script>

@@ -5,6 +5,7 @@ import logging
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
 
 # local Django.
 from .models import (
@@ -41,22 +42,31 @@ def show_topic(request, id):
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
-    form = answer_topic(user, topic, form)
+    redirect_answer = answer_topic(user, topic, form)
+
+    if redirect_answer is not None:
+        return HttpResponseRedirect(redirect_answer)
+    else:
+        # Nothing to do
+        pass
+
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
-    deletable_topic = show_delete_button(topic.author, request.user.username)
+    deletable_topic = show_delete_topic_button(topic.author, user.username)
+    deletable_answers = show_delete_answer_button(answers, topic, user.username)
+    zipped_data = zip(answers, deletable_answers)
 
     return render(request, 'show_topic.html', {
         'topic': topic,
         'deletable_topic': deletable_topic,
         'form': form,
-        'answers': answers,
-        'quantity_answer': quantity_answer
+        'quantity_answer': quantity_answer,
+        'zipped_data': zipped_data
         })
 
 
-def show_delete_button(topic_author, current_user_username):
-    deletable_topic = False  # Variable to define if user will see a button to edit his profile page.
+def show_delete_topic_button(topic_author, current_user_username):
+    deletable_topic = False  # Variable to define if user will see a button to delete a topic.
 
     # Check if logged user is visiting his own topic page.
     if topic_author.username == current_user_username:
@@ -128,19 +138,21 @@ def answer_topic(user, topic, form):
     assert user is not None, "User not logged in."
     assert topic is not None, "Topic is not exists."
 
+    redirect_answer = None
     if form.is_valid():
         answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
         answer = Answer()
         answer.creates_answer(user, topic, answer_description)
 
         # Reset form.
-        form = AnswerForm()
+        redirect_answer = "/forum/topics/" + str(topic.id)
 
         logger.debug("Create answer form was valid.")
     else:
         logger.warning("Invalid answer form.")
+        # Nothing to do
 
-    return form
+    return redirect_answer
 
 
 # List all answers of the topic that the user is accessing.
@@ -151,3 +163,50 @@ def list_all_answer(topic):
     answers = Answer.objects.filter(topic=topic)
     logger.debug("Get all answers.")
     return answers
+
+
+@login_required(login_url='/')
+def delete_answer(request, id):
+    logger.info("This is the id number: " + str(id))
+    logger.info("Username" + request.user.username)
+    try:
+        answer = Answer.objects.get(id=id)  # Answer object, from Answer model.
+    except ObjectDoesNotExist:
+        logger.exception("Answer does not exists.")
+        return redirect('list_all_topics')
+
+    user = request.user  # User object, from user model. Is the current online user.
+
+    topic = answer.topic
+
+    assert answer.user is not None, constants.DELETE_ANSWER_ASSERT
+
+    if user.username == answer.user.username:
+        logger.debug("Deleting answer.")
+        answer.delete()
+
+        return redirect('show_topic', id=topic.id)
+    else:
+        logger.info("User can't delete answer.")
+
+        return redirect('show_topic', id=topic.id)
+
+
+# Only the person who whrote the anwer can delete it.
+def show_delete_answer_button(answers, topic, current_user_username):
+    deletable_answers = []
+
+    for answer in answers:
+        if answer.user.username == current_user_username:
+            logger.debug("Answer should be deletable")
+            # Current user is viewing his answer(s).
+            is_deletable = True
+        else:
+            logger.debug("Answer shouldn't be deletable.")
+            # Current user is viewing other user(s) answer(s).
+            is_deletable = False
+
+        deletable_answers.append(is_deletable)
+        logger.info("Is deletable? " + str(is_deletable))
+
+    return deletable_answers

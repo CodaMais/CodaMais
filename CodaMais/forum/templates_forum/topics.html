@@ -26,9 +26,7 @@
                             <td>{{topic.title}}</td>
                             <td>{{topic.author}}</td>
                             <td>{{topic.dateTopic.date}}</td>
-                            <!-- Add a structure to show the number of answers -->
-                            <td>5</td>
-                            <!-- Add a structure to choose the image that indicate if the best answer was chosen -->
+                            <td>{{topic.answer_set.all|length}}</td>
                             <!-- <i class="fa fa-times text-danger"></i> -->
                             <td><i class="fa fa-check text-success"></td>
                         </tr>

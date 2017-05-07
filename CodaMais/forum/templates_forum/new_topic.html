@@ -1,0 +1,43 @@
+{% extends "general/template.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="header" id=header>
+        <h4 class="title"> Create Topic</h4><br>
+    </div>
+    <div class="content">
+
+        <form method="post" action=".">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="form-group">
+                {% for error in form.title.errors %}
+                <div class="alert alert-danger"role="alert">{{error}}</div>
+                {% endfor %}
+                <label for="{{ form.title.id_for_label }}">Title:</label>
+                {{ form.title }}
+            </div>
+
+            <div class="form-group">
+                {% for error in form.subtitle.errors %}
+                <div class="alert alert-danger"role="alert">{{error}}</div>
+                {% endfor %}
+                <label for="{{ form.subtitle.id_for_label }}">Subtitle:</label>
+                {{ form.subtitle }}
+            </div>
+
+            <div class="form-group">
+                {% for error in form.description.errors %}
+                <div class="alert alert-danger"role="alert">{{error}}</div>
+                {% endfor %}
+                <label for="{{ form.description.id_for_label }}">Title:</label>
+                {{ form.description }}
+            </div>
+
+            <input formnovalidate class="btn btn-fill btn-default" type="submit" value="Salvar" />
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

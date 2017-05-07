@@ -4,3 +4,8 @@ virtual/
 db.sqlite3
 .DS_Store
 .coverage
+media
+debug.log
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

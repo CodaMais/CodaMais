@@ -1,0 +1,42 @@
+{% extends "general/template.html" %}
+
+{% block title %}
+<center><h1>Fórum</h1></center>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Tópicos Criados</h4>
+            </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Data</th>
+                        <th>Número de Resposta</th>
+                        <th>Respota Aceita</th>
+                    </thead>
+                    <tbody>
+                        {% for topic in list_topics %}
+                        <tr class='clickable-row' data-href="{% url 'show_topic' topic.id %}">
+                            <td>{{topic.title}}</td>
+                            <td>{{topic.author}}</td>
+                            <td>{{topic.dateTopic.date}}</td>
+                            <td>{{topic.answer_set.all|length}}</td>
+                            <!-- <i class="fa fa-times text-danger"></i> -->
+                            <td><i class="fa fa-check text-success"></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<center><a href="{% url 'create_topic' %}"> <button class="btn dropdown-toggle btn-outline-success" type="button">Novo Tópico</button></a></center>
+{% endblock %}

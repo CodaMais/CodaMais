@@ -1,0 +1,25 @@
+ {% extends "landing/template.html" %}
+
+  {% block content %}
+  <div class="imageBackground">
+              <br>
+              <br>
+              <br>
+              <div class= "container">
+                <div class = "row" >
+                      <div class="form">
+                          <form method="post" action=".">
+                              {% csrf_token %}
+                               {{ form.as_p }}
+                              <button>Login</button>
+                          </form>
+                        <br>
+                        <div class = "link">
+                        <a href="{% url 'recover_password' %}">Esqueceu sua Senha?</a>
+                      </div>
+                      </div>
+              </div>
+            </div>
+  </div>
+
+  {% endblock %}

@@ -1,20 +1,51 @@
-<!DOCTYPE html>
+{% extends "general/template.html" %}
 
-<html>
   <header>
     <title>
       Content
     </title>
-
   </header>
-  <body>
-    <h1>
-        <center>{{theory.title}}</center>
-    </h1>
-        {{theory.content | safe}} <br><br><br><br>
 
-    <h2>
-        <center>Exercise Area</center>
-    </h2>
-  </body>
-</html>
+  {% block content %}
+
+  <style type="text/css" media="screen">
+  #column {
+      text-align:center;
+      width:120px;
+  }
+  </style>
+
+  <style type="text/css" media="screen">
+  #header {
+      align:top;
+  }
+  </style>
+
+  <div class="card">
+      <div class="header" id=header style="text-align:center;">
+        <table class="table">
+          <tr>
+            <td>
+              <h2 class="title"><b>{{theory.title}}</b></h2>
+            </td>
+          </tr>
+        </table>
+      </div>
+  </div>
+
+  <div class="card">
+      <div class="content ">
+        <table class="table">
+          <tr>
+              <td id = column>
+                  {{theory.content | safe}}
+              </td>
+          </tr>
+        </table>
+      </div>
+  </div>
+      <h2>
+          <center>Exercise Area</center>
+      </h2>
+
+  {% endblock %}

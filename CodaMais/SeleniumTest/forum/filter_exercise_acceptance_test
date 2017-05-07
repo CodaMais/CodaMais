@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8000/" />
+<title>Filter Exercise Acceptance Test</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Filter Exercise Acceptance Test</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/en/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//button[@type='button'])[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=id_email</td>
+	<td>a1@a1.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=id_password</td>
+	<td>12345678</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=form &gt; button</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//li[3]/a/p</td>
+	<td>Exercícios</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//li[3]/a/p</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=h1</td>
+	<td>Exercícios</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=Iniciante</td>
+	<td>Iniciante</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=Médio</td>
+	<td>Médio</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=Avançado</td>
+	<td>Avançado</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=titulo1basico</td>
+	<td>titulo1basico</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Médio</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Avançado</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=titulo1avançado</td>
+	<td>titulo1avançado</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Médio</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=titulo2basico</td>
+	<td>titulo2basico</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=div.content</td>
+	<td>Iniciante Médio Avançado titulo1basico <br /> <br /> titulo2basico <br /> <br /> titulo1avançado</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Log out</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

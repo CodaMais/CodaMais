@@ -19,20 +19,27 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.static import serve
+from django.conf.urls.i18n import i18n_patterns
 
-# Local Django.
-from theory.views import list_all_theories, show_theory
+# Local Django
+from landing.views import home
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
+    url('^user/', include('user.urls')),
+    url('^exercise/', include('exercise.urls')),
+    url('^forum/', include('forum.urls')),
+    url('^theory/', include('theory.urls')),
+    url(r'^$', home, name="landing_home"),
     url(r'^admin/', admin.site.urls),
-    url(r'^redactor/', include('redactor.urls')),
-    url(r'^theories/$', list_all_theories),
-    url(r'^theory/(?P<id>\d+)/(?P<title>[\w|\W]+)/$', show_theory,
-        name='show_theory'),
-]
+
+    # When using the Django's dev server, static files are served by default but
+    # not media files, so you here we're force the server to consider them.
+    url('^dashboard/', include('dashboard.urls')),
+    url('^ranking/', include('ranking.urls')),
+)
 
 # When using the Django's dev server, static files are served by default but
-# not media files, so you here we're force the server to consider them.
+# not media files, so you here we're force the server to consider them
 if settings.DEBUG:
     urlpatterns += [
         url(r'^media/(?P<path>.*)$', serve, {

@@ -9,7 +9,7 @@ from forum.models import (
 )
 from user.models import User
 from forum.views import (
-    list_all_topics, show_topic, create_topic, delete_topic, list_all_answer
+    list_all_topics, show_topic, create_topic, delete_topic, list_all_answer, delete_answer, show_delete_answer_button
 )
 
 # RESPONSE CODES.
@@ -104,6 +104,19 @@ class TestRequestTopic(TestCase):
             self.topic.save()
             request = self.factory.get('/forum/topics/1/')
             request.user = self.user
+            response = show_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
+
+        def test_show_topic_when_topic_is_not_deletable(self):
+            self.topic.save()
+            user_wrong = User()
+            user_wrong.email = "wronguser@wronguser.com"
+            user_wrong.first_name = "WrongUser"
+            user_wrong.username = "WrongUser"
+            user_wrong.is_active = True
+            user_wrong.save()
+            request = self.factory.get('/forum/topics/1/')
+            request.user = user_wrong
             response = show_topic(request, self.topic.id)
             self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
 
@@ -244,6 +257,7 @@ class TestAnswerTopic(TestCase):
         self.user.set_password('userpassword')
         self.user.save()
         self.topic.save()
+        self.wrong_user = 'User'
         self.answer_creation_form = {
             'description': self.answer.description,
         }
@@ -252,8 +266,57 @@ class TestAnswerTopic(TestCase):
         request = self.factory.post('/forum/topics/1/', self.answer_creation_form)
         request.user = self.user
         response = show_topic(request, 1)
-        self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
 
     def test_list_all_answer(self):
         list_answers = list_all_answer(self.topic)
         self.assertEqual(len(list_answers), 0)
+
+    def test_if_user_can_delete_answer(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        request = self.factory.get('/forum/deleteanswer/1/', follow=True)
+        request.user = self.user
+        response = delete_answer(request, self.answer.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/forum/topics/1/')
+
+    def test_delete_answer_which_does_not_exit(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        request = self.factory.get('/forum/deleteanswer/12/', follow=True)
+        request.user = self.user
+        response = delete_answer(request, 12)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+
+    def test_if_user_cant_delete_answer(self):
+        self.answer.user.username = self.wrong_user
+        self.answer.topic = self.topic
+        self.answer.save()
+        request = self.factory.get('/forum/deleteanswer/1/', follow=True)
+        request.user = self.user
+        response = delete_answer(request, self.answer.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/forum/topics/1/')
+
+    def test_if_user_can_see_delete_answer_button(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        answers = Answer.objects.filter(topic=self.answer.topic)
+        not_deletable_answer = []
+        not_deletable_answer.append(True)
+        deletable_answers = show_delete_answer_button(answers, self.topic, self.user.username)
+        self.assertEqual(deletable_answers, not_deletable_answer)
+
+    def test_if_user_cant_see_delete_answer_button(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        answers = Answer.objects.filter(topic=self.topic)
+        not_deletable_answer = []
+        not_deletable_answer.append(False)
+        deletable_answers = show_delete_answer_button(answers, self.topic, self.wrong_user)
+        self.assertEqual(deletable_answers, not_deletable_answer)

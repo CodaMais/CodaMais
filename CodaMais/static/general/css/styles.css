@@ -11,3 +11,21 @@
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
     background-color: #696969;
 }
+
+.typo-line {
+    padding-left: 140px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.label-excercise-info {
+    margin-left: 10px;
+}
+
+.label-exercise-status-False {
+  background-color: #d9534f;
+}
+
+.label-exercise-status-True {
+  background-color: #5cb85c;
+}

@@ -1,4 +1,8 @@
+# Standart Library.
 import os
+
+# Local Django.
+from theory import constants as theory_constants
 
 """
 Django settings for CodaMais project.
@@ -33,7 +37,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
 
-# Application definition
+# Application definition.
 
 INSTALLED_APPS = [
     'user',
@@ -43,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'theory',
     'exercise',
     'redactor',
     'landing',
@@ -73,9 +78,11 @@ ROOT_URLCONF = 'CodaMais.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+
         'DIRS': ['templates', 'user/templates', 'exercise/templates_exercise',
                  'landing/templates', 'dashboard/templates', 'forum/templates_forum',
-                 'ranking/templates'],
+                 'ranking/templates', 'theory/templates'],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,7 +98,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CodaMais.wsgi.application'
 
 
-# Database
+# Database.
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 DATABASES = {
@@ -105,7 +112,7 @@ DATABASES = {
 
 AUTH_USER_MODEL = "user.User"
 
-# Password validation
+# Password validation.
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -124,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
+# Internationalization.
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
 LOCALE_PATHS = [
@@ -146,10 +153,29 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files (CSS, Java, Images).
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Configurations for the django-wysiwyg-redactor: Redactor WYSIWYG editor.
+# https://imperavi.com/redactor/.
+
+REDACTOR_OPTIONS = {'lang': 'en',
+                    'focus': True,
+                    'placeholder': theory_constants.REDACTOR_PLACEHOLDER,
+                    'minHeight': theory_constants.MIN_REDACTOR_HEIGHT,
+                    'buttonsHide': ['file', 'video'],
+                    'imageResizable': True,
+                    'imagePosition': True,
+                    'plugins': ['inlinestyle',
+                                'table',
+                                'source',
+                                'fontcolor',
+                                'fontfamily',
+                                'fontsize',
+                                'fullscreen']
+                    }
 
 # Logging system
 
@@ -175,21 +201,15 @@ LOGGING = {
     },
 }
 
-# Configurations for the wysiwyg editor: Redactor WYSIWYG editor
-# https://imperavi.com/redactor/
-
-REDACTOR_OPTIONS = {'lang': 'en'}
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
 
+REDACTOR_UPLOAD = 'redactor_uploads/'
+REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.SimpleUploader'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
-
-REDACTOR_UPLOAD = 'uploads/'
-
-REDACTOR_UPLOAD_HANDLER = 'redactor.handlers.SimpleUploader'
 
 LOGIN_URL = '/'

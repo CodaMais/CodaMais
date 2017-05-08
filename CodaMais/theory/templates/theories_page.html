@@ -1,0 +1,31 @@
+{% extends "general/template.html" %}
+
+{% block title %}
+<center><h1>Theories List</h1></center>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="header">
+                  <h4 class="title">Theories created</h4>
+              </div>
+              <div class="content table-responsive table-full-width">
+                  <table class="table table-hover table-striped">
+                    <thead>
+                        <th>Título</th>
+                    </thead>
+                    <tbody>
+                      {% for theory in theory_list %}
+                          <tr class='clickable-row' data-href="{% url 'show_theory' theory.id theory.title %}">
+                            <td>{{theory.title}}</td>
+                          </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
+      </div>
+{% endblock %}

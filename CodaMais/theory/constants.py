@@ -1,0 +1,8 @@
+# THEORY FIELDS.
+TITLE_FIELD_LENGHT = 70
+
+# REDACTOR.
+MIN_REDACTOR_HEIGHT = 400
+REDACTOR_PLACEHOLDER = 'Write here the content...'
+
+REQUEST_SUCCEEDED = 200  # 200 is return with success response.

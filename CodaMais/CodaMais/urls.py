@@ -14,15 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 
-
-# Django
+# Django.
 from django.conf import settings
-from django.conf.urls import url
-from django.conf.urls.i18n import i18n_patterns
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.static import serve
-from django.conf.urls import include
-
+from django.conf.urls.i18n import i18n_patterns
 
 # Local Django
 from landing.views import home
@@ -31,8 +28,12 @@ urlpatterns = i18n_patterns(
     url('^user/', include('user.urls')),
     url('^exercise/', include('exercise.urls')),
     url('^forum/', include('forum.urls')),
+    url('^theory/', include('theory.urls')),
     url(r'^$', home, name="landing_home"),
     url(r'^admin/', admin.site.urls),
+
+    # When using the Django's dev server, static files are served by default but
+    # not media files, so you here we're force the server to consider them.
     url('^dashboard/', include('dashboard.urls')),
     url('^ranking/', include('ranking.urls')),
 )
@@ -44,4 +45,4 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT
         }),
-        ]
+    ]

@@ -331,7 +331,7 @@ def edit_profile_view(request, username):
                     pass
 
                 user.save()
-
+                # TODO (Ronyell) Change the confirmation of the modification to a popup.
                 return HttpResponse("Data altered.")
             else:
                 logger.debug("Invalid edit form.")

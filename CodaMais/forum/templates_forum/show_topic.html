@@ -76,17 +76,27 @@
           {{answer.date_answer}}
         </td>
       </tr>
-      {% if delete_answer == True %}
+
       <tr>
-        <td id = column2 td colspan="2">
-          <a class="btn btn-danger btn-sm"
+        <td colspan="2">
+          {% if choose_best_answer %}
+          <a class="btn btn-success btn-sm btn-fill"
+          data-toggle="modal"
+          data-target="#choose_best_answer"
+          data-id="{{answer.id}}"
+          data-url="{% url 'delete_answer' answer.id %}">Melhor Resposta </a>
+          {% endif %}
+
+          {% if delete_answer == True %}
+          <a class="btn btn-danger btn-sm pull-right"
           data-toggle="modal"
           data-target="#delete_confirmation_answer"
           data-id="{{answer.id}}"
           data-url="{% url 'delete_answer' answer.id %}">Deletar Resposta </a>
+          {% endif %}
         </td>
       </tr>
-      {% endif %}
+
     </table>
   </div>
 </div>
@@ -128,6 +138,8 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
 {% endblock %}
 
 {% block modal %}
+
+{% if deletable_topic %}
 <div class="modal fade" id="delete-confirmation_topic">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -145,8 +157,31 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
     </div>
   </div>
 </div>
+{% endif %}
 
+{% if choose_best_answer %}
+<div class="modal fade" id="choose_best_answer">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Melhor Resposta</h4>
+      </div>
+      <div class="modal-body">
+        Você deseja escolher esta como a melhor resposta?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+        <a href="" class="btn btn-info btn-fill btn-sm" id="actualDeleteBtn">Confirmar</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
+{% if delete_answer == True %}
 <div class="modal fade" id="delete_confirmation_answer">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -159,10 +194,11 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-        <a href="" class="btn btn-danger btn-sm" id="actualDeleteBtn">Deletar</a>
+        <a href="" class="btn btn-danger btn-fill btn-sm" id="actualDeleteBtn">Deletar</a>
       </div>
     </div>
   </div>
 </div>
+{% endif %}
 
 {% endblock %}

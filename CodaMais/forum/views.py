@@ -52,17 +52,30 @@ def show_topic(request, id):
 
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
+    choose_best_answer = show_choose_best_answer_button(topic.author, user)
     deletable_topic = show_delete_topic_button(topic.author, user.username)
     deletable_answers = show_delete_answer_button(answers, topic, user.username)
     zipped_data = zip(answers, deletable_answers)
 
     return render(request, 'show_topic.html', {
         'topic': topic,
+        'choose_best_answer': choose_best_answer,
         'deletable_topic': deletable_topic,
         'form': form,
         'quantity_answer': quantity_answer,
         'zipped_data': zipped_data
         })
+
+
+def show_choose_best_answer_button(topic_author, current_user):
+    # Check if logger user is the author of the topic, if is, enable to
+    # choose best answer
+    if topic_author.id == current_user.id:
+        logger.debug("Should enable to choose best answer.")
+        return True
+    else:
+        logger.debug("Should not enable to choose best answer.")
+        return False
 
 
 def show_delete_topic_button(topic_author, current_user_username):

@@ -2,6 +2,8 @@
 
 {% block content %}
 
+
+
 <style type="text/css" media="screen">
 #column {
   text-align:center;
@@ -59,7 +61,7 @@
   </div>
 </div>
 
-{% if topic.locked is False %}
+
 
 <div class="card">
   <div class="header" id=header>
@@ -104,12 +106,9 @@
 {% endfor %}
 </div>
 
+{% if topic.locked is False %}
 
-
-<div class="card">
-  <div class="header" id=header>
-    <h3 class="title"> Answer </h3><br>
-  </div>
+<div class="card">div class="header"<h3 class="title"> Answer </h3><br>
   <div class="content">
 
     <form method="post" action=".">
@@ -128,7 +127,8 @@
 
 {% else %}
 
-O tópico está trancado.
+
+<h2><center><span class="label label-danger">O tópico está trancado.</span></center></h2>
 
 {% endif %}
 

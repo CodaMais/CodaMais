@@ -20,10 +20,14 @@
 }
 </style>
 
+{% if lockable_topic is True %}
+
 <div class="header" id=header style="text-align:right;">
   <a class="btn btn-outline-success" data-toggle="modal" data-target="#lock-topic" href="javascript:void(0)">Trancar Tópico</a>
 </div>
 <br>
+
+{% endif %}
 
 <div class="card">
   <div class="header" id=header style="text-align:center;">
@@ -55,6 +59,7 @@
   </div>
 </div>
 
+{% if topic.locked is False %}
 
 <div class="card">
   <div class="header" id=header>
@@ -120,6 +125,12 @@
     </form>
   </div>
 </div>
+
+{% else %}
+
+O tópico está trancado.
+
+{% endif %}
 
 
 <div>

@@ -18,7 +18,7 @@ from . import constants
 
 # Required to access the information log.
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(constants.DEFAULT_LOGGER)
 
 
 def list_all_topics(request):
@@ -53,12 +53,14 @@ def show_topic(request, id):
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
     deletable_topic = show_delete_topic_button(topic.author, user.username)
+    lockable_topic = show_lock_topic_button(topic, user)
     deletable_answers = show_delete_answer_button(answers, topic, user.username)
     zipped_data = zip(answers, deletable_answers)
 
     return render(request, 'show_topic.html', {
         'topic': topic,
         'deletable_topic': deletable_topic,
+        'lockable_topic': lockable_topic,
         'form': form,
         'quantity_answer': quantity_answer,
         'zipped_data': zipped_data
@@ -78,6 +80,27 @@ def show_delete_topic_button(topic_author, current_user_username):
 
     logger.debug("Topic page is deletable? " + str(deletable_topic))
     return deletable_topic
+
+
+def show_lock_topic_button(topic, current_user):
+    lockable_topic = False  # Variable to define if user will see a button to lock a topic.
+
+    # Check if topic is already locked.
+    if topic.locked is False:
+
+        # Check if logged user is visiting his own topic page.
+        if topic.author.username == current_user.username or current_user.is_staff is True:
+            logger.debug("Topic page should be lockable.")
+            lockable_topic = True
+        else:
+            logger.debug("Topic page shouldn't be lockable.")
+            # Nothing to do.
+    else:
+        logger.debug("Topic is already locked.")
+        # Nothing to do
+
+    logger.debug("Topic page is lockable? " + str(lockable_topic))
+    return lockable_topic
 
 
 @login_required(login_url='/')
@@ -225,7 +248,7 @@ def lock_topic(request, id):
 
     assert topic.author is not None, constants.INEXISTENT_TOPIC_ASSERT
 
-    if user.username == topic.author.username:
+    if user.username == topic.author.username or user.is_staff is True:
         logger.debug("Locking topic.")
         topic.locked = True
         topic.save()

@@ -32,14 +32,14 @@
                menubar:false,
         });
 
-        $.notify({
-            icon: 'pe-7s-gift',
-            message: "Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer."
-
-        },{
-            type: 'info',
-            timer: 4000
-        });
+        // $.notify({
+        //     icon: 'pe-7s-gift',
+        //     message: "Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer."
+        //
+        // },{
+        //     type: 'info',
+        //     timer: 4000
+        // });
 
         $('#delete_confirmation_answer').on('shown.bs.modal', function(event) {
             $("#answerId").text($(event.relatedTarget).data('id'));

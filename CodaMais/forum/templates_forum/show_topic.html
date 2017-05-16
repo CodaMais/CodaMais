@@ -184,7 +184,7 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <a href="#" class="btn btn-primary">Trancar</a>
+        <a href="{% url 'lock_topic' topic.id %}" class="btn btn-primary">Trancar</a>
       </div>
     </div>
   </div>

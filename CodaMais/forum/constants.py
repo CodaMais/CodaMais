@@ -14,8 +14,8 @@ MAX_LENGTH_TOPIC_DESCRIPTION = 1000
 MAX_LENGTH_ANSWER_DESCRIPTION = 100000000
 
 # ERROR MESSAGES
-DELETE_TOPIC_ASSERT = "Topic does not have an author."
-DELETE_ANSWER_ASSERT = "Answer does not have an author."
+INEXISTENT_TOPIC_ASSERT = "Topic does not have an author."
+INEXISTENT_ANSWER_ASSERT = "Answer does not have an author."
 
 # ANSWER DESCRIPTION
 ANSWER_DESCRIPTION_NAME = 'description'

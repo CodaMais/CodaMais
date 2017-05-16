@@ -19,6 +19,13 @@
   align:top;
 }
 </style>
+
+<div class="header" id=header style="text-align:right;">
+  <a class="btn btn-outline-success" data-toggle="modal" data-target="#lock-topic" href="javascript:void(0)">Trancar Tópico</a>
+</div>
+<br>
+
+
 <div class="card">
   <div class="header" id=header style="text-align:center;">
     <h2 class="title">{{topic.title}}</h2>
@@ -116,9 +123,13 @@
 </div>
 
 
-<div>
+<div style="width: 100%; overflow: hidden;">
   {% if deletable_topic %}
-  <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation_topic" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
+    <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation_topic" href="javascript:void(0)">Deletar Tópico</a>
+  {% endif %}
+  <div style="width: 85%; float: right;">
+    <a class="btn btn-outline-success" data-toggle="modal" data-target="#lock-topic" href="javascript:void(0)">Trancar Tópico</a>
+  </div>
 </div>
 
 <script>

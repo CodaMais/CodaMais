@@ -8,6 +8,7 @@ from .views import (
     create_topic,
     delete_topic,
     delete_answer,
+    best_answer,
 )
 
 urlpatterns = (
@@ -17,4 +18,5 @@ urlpatterns = (
     url(r'^newtopic/$', create_topic, name='create_topic'),
     url(r'^deletetopic/(?P<id>\d+)/$', delete_topic, name='delete_topic'),
     url(r'^deleteanswer/(?P<id>\d+)/$', delete_answer, name='delete_answer'),
+    url(r'^best_answer/(?P<id>\d+)/$', best_answer, name='best_answer'),
 )

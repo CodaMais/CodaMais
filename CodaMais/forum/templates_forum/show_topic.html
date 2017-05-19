@@ -84,7 +84,7 @@
           data-toggle="modal"
           data-target="#choose_best_answer"
           data-id="{{answer.id}}"
-          data-url="{% url 'delete_answer' answer.id %}">Melhor Resposta </a>
+          data-url="{% url 'best_answer' answer.id %}">Melhor Resposta </a>
           {% endif %}
 
           {% if delete_answer == True %}

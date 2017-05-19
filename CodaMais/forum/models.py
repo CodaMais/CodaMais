@@ -16,6 +16,7 @@ class Topic(models.Model):
           on_delete=models.CASCADE,)
     description = models.CharField(max_length=constants.MAX_LENGTH_TOPIC_DESCRIPTION)
     date_topic = models.DateTimeField(auto_now_add=True, blank=True)
+    best_answer = models.ForeignKey('Answer', models.SET_NULL, related_name='best_answer', null=True)
 
     def __str__(self):
         return self.title

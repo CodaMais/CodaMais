@@ -1,6 +1,7 @@
 # Django.
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.core.exceptions import ObjectDoesNotExist
 
 # local Django.
 
@@ -216,6 +217,36 @@ class TestRequestTopic(TestCase):
             self.topic.save()
             request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
             request.user = self.user
+            response = lock_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, REQUEST_REDIRECT)
+            self.assertEqual(response.url, '/en/forum/topics/')
+
+            locked_topic = Topic.objects.get(id=self.topic.id)
+
+            self.assertTrue(locked_topic.locked)
+
+        def test_lock_topic_when_topic_doesnt_exist(self):
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = self.user
+            lock_topic(request, self.topic.id)
+            self.assertRaises(ObjectDoesNotExist)
+
+        def test_lock_topic_when_user_cant_lock(self):
+            self.user_wrong.save()
+            self.topic.save()
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = self.user_wrong
+            response = lock_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, REQUEST_REDIRECT)
+            self.assertEqual(response.url, '/en/forum/topics/')
+
+        def test_lock_topic_when_user_is_staff_lock(self):
+            user = self.user_wrong
+            user.is_staff = True
+            user.save()
+            self.topic.save()
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = user
             response = lock_topic(request, self.topic.id)
             self.assertEqual(response.status_code, REQUEST_REDIRECT)
             self.assertEqual(response.url, '/en/forum/topics/')

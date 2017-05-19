@@ -53,7 +53,7 @@ def show_topic(request, id):
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
     deletable_topic = show_delete_topic_button(topic.author, user.username)
-    lockable_topic = show_lock_topic_button(topic, user)
+    lockable_topic = __show_lock_topic_button__(topic, user)
     deletable_answers = show_delete_answer_button(answers, topic, user.username)
     zipped_data = zip(answers, deletable_answers)
 
@@ -82,8 +82,13 @@ def show_delete_topic_button(topic_author, current_user_username):
     return deletable_topic
 
 
-def show_lock_topic_button(topic, current_user):
+def __show_lock_topic_button__(topic, current_user):
+    assert topic is not None, "Topic can't be none."
+    assert current_user is not None, "Current user can't be none."
+
     lockable_topic = False  # Variable to define if user will see a button to lock a topic.
+
+    logger.debug("Topic is locked? " + str(topic.locked))
 
     # Check if topic is already locked.
     if topic.locked is False:

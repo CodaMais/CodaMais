@@ -9,7 +9,8 @@ from forum.models import (
 )
 from user.models import User
 from forum.views import (
-    list_all_topics, show_topic, create_topic, delete_topic, list_all_answer, delete_answer, show_delete_answer_button
+    list_all_topics, show_topic, create_topic, delete_topic, list_all_answer, delete_answer, show_delete_answer_button,
+    __show_lock_topic_button__,
 )
 
 # RESPONSE CODES.
@@ -80,13 +81,22 @@ class TestRequestTopic(TestCase):
             self.user.first_name = "TestUser"
             self.user.username = "Username"
             self.user.is_active = True
+            self.user.set_password('userpassword')
+            self.user.save()
+
+            self.user_wrong = User()
+            self.user_wrong.email = "wronguser@wronguser.com"
+            self.user_wrong.first_name = "WrongUser"
+            self.user_wrong.username = "WrongUser"
+            self.user_wrong.is_active = True
+
             self.topic.title = 'Basic Topic'
             self.topic.subtitle = 'How test in Django'
             self.topic.author = self.user
             self.topic.description = '<p>Text Basic Exercise.</p>'
+            self.topic.locked = False
+
             self.factory = RequestFactory()
-            self.user.set_password('userpassword')
-            self.user.save()
             self.wrong_author = 'User'
             self.topic_creation_form = {
                 'title': self.topic.title,
@@ -109,14 +119,10 @@ class TestRequestTopic(TestCase):
 
         def test_show_topic_when_topic_is_not_deletable(self):
             self.topic.save()
-            user_wrong = User()
-            user_wrong.email = "wronguser@wronguser.com"
-            user_wrong.first_name = "WrongUser"
-            user_wrong.username = "WrongUser"
-            user_wrong.is_active = True
-            user_wrong.save()
+
+            self.user_wrong.save()
             request = self.factory.get('/forum/topics/1/')
-            request.user = user_wrong
+            request.user = self.user_wrong
             response = show_topic(request, self.topic.id)
             self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
 
@@ -172,6 +178,39 @@ class TestRequestTopic(TestCase):
             response = delete_topic(request, self.topic.id)
             self.assertEqual(response.status_code, REQUEST_REDIRECT)
             self.assertEqual(response.url, '/en/forum/topics/')
+
+        def test_show_lock_topic_button_when_topic_isnt_lockable(self):
+            self.user_wrong.save()
+            self.topic.save()
+            lockable_topic = __show_lock_topic_button__(self.topic, self.user_wrong)
+            self.assertEqual(lockable_topic, False)
+
+        def test_show_lock_topic_button_when_topic_is_lockable(self):
+            self.topic.save()
+            lockable_topic = __show_lock_topic_button__(self.topic, self.user)
+            self.assertTrue(lockable_topic)
+
+        def test_show_lock_topic_button_when_topic_is_already_locked(self):
+            topic = self.topic
+            topic.locked = True
+            topic.save()
+            lockable_topic = __show_lock_topic_button__(topic, self.user)
+            self.assertFalse(lockable_topic, False)
+
+        def test_show_lock_topic_button_when_topic_is_null(self):
+            topic = None
+            try:
+                __show_lock_topic_button__(topic, self.user)
+            except AssertionError:
+                self.assertTrue(True)
+
+        def test_show_lock_topic_button_when_user_is_null(self):
+            self.topic.save()
+            user = None
+            try:
+                __show_lock_topic_button__(self.topic, user)
+            except AssertionError:
+                self.assertTrue(True)
 
 
 class TestAnswerCreation(TestCase):

@@ -3,7 +3,7 @@ from django.db import models
 
 # local Django
 from achievement import constants
-# from user.models import User
+from user.models import User
 
 
 class Achievement(models.Model):
@@ -21,3 +21,27 @@ class Achievement(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# Class: Achievement
+# The class represents the relationship between the achievement and the user.
+# The table can only be stored when the user gets the achievement.
+class UserAchievement(models.Model):
+    class Meta:
+        unique_together = (('user', 'achievement'),)
+
+    user = models.ForeignKey(
+          User,
+          on_delete=models.CASCADE,)
+
+    achievement = models.ForeignKey(
+            Achievement,
+            on_delete=models.CASCADE,)
+
+    def update_or_creates(self, achievement, user):
+        self.achievement = achievement
+        self.user = user
+        self.save()
+
+    def __str__(self):
+        return self.user.email + "-" + str(self.achievement.name)

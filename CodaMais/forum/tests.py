@@ -10,7 +10,7 @@ from forum.models import (
 from user.models import User
 from forum.views import (
     list_all_topics, show_topic, create_topic, delete_topic, list_all_answer, delete_answer, show_delete_answer_button,
-    __show_lock_topic_button__,
+    __show_lock_topic_button__, lock_topic,
 )
 
 # RESPONSE CODES.
@@ -183,7 +183,7 @@ class TestRequestTopic(TestCase):
             self.user_wrong.save()
             self.topic.save()
             lockable_topic = __show_lock_topic_button__(self.topic, self.user_wrong)
-            self.assertEqual(lockable_topic, False)
+            self.assertFalse(lockable_topic)
 
         def test_show_lock_topic_button_when_topic_is_lockable(self):
             self.topic.save()
@@ -211,6 +211,18 @@ class TestRequestTopic(TestCase):
                 __show_lock_topic_button__(self.topic, user)
             except AssertionError:
                 self.assertTrue(True)
+
+        def test_lock_topic_when_topic_is_lockable(self):
+            self.topic.save()
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = self.user
+            response = lock_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, REQUEST_REDIRECT)
+            self.assertEqual(response.url, '/en/forum/topics/')
+
+            locked_topic = Topic.objects.get(id=self.topic.id)
+
+            self.assertTrue(locked_topic.locked)
 
 
 class TestAnswerCreation(TestCase):

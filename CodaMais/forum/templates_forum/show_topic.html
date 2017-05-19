@@ -84,7 +84,7 @@
           data-toggle="modal"
           data-target="#choose_best_answer"
           data-id="{{answer.id}}"
-          data-url="{% url 'delete_answer' answer.id %}">Melhor Resposta </a>
+          data-url="{% url 'best_answer' answer.id %}">Melhor Resposta </a>
           {% endif %}
 
           {% if delete_answer == True %}
@@ -174,7 +174,7 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-        <a href="" class="btn btn-info btn-fill btn-sm" id="actualDeleteBtn">Confirmar</a>
+        <a href="" class="btn btn-info btn-fill btn-sm" id="confirm_choose_best_answer">Confirmar</a>
       </div>
     </div>
   </div>

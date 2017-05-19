@@ -205,6 +205,25 @@ def delete_answer(request, id):
         return redirect('show_topic', id=topic.id)
 
 
+@login_required(login_url='/')
+def best_answer(request, id):
+    try:
+        best_answer = Answer.objects.get(id=id)  # Answer object, from Answer model.
+    except ObjectDoesNotExist:
+        logger.exception("Answer does not exists.")
+        return redirect('list_all_topics')
+
+    user = request.user  # User object, from user model. Is the current online user.
+
+    topic = best_answer.topic
+
+    # Checks if the signed user is the owner of the topic, then he can set the best answer.
+    if user.username == topic.author.username:
+        topic.best_answer = best_answer
+        topic.save()
+    return redirect('show_topic', id=topic.id)
+
+
 # Only the person who whrote the anwer can delete it.
 def show_delete_answer_button(answers, topic, current_user_username):
     deletable_answers = []

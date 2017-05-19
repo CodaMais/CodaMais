@@ -1,3 +1,4 @@
+
 # standard library
 import http.client
 import urllib
@@ -18,14 +19,6 @@ from exercise.forms import SubmitExerciseForm
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(constants.PROJECT_NAME)
-
-
-@login_required
-def list_all_exercises(request):
-    logger.info("List all exercises page.")
-    data = {}
-    data['list_exercises'] = Exercise.objects.all()
-    return render(request, 'exercises.html', data)
 
 
 @login_required

@@ -15,6 +15,7 @@ from user.models import User
 # 302 is the value returned from a HttpRequest status code when the URL was redirected.
 REQUEST_REDIRECT = 302
 
+
 class TestExerciseRegistration(TestCase):
 
     exercise = Exercise()
@@ -223,6 +224,66 @@ class TestUserExerciseRegistration(TestCase):
         self.assertEqual(response.status_code, REQUEST_REDIRECT)
         self.assertEqual(response.url, '/en/exercise/1/')
 
+    def test_get_user_submissions_exercise(self):
+        self.user_exercise.update_or_creates(
+                                            self.user_exercise.code,
+                                            self.user_exercise.exercise,
+                                            self.user_exercise.user,
+                                            self.user_exercise.time,
+                                            self.user_exercise.status,
+                                            self.user_exercise.scored)
+
+        list_exercises = Exercise.objects.all()
+
+        submissions = views.get_user_submissions_exercise(self.user, list_exercises)
+        self.assertEqual(len(submissions), 1)
+
+    def test_if_status_submission_is_incorrect(self):
+        status = False
+        self.user_exercise.update_or_creates(
+                                            self.user_exercise.code,
+                                            self.user_exercise.exercise,
+                                            self.user_exercise.user,
+                                            self.user_exercise.time,
+                                            status,
+                                            self.user_exercise.scored)
+
+        list_exercises = Exercise.objects.all()
+
+        submissions = views.get_user_submissions_exercise(self.user, list_exercises)
+        for exercise, user_exercise in submissions:
+            self.assertEqual(user_exercise.status, status)
+
+    def test_if_status_submission_is_correct(self):
+        status = True
+        self.user_exercise.update_or_creates(
+                                            self.user_exercise.code,
+                                            self.user_exercise.exercise,
+                                            self.user_exercise.user,
+                                            self.user_exercise.time,
+                                            status,
+                                            self.user_exercise.scored)
+
+        list_exercises = Exercise.objects.all()
+
+        submissions = views.get_user_submissions_exercise(self.user, list_exercises)
+        for exercise, user_exercise in submissions:
+            self.assertEqual(user_exercise.status, status)
+
+    def test_get_user_submissions_exercise_status_is_true(self):
+        self.user_exercise.update_or_creates(
+                                            self.user_exercise.code,
+                                            self.user_exercise.exercise,
+                                            self.user_exercise.user,
+                                            self.user_exercise.time,
+                                            self.user_exercise.status,
+                                            self.user_exercise.scored)
+
+        list_exercises = Exercise.objects.all()
+
+        submissions = views.get_user_submissions_exercise(self.user, list_exercises)
+        self.assertEqual(len(submissions), 1)
+
 
 class TestCaseExerciseRegistration(TestCase):
     exercise = Exercise()
@@ -272,12 +333,6 @@ class TestRequestExercise(TestCase):
 
         self.test_case_exercise.exercise = self.exercise
         self.test_case_exercise.save()
-
-    def test_list_all_exercises_deprecated(self):
-        request = self.factory.get('/exercise/')
-        request.user = self.user
-        response = views.list_all_exercises(request)
-        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
     def test_list_exercises_not_deprecated(self):
         request = self.factory.get('/exercise/')

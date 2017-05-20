@@ -21,7 +21,12 @@ class Topic(models.Model):
     def answers(self):
         assert self is not None, "Topic not exists."
         # Getting all current topic answers except the best answer
-        answers = Answer.objects.filter(topic=self).exclude(id=self.best_answer.id)
+        answers = Answer.objects.filter(topic=self)
+        if self.best_answer is not None:
+            answers.exclude(id=self.best_answer.id)
+        else:
+            # NOTHING TO DO.
+            pass
         return answers
 
     def __str__(self):

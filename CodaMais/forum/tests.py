@@ -9,7 +9,7 @@ from forum.models import (
 )
 from user.models import User
 from forum.views import (
-    list_all_topics, show_topic, create_topic, delete_topic, delete_answer, show_choose_best_answer_button, show_delete_answer_button
+    list_all_topics, show_topic, create_topic, delete_topic, delete_answer, best_answer, show_choose_best_answer_button, show_delete_answer_button
 )
 
 # RESPONSE CODES.
@@ -273,14 +273,11 @@ class TestAnswerTopic(TestCase):
         self.assertEqual(len(list_answers), 0)
 
     def list_all_answer_except_best_answer(self):
-        answer = Answer()
-
-        answer.description = "description"
-        answer.topic = self.topic
-        answer.user = self.user
-        answer.save()
-
-        self.topic.best_answer = answer
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        
+        self.topic.best_answer = self.answer
         self.topic.save()
 
         list_answers = self.topic.answers()
@@ -347,3 +344,20 @@ class TestAnswerTopic(TestCase):
         current_user = self.user
         choose_best_answer = show_choose_best_answer_button(topic_author, current_user)
         self.assertEqual(choose_best_answer, False)
+
+    def test_if_topic_author_cant_choose_an_inexistent_answer(self):
+        request = self.factory.get('/forum/best_answer/1/')
+        request.user = self.user
+        response = best_answer(request, self.answer.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/forum/topics/')
+
+    def test_if_topic_author_can_choose_best_answer(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        request = self.factory.get('/forum/best_answer/1/')
+        request.user = self.topic.author
+        response = best_answer(request, self.answer.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/forum/topics/1/')

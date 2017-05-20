@@ -83,6 +83,7 @@
     <h4 class="title">{{quantity_answer}} Respostas</h4><br>
   </div>
   {% for answer, delete_answer in zipped_data %}
+  {% if answer.id is not best_answer.id %}
   <div class="card">
   <div class="table-responsive">
     <table class="table table-striped">
@@ -128,6 +129,7 @@
     </table>
   </div>
 </div>
+{% endif %}
 {% endfor %}
 </div>
 
@@ -209,7 +211,6 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
 </div>
 {% endif %}
 
-{% if delete_answer == True %}
 <div class="modal fade" id="delete_confirmation_answer">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -227,6 +228,5 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
     </div>
   </div>
 </div>
-{% endif %}
 
 {% endblock %}

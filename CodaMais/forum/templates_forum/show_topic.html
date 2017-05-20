@@ -49,6 +49,38 @@
   </div>
 </div>
 
+{% if best_answer is not None %}
+
+<div class="card best-answer">
+  <div class="header">
+    <h4 class="title">Melhor reposta</h4>
+  </div>
+  <div class="content table-responsive table-full-width">
+
+    <table class="table table-striped">
+      <tr>
+        <td id = column>
+          <img src="{{best_answer.user.user_image.url}}" width="100px" height="100px"></img>
+        </td>
+        <td id = column2>
+          {{best_answer.description|safe}}
+        </td>
+      </tr>
+      <tr>
+        <td id = column>
+          <b>
+            {{best_answer.username}}
+          </b>
+        </td>
+        <td  id = column2 style = "text-align:right;">
+          {{best_answer.date_answer}}
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+{% endif %}
 
 <div class="card">
   <div class="header" id=header>
@@ -174,7 +206,7 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-        <a href="" class="btn btn-info btn-fill btn-sm" id="actualDeleteBtn">Confirmar</a>
+        <a href="" class="btn btn-info btn-fill btn-sm" id="confirm_choose_best_answer">Confirmar</a>
       </div>
     </div>
   </div>

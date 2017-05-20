@@ -29,3 +29,11 @@
 .label-exercise-status-True {
   background-color: #5cb85c;
 }
+
+.card.best-answer > .header {
+  background-color: #4CAF50;
+}
+
+.card.best-answer > .header > .title {
+  color: #FFF;
+}

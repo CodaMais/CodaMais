@@ -46,5 +46,10 @@
             $("#actualDeleteBtn").attr('href', $(event.relatedTarget).data('url'));
         })
 
+        $('#choose_best_answer').on('shown.bs.modal', function(event) {
+            let url_best_answer = $(event.relatedTarget).data('url');
+            $("#confirm_choose_best_answer").attr('href', url_best_answer);
+        })
+
     });
 </script>

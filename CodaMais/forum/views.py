@@ -56,6 +56,7 @@ def show_topic(request, id):
     deletable_topic = show_delete_topic_button(topic.author, user.username)
     deletable_answers = show_delete_answer_button(answers, topic, user.username)
     zipped_data = zip(answers, deletable_answers)
+    best_answer = topic.best_answer
 
     return render(request, 'show_topic.html', {
         'topic': topic,
@@ -63,7 +64,8 @@ def show_topic(request, id):
         'deletable_topic': deletable_topic,
         'form': form,
         'quantity_answer': quantity_answer,
-        'zipped_data': zipped_data
+        'zipped_data': zipped_data,
+        'best_answer': best_answer
         })
 
 
@@ -207,20 +209,19 @@ def delete_answer(request, id):
 
 @login_required(login_url='/')
 def best_answer(request, id):
-    print("Entrou no best_answer")
     try:
         best_answer = Answer.objects.get(id=id)  # Answer object, from Answer model.
     except ObjectDoesNotExist:
         logger.exception("Answer does not exists.")
         return redirect('list_all_topics')
 
-        user = request.user  # User object, from user model. Is the current online user.
+    user = request.user  # User object, from user model. Is the current online user.
+    topic = best_answer.topic
 
-        topic = best_answer.topic
-
+    # Checks if the signed user is the owner of the topic, then he can set the best answer.
     if user.username == topic.author.username:
         topic.best_answer = best_answer
-    print("Saiu do best answers")
+        topic.save()
     return redirect('show_topic', id=topic.id)
 
 

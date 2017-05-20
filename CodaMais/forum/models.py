@@ -18,6 +18,12 @@ class Topic(models.Model):
     date_topic = models.DateTimeField(auto_now_add=True, blank=True)
     best_answer = models.ForeignKey('Answer', models.SET_NULL, related_name='best_answer', null=True)
 
+    def answers(self):
+        assert self is not None, "Topic not exists."
+        # Getting all current topic answers except the best answer
+        answers = Answer.objects.filter(topic=self).exclude(id=self.best_answer.id)
+        return answers
+
     def __str__(self):
         return self.title
 

@@ -14,15 +14,11 @@
 }
 </style>
 
-<style type="text/css" media="screen">
-#header {
-  align:top;
-}
-</style>
+
 <div class="card">
-  <div class="header" id=header style="text-align:center;">
-    <h2 class="title">{{topic.title}}</h2>
-    <h4 class="title">{{topic.subtitle}}</h4>
+  <div class="header">
+    <h4 class="title">{{topic.title}}</h4>
+    <h5 class="title sub">{{topic.subtitle}}</h5>
   </div>
   <div class="content table-responsive table-full-width">
 
@@ -69,7 +65,7 @@
       <tr>
         <td id = column>
           <b>
-            {{best_answer.username}}
+            {{best_answer.user.username}}
           </b>
         </td>
         <td  id = column2 style = "text-align:right;">
@@ -160,7 +156,7 @@
 
 <div>
   {% if deletable_topic %}
-  <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete-confirmation_topic" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
+  <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete_confirmation_topic" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
 </div>
 
 <script>
@@ -172,7 +168,7 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
 {% block modal %}
 
 {% if deletable_topic %}
-<div class="modal fade" id="delete-confirmation_topic">
+<div class="modal fade" id="delete_confirmation_topic">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -219,14 +215,14 @@ tinyMCE.get('#id_description').setContent('<span>some</span> html');
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Confirmar Deleção</h4>
+        <h4 class="modal-title" id="myModalLabel">Confirmar Ação</h4>
       </div>
       <div class="modal-body">
         Você deseja realmente apagar sua resposta? Essa ação é irreversível.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-        <a href="" class="btn btn-danger btn-fill btn-sm" id="actualDeleteBtn">Deletar</a>
+        <a href="" class="btn btn-danger btn-fill btn-sm" id="confirm_delete_answer">Deletar</a>
       </div>
     </div>
   </div>

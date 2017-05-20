@@ -50,7 +50,7 @@ def show_topic(request, id):
         # Nothing to do
         pass
 
-    answers = list_all_answer(topic)
+    answers = topic.answers()
     quantity_answer = len(answers)
     choose_best_answer = show_choose_best_answer_button(topic.author, user)
     deletable_topic = show_delete_topic_button(topic.author, user.username)
@@ -168,16 +168,6 @@ def answer_topic(user, topic, form):
         # Nothing to do
 
     return redirect_answer
-
-
-# List all answers of the topic that the user is accessing.
-def list_all_answer(topic):
-    assert topic is not None, "Topic is not exists."
-
-    answers = []
-    answers = Answer.objects.filter(topic=topic)
-    logger.debug("Get all answers.")
-    return answers
 
 
 @login_required(login_url='/')

@@ -40,9 +40,9 @@ class UserAchievement(models.Model):
             Achievement,
             on_delete=models.CASCADE,)
 
-    def update_or_creates(self, achievement, user):
-        self.achievement = achievement
+    def update_or_creates(self, user, achievement):
         self.user = user
+        self.achievement = achievement
         self.save()
 
     def __str__(self):

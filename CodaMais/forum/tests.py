@@ -9,7 +9,7 @@ from forum.models import (
 )
 from user.models import User
 from forum.views import (
-    list_all_topics, show_topic, create_topic, delete_topic, delete_answer, show_delete_answer_button
+    list_all_topics, show_topic, create_topic, delete_topic, delete_answer, show_choose_best_answer_button, show_delete_answer_button
 )
 
 # RESPONSE CODES.
@@ -335,3 +335,15 @@ class TestAnswerTopic(TestCase):
         not_deletable_answer.append(False)
         deletable_answers = show_delete_answer_button(answers, self.topic, self.wrong_user)
         self.assertEqual(deletable_answers, not_deletable_answer)
+
+    def test_if_user_can_see_choose_best_answer_button(self):
+        topic_author = self.topic.author
+        current_user = topic_author
+        choose_best_answer = show_choose_best_answer_button(topic_author, current_user)
+        self.assertEqual(choose_best_answer, True)
+
+    def test_if_user_cant_see_choose_best_answer_button(self):
+        topic_author = self.topic.author
+        current_user = self.user
+        choose_best_answer = show_choose_best_answer_button(topic_author, current_user)
+        self.assertEqual(choose_best_answer, False)

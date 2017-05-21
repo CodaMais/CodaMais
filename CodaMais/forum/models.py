@@ -16,6 +16,7 @@ class Topic(models.Model):
           on_delete=models.CASCADE,)
     description = models.CharField(max_length=constants.MAX_LENGTH_TOPIC_DESCRIPTION)
     date_topic = models.DateTimeField(auto_now_add=True, blank=True)
+    locked = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

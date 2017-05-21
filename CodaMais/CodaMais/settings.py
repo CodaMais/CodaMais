@@ -183,18 +183,14 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-        },
         'console': {
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-        }
+        },
     },
     'loggers': {
-        'CodaMais': {
-            'handlers': ['file'],
+        'default': {
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
         },

@@ -17,18 +17,26 @@
                         <th>Título</th>
                         <th>Autor</th>
                         <th>Data</th>
-                        <th>Número de Respostas</th>
-                        <th>Resposta Aceita</th>
+
+                        <th>Número de Resposta</th>
+                        <th>Respota Aceita</th>
+                        <th>Trancado</th>                        
+
                     </thead>
                     <tbody>
                         {% for topic in list_topics %}
                         <tr class='clickable-row' data-href="{% url 'show_topic' topic.id %}">
                             <td>{{topic.title}}</td>
                             <td>{{topic.author}}</td>
-                            <td>{{topic.dateTopic.date}}</td>
+                            <td>{{topic.date_topic.date}}</td>
                             <td>{{topic.answer_set.all|length}}</td>
                             <!-- <i class="fa fa-times text-danger"></i> -->
                             <td><i class="fa fa-check text-success"></td>
+                            {% if topic.locked is True %}
+                            <td><i class="fa fa-lock"></i></td>
+                            {% else %}
+                            <td><i class="fa fa-unlock"></i></td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

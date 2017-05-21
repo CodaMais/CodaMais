@@ -18,7 +18,7 @@ from . import constants
 
 # Required to access the information log.
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(constants.DEFAULT_LOGGER)
 
 
 def list_all_topics(request):
@@ -53,12 +53,14 @@ def show_topic(request, id):
     answers = list_all_answer(topic)
     quantity_answer = len(answers)
     deletable_topic = show_delete_topic_button(topic.author, user.username)
+    lockable_topic = __show_lock_topic_button__(topic, user)
     deletable_answers = show_delete_answer_button(answers, topic, user.username)
     zipped_data = zip(answers, deletable_answers)
 
     return render(request, 'show_topic.html', {
         'topic': topic,
         'deletable_topic': deletable_topic,
+        'lockable_topic': lockable_topic,
         'form': form,
         'quantity_answer': quantity_answer,
         'zipped_data': zipped_data
@@ -78,6 +80,32 @@ def show_delete_topic_button(topic_author, current_user_username):
 
     logger.debug("Topic page is deletable? " + str(deletable_topic))
     return deletable_topic
+
+
+def __show_lock_topic_button__(topic, current_user):
+    assert topic is not None, "Topic can't be none."
+    assert current_user is not None, "Current user can't be none."
+
+    lockable_topic = False  # Variable to define if user will see a button to lock a topic.
+
+    logger.debug("Topic is locked? " + str(topic.locked))
+
+    # Check if topic is already locked.
+    if topic.locked is False:
+
+        # Check if logged user is visiting his own topic page.
+        if topic.author.username == current_user.username or current_user.is_staff is True:
+            logger.debug("Topic page should be lockable.")
+            lockable_topic = True
+        else:
+            logger.debug("Topic page shouldn't be lockable.")
+            # Nothing to do.
+    else:
+        logger.debug("Topic is already locked.")
+        # Nothing to do
+
+    logger.debug("Topic page is lockable? " + str(lockable_topic))
+    return lockable_topic
 
 
 @login_required(login_url='/')
@@ -119,7 +147,7 @@ def delete_topic(request, id):
 
     user = request.user  # User object, from user model. Is the current online user.
 
-    assert topic.author is not None, constants.DELETE_TOPIC_ASSERT
+    assert topic.author is not None, constants.INEXISTENT_TOPIC_ASSERT
 
     if user.username == topic.author.username:
         logger.debug("Deleting topic.")
@@ -179,7 +207,7 @@ def delete_answer(request, id):
 
     topic = answer.topic
 
-    assert answer.user is not None, constants.DELETE_ANSWER_ASSERT
+    assert answer.user is not None, constants.INEXISTENT_ANSWER_ASSERT
 
     if user.username == answer.user.username:
         logger.debug("Deleting answer.")
@@ -210,3 +238,29 @@ def show_delete_answer_button(answers, topic, current_user_username):
         logger.info("Is deletable? " + str(is_deletable))
 
     return deletable_answers
+
+
+@login_required(login_url='/')
+def lock_topic(request, id):
+    try:
+        topic = Topic.objects.get(id=id)  # Topic object, from Topic model.
+    except ObjectDoesNotExist:
+        logger.exception("Topic is not exists.")
+        # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
+        return redirect('list_all_topics')
+
+    user = request.user  # User object, from user model. Is the current online user.
+
+    assert topic.author is not None, constants.INEXISTENT_TOPIC_ASSERT
+
+    if user.username == topic.author.username or user.is_staff is True:
+        logger.debug("Locking topic.")
+        topic.locked = True
+        topic.save()
+
+        return redirect('list_all_topics')
+    else:
+        logger.info("User can't lock topic.")
+
+        # TODO(Roger) Create structure to alert the user that the topic isn't his.
+        return redirect('list_all_topics')

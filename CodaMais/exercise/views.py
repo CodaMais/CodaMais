@@ -15,6 +15,7 @@ from exercise.models import (
 from exercise import constants
 from exercise.forms import SubmitExerciseForm
 from achievement.views import verify_correct_exercise_achievement
+from achievement.views import verify_score_achievement
 
 
 logging.basicConfig(level=logging.INFO)
@@ -110,6 +111,9 @@ def process_user_exercise(request, id):
 
         # Used to unlock correct exercise achievements everytime this method is called.
         verify_correct_exercise_achievement(user)
+
+        # Used to unlock score achievements when the user receives points from exercises.
+        verify_score_achievement(user)
     else:
         logger.info("The code form was invalid.")
         # Nothing to do.

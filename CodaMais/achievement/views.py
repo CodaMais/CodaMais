@@ -79,6 +79,25 @@ def get_user_submited_answers_quantity(user):
     return user_submited_answers_quantity
 
 
+# Find all achievements related to score and determine if the current user is able to unlock some of them.
+# This method should be called everywhere user is scored.
+def verify_score_achievement(user):
+    logger.debug("Verifying score achievement.")
+
+    # List of achievements that have the same type(user pontuation).
+    score_achievements_list = Achievement.objects.filter(
+                                    achievement_type=constants.SCORE_ACHIEVEMENTS)
+
+    # The list of achievements must be ordered by the biggest quantity of user points.
+    score_achievements_list = score_achievements_list.order_by('-quantity')
+
+    score = user.score
+    # Verify in fact wich achievement of the specific type achievements list the user should get.
+    check_achievement_user_should_get(user, score, score_achievements_list)
+
+    logger.debug("Ending verifycation of score achievement.")
+
+
 # Verifies if exists a relationship between the current user and the current achievement in database.
 def check_if_user_has_achievement(user, achievement):
     assert user is not None, "User not logged in."

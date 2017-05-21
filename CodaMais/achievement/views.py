@@ -84,11 +84,11 @@ def get_user_submited_answers_quantity(user):
 def verify_score_achievement(user):
     logger.debug("Verifying score achievement.")
 
-    # List of achievements that have the same type(user pontuation).
+    # List of achievements that have the same type(score).
     score_achievements_list = Achievement.objects.filter(
                                     achievement_type=constants.SCORE_ACHIEVEMENTS)
 
-    # The list of achievements must be ordered by the biggest quantity of user points.
+    # The list of achievements must be ordered by the biggest quantity of score.
     score_achievements_list = score_achievements_list.order_by('-quantity')
 
     score = user.score
@@ -96,6 +96,41 @@ def verify_score_achievement(user):
     check_achievement_user_should_get(user, score, score_achievements_list)
 
     logger.debug("Ending verifycation of score achievement.")
+
+
+# Find all achievements related to submited exercises in topics and determine if the current user
+# is able to unlock some of them.
+def verify_submited_exercises_achievement(user):
+    logger.debug("Verifying submited exercise achievement.")
+
+    user_submited_exercises_quantity = get_user_submited_exercises_quantity(user)
+
+    # List of achievements that have the same type(submited exercises).
+    submited_exercise_achievements_list = Achievement.objects.filter(
+                                    achievement_type=constants.SUBMITED_EXERCISE_ACHIEVEMENTS)
+
+    # The list of achievements must be ordered by the biggest quantity of correct exercises.
+    submited_exercise_achievements_list = submited_exercise_achievements_list.order_by('-quantity')
+
+    # Verify in fact wich achievement of the specific type achievements list the user should get.
+    check_achievement_user_should_get(user, user_submited_exercises_quantity, submited_exercise_achievements_list)
+
+    logger.debug("Ending verifycation of submited exercises achievement.")
+
+
+# Count all submissions of all exercises that the user submited, correct or not.
+def get_user_submited_exercises_quantity(user):
+    assert user is not None, "User not logged in."
+
+    submited_exercises_list = UserExercise.objects.filter(user=user)
+    user_submited_exercises_quantity = 0
+
+    for submited_exercise in submited_exercises_list:
+        user_submited_exercises_quantity += submited_exercise.number_submission
+
+    assert user_submited_exercises_quantity >= 0, "Invalid number of user submited exercise"
+
+    return user_submited_exercises_quantity
 
 
 # Verifies if exists a relationship between the current user and the current achievement in database.

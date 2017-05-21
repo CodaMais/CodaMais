@@ -25,21 +25,11 @@
             window.location = $(this).data("href");
         });
 
-        //demo.initChartist();
-
         tinyMCE.init({
                selector:'#id_description',
                menubar:false,
         });
 
-        $.notify({
-            icon: 'pe-7s-gift',
-            message: "Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer."
-
-        },{
-            type: 'info',
-            timer: 4000
-        });
 
         $('#choose_best_answer').on('shown.bs.modal', function(event) {
             let url_best_answer = $(event.relatedTarget).data('url');
@@ -50,6 +40,8 @@
             let url_delete_answer = $(event.relatedTarget).data('url');
             $("#confirm_delete_answer").attr('href', url_delete_answer);
         });
+
+        demo.initChartist();
 
     });
 </script>

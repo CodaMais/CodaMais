@@ -9,6 +9,7 @@ from .views import (
     delete_topic,
     delete_answer,
     best_answer,
+    lock_topic,
 )
 
 urlpatterns = (
@@ -19,4 +20,5 @@ urlpatterns = (
     url(r'^deletetopic/(?P<id>\d+)/$', delete_topic, name='delete_topic'),
     url(r'^deleteanswer/(?P<id>\d+)/$', delete_answer, name='delete_answer'),
     url(r'^best_answer/(?P<id>\d+)/$', best_answer, name='best_answer'),
+    url(r'^locktopic/(?P<id>\d+)/$', lock_topic, name='lock_topic'),
 )

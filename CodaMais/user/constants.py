@@ -27,8 +27,8 @@ FIRST_NAME_CHARACTERS = 'Your name can\'t have special characters'
 # PASSWORDS FIELDS.
 PASSWORD_CONFIRMATION = 'Password Confirmation'
 PASSWORD = 'Password'
-PASSWORD_RECOVER = 'Recover Password'
-PASSWORD_CHANGE = 'Change password'
+PASSWORD_RECOVER = 'Recuperação de Senha'
+PASSWORD_CHANGE = 'Mudar senha'
 PASSWORD_FIELD_LENGTH = 30
 PASSWORD_MIN_LENGTH = 8
 PASSWORD_MAX_LENGTH = 12

@@ -108,20 +108,22 @@
 
 {% if topic.locked is False %}
 
-<div class="card">div class="header"<h3 class="title"> Answer </h3><br>
-  <div class="content">
+<div class="card">
+  <div class="header"><h3 class="title"> Answer </h3><br>
+    <div class="content">
 
-    <form method="post" action=".">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
-      <div class="form-group">
-        {% for error in form.description.errors %}
-        <div class="alert alert-danger"role="alert">{{error}}</div>
-        {% endfor %}
-        {{ form.description }}
-      </div>
-      <input formnovalidate class="btn btn-fill btn-default" type="submit" value="Answer" />
-    </form>
+      <form method="post" action=".">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+          {% for error in form.description.errors %}
+          <div class="alert alert-danger"role="alert">{{error}}</div>
+          {% endfor %}
+          {{ form.description }}
+        </div>
+        <input formnovalidate class="btn btn-fill btn-default" type="submit" value="Answer" />
+      </form>
+    </div>
   </div>
 </div>
 

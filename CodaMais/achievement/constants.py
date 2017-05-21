@@ -4,6 +4,7 @@ ACHIEVEMENT_TYPE = ((1, 'Exercício Correto'),
                     (3, 'Pontuação do Usuário'),
                     (4, 'Submissão de Exercícios'))
 CORRECT_EXERCISE_ACHIEVEMENTS = 1
+SUBMITED_ANSWERS_ACHIEVEMENTS = 2
 
 # NAME FIELD.
 MAX_LENGTH_NAME = 35

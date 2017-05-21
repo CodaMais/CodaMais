@@ -15,6 +15,7 @@ from .forms import (
     TopicForm, AnswerForm
 )
 from . import constants
+from achievement.views import verify_submited_answers_achievement
 
 # Required to access the information log.
 logging.basicConfig(level=logging.DEBUG)
@@ -143,6 +144,8 @@ def answer_topic(user, topic, form):
         answer_description = form.cleaned_data.get(constants.ANSWER_DESCRIPTION_NAME)
         answer = Answer()
         answer.creates_answer(user, topic, answer_description)
+
+        verify_submited_answers_achievement(user)
 
         # Reset form.
         redirect_answer = "/forum/topics/" + str(topic.id)

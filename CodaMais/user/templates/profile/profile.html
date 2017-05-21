@@ -1,14 +1,59 @@
 {% extends "general/template.html" %}
 
 {% block content %}
-    {% ifequal editable_profile 1 %}
-      <a href="{% url 'edit' user.username %}"> Edit </a>
-    {% endifequal %}
-    <h1>
-        Nickname: {{user.username}}
-        <br>
-        First name: {{user.first_name}}
-        <br>
-        <img src="{{user.user_image.url}}" width="100px" height="100px"></img>
-    </h1>
+<style type="text/css" media="screen">
+body {
+  background-color: #eaeaea;
+}
+
+img.avatar {
+  border: 1px solid #eee;
+}
+
+.only-bottom-margin {
+  margin-top: 0px;
+}
+
+.activity-mini {
+  padding-right: 0px;
+  float: left;
+}
+</style>
+
+  <div class="row">
+    <div class="responsive">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12 lead">User profile
+              {% ifequal editable_profile 1 %}
+              <a href="{% url 'edit' user.username %}" class="btn btn-default pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+              {% endifequal %}
+              <hr>
+            </div>
+
+          </div>
+          <div class="row">
+			      <div class="col-md-4 text-center">
+                <img src="{{user.user_image.url}}" width="200px" height="200px"></img>
+            </div>
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-12">
+                  <h1 class="only-bottom-margin">{{user.username}}</h1>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <span class="text-muted">Nome:</span> {{user.first_name}}<br>
+                  <span class="text-muted">Score :</span>{{user.score}} <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

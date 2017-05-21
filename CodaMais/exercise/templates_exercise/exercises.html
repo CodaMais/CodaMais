@@ -1,7 +1,18 @@
 {% extends "general/template.html" %}
-
 {% block title %}
+
+<style type="text/css" media="screen">
+  #column {
+    width: 50%;
+  }
+
+  #align{
+    text-align: center;
+  }
+</style>
+
 <center><h1>Exercícios</h1></center>
+
 {% endblock %}
 
 <head>
@@ -11,6 +22,8 @@
 </head>
 
 {% block content %}
+  <div class="card">
+
 
           <!-- Nav tabs category -->
           <ul class="nav nav-tabs faq-cat-tabs">
@@ -23,35 +36,114 @@
           <div class="tab-content faq-cat-content">
               <div class="tab-pane active in fade" id="faq-cat-1">
                 <div class="list-group">
-                    {% for exercise in list_exercises %}
-                      {% if exercise.category == 1 %}
-                        <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
-                      {% endif %}
-                    {% endfor %}
+                  <div class="content table-responsive table-full-width">
+                      <table class="table table-hover table-striped">
+                          <thead>
+                            <th>Título</th>
+                            <th id=align>N° Submissões</th>
+                            <th id=align>Score</th>
+                            <th id=align>Status</th>
+                          </thead>
+                          <tbody>
+                            {% for exercise,user_exercise in list_exercises %}
+                              {% if exercise.category == 1 %}
+                                <tr class='clickable-row' data-href="{% url 'show_exercise' exercise.id%}">
+                                  <td id=column>
+                                    {{exercise.title|truncatechars:40}}
+                                  </td>
+                                  <td id=align>{{user_exercise.number_submission}}</td>
+                                  <td id=align>{{exercise.score}}</td>
+                                  <td id=align>
+                                      {% if user_exercise.status == True %}
+                                        <i class="fa fa-check text-success"></i>
+                                      {% elif user_exercise.status == False and user_exercise.number_submission %}
+                                        <i class="fa fa-times text-danger"></i>
+                                      {% else %}
+                                        <!-- Nothing to do -->
+                                      {% endif %}
+                                  </td>
+                                </tr>
+                              {% endif %}
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
                 </div>
               </div>
 
               <div class="tab-pane fade" id="faq-cat-2">
                 <div class="list-group">
-                    {% for exercise in list_exercises %}
-                      {% if exercise.category == 2 %}
-                        <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
-                      {% endif %}
-                    {% endfor %}
+                  <div class="content table-responsive table-full-width">
+                      <table class="table table-hover table-striped">
+                          <thead>
+                            <th>Título</th>
+                            <th id=align>N° Submissões</th>
+                            <th id=align>Score</th>
+                            <th id=align>Status</th>
+                          </thead>
+                          <tbody>
+                            {% for exercise,user_exercise in list_exercises %}
+                              {% if exercise.category == 2 %}
+                                <tr class='clickable-row' data-href="{% url 'show_exercise' exercise.id%}">
+                                  <td id=column>
+                                    {{exercise.title|truncatechars:40}}
+                                  </td>
+                                  <td id=align>{{user_exercise.number_submission}}</td>
+                                  <td id=align>{{exercise.score}}</td>
+                                  <td id=align>
+                                      {% if user_exercise.status == True %}
+                                        <i class="fa fa-check text-success"></i>
+                                      {% elif user_exercise.status == False and user_exercise.number_submission %}
+                                        <i class="fa fa-times text-danger"></i>
+                                      {% else %}
+                                        <!-- Nothing to do -->
+                                      {% endif %}
+                                  </td>
+                                </tr>
+                              {% endif %}
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
                 </div>
               </div>
 
               <div class="tab-pane fade" id="faq-cat-3">
-
-                  <div class="list-group">
-                      {% for exercise in list_exercises %}
-                        {% if exercise.category == 3 %}
-                          <a href="{% url 'show_exercise' exercise.id %}" class="list-group-item">{{exercise.title}}</a>
-                        {% endif %}
-                      {% endfor %}
-                  </div>
+                <div class="list-group">
+                  <div class="content table-responsive table-full-width">
+                      <table class="table table-hover table-striped">
+                          <thead>
+                              <th>Título</th>
+                              <th id=align>N° Submissões</th>
+                              <th id=align>Score</th>
+                              <th id=align>Status</th>
+                          </thead>
+                          <tbody>
+                            {% for exercise,user_exercise in list_exercises %}
+                              {% if exercise.category == 3 %}
+                                <tr class='clickable-row' data-href="{% url 'show_exercise' exercise.id%}">
+                                  <td id=column>
+                                    {{exercise.title|truncatechars:40}}
+                                  </td>
+                                  <td id=align>{{user_exercise.number_submission}}</td>
+                                  <td id=align>{{exercise.score}}</td>
+                                  <td id=align>
+                                      {% if user_exercise.status == True %}
+                                        <i class="fa fa-check text-success"></i>
+                                      {% elif user_exercise.status == False and user_exercise.number_submission %}
+                                        <i class="fa fa-times text-danger"></i>
+                                      {% else %}
+                                        <!-- Nothing to do -->
+                                      {% endif %}
+                                  </td>
+                                </tr>
+                              {% endif %}
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                </div>
               </div>
-
           </div>
-
+</div>
 {% endblock %}

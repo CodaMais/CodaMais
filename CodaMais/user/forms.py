@@ -114,20 +114,25 @@ class ConfirmPasswordForm(forms.Form):
 
 
 class UserEditForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput,
-                               label=_(constants.NEW_PASSWORD),
-                               required=False)
+    password = forms.CharField(widget=forms.PasswordInput(
+                            attrs={'class': 'form-control'}),
+                            label=_(constants.NEW_PASSWORD),
+                            required=False)
 
-    password_confirmation = forms.CharField(widget=forms.PasswordInput,
+    password_confirmation = forms.CharField(widget=forms.PasswordInput(
+                                            attrs={'class': 'form-control'}),
                                             label=_(constants.PASSWORD_CONFIRMATION),
                                             required=False)
 
-    first_name = forms.CharField(label=constants.FIRST_NAME,
-                                 max_length=constants.FIRST_NAME_FIELD_LENGTH,
-                                 required=False)
+    first_name = forms.CharField(widget=forms.TextInput(
+                                attrs={'class': 'form-control'}),
+                                label=constants.FIRST_NAME,
+                                max_length=constants.FIRST_NAME_FIELD_LENGTH,
+                                required=False)
 
-    user_image = forms.ImageField(label=constants.USER_IMAGE_FIELD,
-                                  required=False)
+    user_image = forms.ImageField(
+                                label=constants.USER_IMAGE_FIELD,
+                                required=False)
 
     class Meta:
         model = User

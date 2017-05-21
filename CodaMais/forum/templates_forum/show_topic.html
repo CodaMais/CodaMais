@@ -1,232 +1,240 @@
-{% extends "general/template.html" %}
+{% extends "general/template.html" %} {% block content %}
 
-{% block content %}
+
 
 <style type="text/css" media="screen">
-#column {
-  text-align:center;
-  width:120px;
-  border:none;
-}
+  #column {
+    text-align: center;
+    width: 120px;
+    border: none;
+  }
 
-#column2{
-    border:none;
-}
+  #column2 {
+    border: none;
+  }
 </style>
 
 
-<div class="card">
-  <div class="header">
-    <h4 class="title">{{topic.title}}</h4>
-    <h5 class="title sub">{{topic.subtitle}}</h5>
-  </div>
-  <div class="content table-responsive table-full-width">
+  {% if lockable_topic is True %}
 
-    <table class="table table-striped">
-      <tr>
-        <td id = column>
-          <img src="{{topic.author.user_image.url}}" width="100px" height="100px"></img>
-        </td>
-        <td id = column2>
-          {{topic.description|safe}}
-        </td>
-      </tr>
-      <tr>
-        <td id = column>
-          <b>
+  <div class="header" id=header style="text-align:right;">
+    <a class="btn btn-outline-success" data-toggle="modal" data-target="#lock-topic" href="javascript:void(0)">Trancar Tópico</a>
+  </div>
+  <br> {% endif %}
+
+  <div class="card">
+    <div class="header">
+      <h4 class="title">{{topic.title}}</h4>
+      <h5 class="title sub">{{topic.subtitle}}</h5>
+    </div>
+    <div class="content table-responsive table-full-width">
+
+      <table class="table table-striped">
+        <tr>
+          <td id=c olumn>
+            <img src="{{topic.author.user_image.url}}" width="100px" height="100px"></img>
+          </td>
+          <td id=c olumn2>
+            {{topic.description|safe}}
+          </td>
+        </tr>
+        <tr>
+          <td id=c olumn>
+            <b>
             {{topic.author.username}}
           </b>
-        </td>
-        <td  id = column2 style = "text-align:right;">
-          {{topic.date_topic}}
-        </td>
-      </tr>
-    </table>
+          </td>
+          <td id=c olumn2 style="text-align:right;">
+            {{topic.date_topic}}
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
 
-{% if best_answer is not None %}
+  {% if best_answer is not None %}
 
-<div class="card best-answer">
-  <div class="header">
-    <h4 class="title">Melhor reposta</h4>
-  </div>
-  <div class="content table-responsive table-full-width">
+  <div class="card best-answer">
+    <div class="header">
+      <h4 class="title">Melhor reposta</h4>
+    </div>
+    <div class="content table-responsive table-full-width">
 
-    <table class="table table-striped">
-      <tr>
-        <td id = column>
-          <img src="{{best_answer.user.user_image.url}}" width="100px" height="100px"></img>
-        </td>
-        <td id = column2>
-          {{best_answer.description|safe}}
-        </td>
-      </tr>
-      <tr>
-        <td id = column>
-          <b>
+      <table class="table table-striped">
+        <tr>
+          <td id=c olumn>
+            <img src="{{best_answer.user.user_image.url}}" width="100px" height="100px"></img>
+          </td>
+          <td id=c olumn2>
+            {{best_answer.description|safe}}
+          </td>
+        </tr>
+        <tr>
+          <td id=c olumn>
+            <b>
             {{best_answer.user.username}}
           </b>
-        </td>
-        <td  id = column2 style = "text-align:right;">
-          {{best_answer.date_answer}}
-        </td>
-      </tr>
-    </table>
+          </td>
+          <td id=c olumn2 style="text-align:right;">
+            {{best_answer.date_answer}}
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
 
-{% endif %}
+  {% endif %}
 
-<div class="card">
-  <div class="header" id=header>
-    <h4 class="title">{{quantity_answer}} Respostas</h4><br>
-  </div>
-  {% for answer, delete_answer in zipped_data %}
-  {% if answer.id is not best_answer.id %}
+
   <div class="card">
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <tr>
-        <td id = column>
-          <img src="{{answer.user.user_image.url}}" width="100px" height="100px"></img>
-        </td>
-        <td id = column2>
-          {{answer.description|safe}}
-        </td>
-      </tr>
-      <tr>
-        <td id = column>
-          <b>
+    <div class="header" id=header>
+      <h4 class="title">{{quantity_answer}} Respostas</h4><br>
+    </div>
+    {% for answer, delete_answer in zipped_data %} {% if answer.id is not best_answer.id %}
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <tr>
+            <td id=c olumn>
+              <img src="{{answer.user.user_image.url}}" width="100px" height="100px"></img>
+            </td>
+            <td id=c olumn2>
+              {{answer.description|safe}}
+            </td>
+          </tr>
+          <tr>
+            <td id=c olumn>
+              <b>
             {{answer.user.username}}
           </b>
-        </td>
-        <td id = column2 style = "text-align:right;">
-          {{answer.date_answer}}
-        </td>
-      </tr>
+            </td>
+            <td id=c olumn2 style="text-align:right;">
+              {{answer.date_answer}}
+            </td>
+          </tr>
 
-      <tr>
-        <td colspan="2">
-          {% if choose_best_answer %}
-          <a class="btn btn-success btn-sm btn-fill"
-          data-toggle="modal"
-          data-target="#choose_best_answer"
-          data-id="{{answer.id}}"
-          data-url="{% url 'best_answer' answer.id %}">Melhor Resposta </a>
-          {% endif %}
+          <tr>
+            <td colspan="2">
+              {% if choose_best_answer %}
+              <a class="btn btn-success btn-sm btn-fill" data-toggle="modal" data-target="#choose_best_answer" data-id="{{answer.id}}" data-url="{% url 'best_answer' answer.id %}">Melhor Resposta </a> {% endif %} {% if delete_answer == True %}
+              <a class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#delete_confirmation_answer" data-id="{{answer.id}}" data-url="{% url 'delete_answer' answer.id %}">Deletar Resposta </a> {% endif %}
+            </td>
+          </tr>
 
-          {% if delete_answer == True %}
-          <a class="btn btn-danger btn-sm pull-right"
-          data-toggle="modal"
-          data-target="#delete_confirmation_answer"
-          data-id="{{answer.id}}"
-          data-url="{% url 'delete_answer' answer.id %}">Deletar Resposta </a>
-          {% endif %}
-        </td>
-      </tr>
-
-    </table>
-  </div>
-</div>
-{% endif %}
-{% endfor %}
-</div>
-
-
-
-<div class="card">
-  <div class="header" id=header>
-    <h3 class="title"> Answer </h3><br>
-  </div>
-  <div class="content">
-
-    <form method="post" action=".">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
-      <div class="form-group">
-        {% for error in form.description.errors %}
-        <div class="alert alert-danger"role="alert">{{error}}</div>
-        {% endfor %}
-        {{ form.description }}
+        </table>
       </div>
-      <input formnovalidate class="btn btn-fill btn-default" type="submit" value="Answer" />
-    </form>
+    </div>
+    {% endif %} {% endfor %}
   </div>
-</div>
 
+  {% if topic.locked is False %}
 
-<div>
-  {% if deletable_topic %}
-  <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete_confirmation_topic" href="javascript:void(0)">Deletar Tópico</a> {% endif %}
-</div>
+  <div class="card">
+    <div class="header">
+      <h3 class="title"> Answer </h3><br>
+      <div class="content">
 
-<script>
-tinyMCE.get('#id_description').setContent('<span>some</span> html');
-</script>
-
-{% endblock %}
-
-{% block modal %}
-
-{% if deletable_topic %}
-<div class="modal fade" id="delete_confirmation_topic">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Confirmar Deleção</h4>
-      </div>
-      <div class="modal-body">
-        Você deseja realmente apagar seu tópico? Essa ação é irreversível.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <a href="{% url 'delete_topic' topic.id %}" class="btn btn-primary">Deletar</a>
+        <form method="post" action=".">
+          {% csrf_token %} {{ form.non_field_errors }}
+          <div class="form-group">
+            {% for error in form.description.errors %}
+            <div class="alert alert-danger" role="alert">{{error}}</div>
+            {% endfor %} {{ form.description }}
+          </div>
+          <input formnovalidate class="btn btn-fill btn-default" type="submit" value="Answer" />
+        </form>
       </div>
     </div>
   </div>
-</div>
-{% endif %}
 
-{% if choose_best_answer %}
-<div class="modal fade" id="choose_best_answer">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  {% else %}
+
+
+  <h2><center><span class="label label-danger">O tópico está trancado.</span></center></h2> {% endif %}
+
+
+  {% if deletable_topic %}
+    <a class="btn btn-outline-success" data-toggle="modal" data-target="#delete_confirmation_topic" href="javascript:void(0)">Deletar Tópico</a>
+  {% endif %}
+
+  <script>
+    tinyMCE.get('#id_description').setContent('<span>some</span> html');
+  </script>
+
+  {% endblock %} {% block modal %} {% if deletable_topic %}
+  <div class="modal fade" id="delete_confirmation_topic">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Confirmar Deleção</h4>
+        </div>
+        <div class="modal-body">
+          Você deseja realmente apagar seu tópico? Essa ação é irreversível.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <a href="{% url 'delete_topic' topic.id %}" class="btn btn-primary">Deletar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %} {% if choose_best_answer %}
+  <div class="modal fade" id="choose_best_answer">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title" id="myModalLabel">Melhor Resposta</h4>
-      </div>
-      <div class="modal-body">
-        Você deseja escolher esta como a melhor resposta?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-        <a href="" class="btn btn-info btn-fill btn-sm" id="confirm_choose_best_answer">Confirmar</a>
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
-
-<div class="modal fade" id="delete_confirmation_answer">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Confirmar Ação</h4>
-      </div>
-      <div class="modal-body">
-        Você deseja realmente apagar sua resposta? Essa ação é irreversível.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-        <a href="" class="btn btn-danger btn-fill btn-sm" id="confirm_delete_answer">Deletar</a>
+          <h4 class="modal-title" id="myModalLabel">Melhor Resposta</h4>
+        </div>
+        <div class="modal-body">
+          Você deseja escolher esta como a melhor resposta?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+          <a href="" class="btn btn-info btn-fill btn-sm" id="confirm_choose_best_answer">Confirmar</a>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  {% endif %}
 
-{% endblock %}
+  <div class="modal fade" id="delete_confirmation_answer">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Confirmar Ação</h4>
+        </div>
+        <div class="modal-body">
+          Você deseja realmente apagar sua resposta? Essa ação é irreversível.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+          <a href="" class="btn btn-danger btn-fill btn-sm" id="confirm_delete_answer">Deletar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="lock-topic">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Confirmar Trancamento?</h4>
+        </div>
+        <div class="modal-body">
+          Você deseja realmente trancar seu tópico? Essa ação é irreversível.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <a href="{% url 'lock_topic' topic.id %}" class="btn btn-primary">Trancar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}

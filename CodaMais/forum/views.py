@@ -50,21 +50,36 @@ def show_topic(request, id):
         # Nothing to do
         pass
 
-    answers = list_all_answer(topic)
+    answers = topic.answers()
     quantity_answer = len(answers)
+    choose_best_answer = show_choose_best_answer_button(topic.author, user)
     deletable_topic = show_delete_topic_button(topic.author, user.username)
     lockable_topic = __show_lock_topic_button__(topic, user)
     deletable_answers = show_delete_answer_button(answers, topic, user.username)
     zipped_data = zip(answers, deletable_answers)
+    best_answer = topic.best_answer
 
     return render(request, 'show_topic.html', {
         'topic': topic,
+        'choose_best_answer': choose_best_answer,
         'deletable_topic': deletable_topic,
         'lockable_topic': lockable_topic,
         'form': form,
         'quantity_answer': quantity_answer,
-        'zipped_data': zipped_data
+        'zipped_data': zipped_data,
+        'best_answer': best_answer
         })
+
+
+def show_choose_best_answer_button(topic_author, current_user):
+    # Check if logger user is the author of the topic, if is, enable to
+    # choose best answer
+    if topic_author.id == current_user.id:
+        logger.debug("Should enable to choose best answer.")
+        return True
+    else:
+        logger.debug("Should not enable to choose best answer.")
+        return False
 
 
 def show_delete_topic_button(topic_author, current_user_username):
@@ -183,16 +198,6 @@ def answer_topic(user, topic, form):
     return redirect_answer
 
 
-# List all answers of the topic that the user is accessing.
-def list_all_answer(topic):
-    assert topic is not None, "Topic is not exists."
-
-    answers = []
-    answers = Answer.objects.filter(topic=topic)
-    logger.debug("Get all answers.")
-    return answers
-
-
 @login_required(login_url='/')
 def delete_answer(request, id):
     logger.info("This is the id number: " + str(id))
@@ -218,6 +223,28 @@ def delete_answer(request, id):
         logger.info("User can't delete answer.")
 
         return redirect('show_topic', id=topic.id)
+
+
+@login_required(login_url='/')
+def best_answer(request, id):
+    try:
+        best_answer = Answer.objects.get(id=id)  # Answer object, from Answer model.
+    except ObjectDoesNotExist:
+        logger.exception("Answer does not exists.")
+        return redirect('list_all_topics')
+
+    user = request.user  # User object, from user model. Is the current online user.
+    topic = best_answer.topic
+
+    # Checks if the signed user is the owner of the topic, then he can set the best answer.
+    if user.username == topic.author.username:
+        topic.best_answer = best_answer
+        topic.save()
+    else:
+        pass
+        # NOTHING TO DO
+
+    return redirect('show_topic', id=topic.id)
 
 
 # Only the person who whrote the anwer can delete it.

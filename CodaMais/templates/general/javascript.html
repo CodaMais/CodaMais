@@ -30,11 +30,15 @@
                menubar:false,
         });
 
+        $('#choose_best_answer').on('shown.bs.modal', function(event) {
+            let url_best_answer = $(event.relatedTarget).data('url');
+            $("#confirm_choose_best_answer").attr('href', url_best_answer);
+        });
 
         $('#delete_confirmation_answer').on('shown.bs.modal', function(event) {
-            $("#answerId").text($(event.relatedTarget).data('id'));
-            $("#actualDeleteBtn").attr('href', $(event.relatedTarget).data('url'));
-        })
+            let url_delete_answer = $(event.relatedTarget).data('url');
+            $("#confirm_delete_answer").attr('href', url_delete_answer);
+        });
 
         demo.initChartist();
 

@@ -16,7 +16,14 @@ class Topic(models.Model):
           on_delete=models.CASCADE,)
     description = models.CharField(max_length=constants.MAX_LENGTH_TOPIC_DESCRIPTION)
     date_topic = models.DateTimeField(auto_now_add=True, blank=True)
+    best_answer = models.ForeignKey('Answer', models.SET_NULL, related_name='best_answer', null=True)
     locked = models.BooleanField(default=False)
+
+    def answers(self):
+        assert self is not None, "Topic not exists."
+        # Getting all current topic answers except the best answer
+        answers = Answer.objects.filter(topic=self)
+        return answers
 
     def __str__(self):
         return self.title

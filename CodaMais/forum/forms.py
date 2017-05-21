@@ -18,7 +18,7 @@ class TopicForm(forms.ModelForm):
 
     class Meta:
         model = Topic
-        exclude = ['author', 'date_topic']
+        exclude = ['author', 'date_topic', 'best_answer']
 
 
 class AnswerForm(forms.ModelForm):

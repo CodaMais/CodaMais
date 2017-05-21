@@ -27,8 +27,12 @@
                             <td>{{topic.author}}</td>
                             <td>{{topic.date_topic.date}}</td>
                             <td>{{topic.answer_set.all|length}}</td>
-                            <!-- <i class="fa fa-times text-danger"></i> -->
+                            {% if topic.best_answer == None %}
+                            <td><i class="fa fa-times text-danger"></i><td>
+                            {% endif %}
+                            {% if topic.best_answer != None %}
                             <td><i class="fa fa-check text-success"></td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

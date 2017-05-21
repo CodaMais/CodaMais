@@ -212,6 +212,10 @@ def best_answer(request, id):
     if user.username == topic.author.username:
         topic.best_answer = best_answer
         topic.save()
+    else:
+        pass
+        # NOTHING TO DO
+
     return redirect('show_topic', id=topic.id)
 
 

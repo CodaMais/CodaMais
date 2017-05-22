@@ -25,13 +25,12 @@ img.avatar {
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
-            <div class="col-md-12 lead">User profile
+            <div class="col-md-12 lead"><b>User profile</b>
               {% ifequal editable_profile 1 %}
               <a href="{% url 'edit' user.username %}" class="btn btn-default pull-right"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
               {% endifequal %}
               <hr>
             </div>
-
           </div>
           <div class="row">
 			      <div class="col-md-4 text-center">
@@ -51,6 +50,28 @@ img.avatar {
               </div>
             </div>
           </div>
+          <br>
+          <br>
+          <br>
+
+          <div class="row">
+            <div class="col-md-12 lead"><b>{{user.username}}'s Achievements</b>
+              <hr>
+              <!-- If the current user has no achievements, he'll see this message. -->
+              {% if not user_achievements_list %}
+              <center><h4>No achievements to show!</h4></center>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row">
+              {% for user_achievement in user_achievements_list %}
+                  <br>
+                  <img src="{{user_achievement.achievement.achievement_icon.url}}" width="100px" height="100px"></img>
+                  {{user_achievement.achievement.name}}
+                  <br>
+              {% endfor %}
+          </div>
+
         </div>
       </div>
     </div>

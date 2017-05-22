@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'forum',
     'dashboard',
     'ranking',
+    'achievement',
 ]
 
 # Authentication backends

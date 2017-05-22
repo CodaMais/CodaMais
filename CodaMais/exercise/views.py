@@ -15,7 +15,9 @@ from exercise.models import (
 )
 from exercise import constants
 from exercise.forms import SubmitExerciseForm
-
+from achievement.views import (
+    verify_correct_exercise_achievement, verify_score_achievement, verify_submited_exercises_achievement
+)
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(constants.PROJECT_NAME)
@@ -103,6 +105,15 @@ def process_user_exercise(request, id):
         user_exercise.update_or_creates(
                                         source_code, exercise,
                                         user, runtime, status, scored)
+
+        # Used to unlock correct exercise achievements everytime this method is called.
+        verify_correct_exercise_achievement(user)
+
+        # Used to unlock submited exercises achievement everytime this method is called.
+        verify_submited_exercises_achievement(user)
+
+        # Used to unlock score achievements when the user receives points from exercises.
+        verify_score_achievement(user)
     else:
         logger.info("The code form was invalid.")
         # Nothing to do.

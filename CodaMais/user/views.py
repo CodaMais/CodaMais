@@ -16,6 +16,7 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 
 # local Django
+from achievement.models import UserAchievement
 from .forms import (
     UserRegisterForm, UserLoginForm, UserEditForm, RecoverPasswordForm, ConfirmPasswordForm
 )
@@ -277,8 +278,14 @@ def profile_view(request, username):
         logger.debug("Profile view request: POST")
         user = User()
 
+    # Get all achievements of the current user.
+    current_user_achievements_list = UserAchievement.objects.filter(user=user)
+    print(current_user_achievements_list)
+
     logger.debug("Profile page is editable? " + str(editable_profile))
-    return render(request, 'profile/profile.html', {'user': user, 'editable_profile': editable_profile})
+    return render(request, 'profile/profile.html', {'user': user,
+                                                    'editable_profile': editable_profile,
+                                                    'user_achievements_list': current_user_achievements_list})
 
 
 def show_edit_button(visitor_username, current_user_username):

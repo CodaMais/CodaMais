@@ -1,6 +1,7 @@
 # Django.
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.core.exceptions import ObjectDoesNotExist
 
 # local Django.
 
@@ -9,7 +10,11 @@ from forum.models import (
 )
 from user.models import User
 from forum.views import (
-    list_all_topics, show_topic, create_topic, delete_topic, list_all_answer, delete_answer, show_delete_answer_button
+    list_all_topics, show_topic,
+    create_topic, delete_topic, delete_answer,
+    best_answer, show_choose_best_answer_button,
+    show_delete_answer_button, __show_lock_topic_button__,
+    lock_topic,
 )
 
 # RESPONSE CODES.
@@ -80,13 +85,22 @@ class TestRequestTopic(TestCase):
             self.user.first_name = "TestUser"
             self.user.username = "Username"
             self.user.is_active = True
+            self.user.set_password('userpassword')
+            self.user.save()
+
+            self.user_wrong = User()
+            self.user_wrong.email = "wronguser@wronguser.com"
+            self.user_wrong.first_name = "WrongUser"
+            self.user_wrong.username = "WrongUser"
+            self.user_wrong.is_active = True
+
             self.topic.title = 'Basic Topic'
             self.topic.subtitle = 'How test in Django'
             self.topic.author = self.user
             self.topic.description = '<p>Text Basic Exercise.</p>'
+            self.topic.locked = False
+
             self.factory = RequestFactory()
-            self.user.set_password('userpassword')
-            self.user.save()
             self.wrong_author = 'User'
             self.topic_creation_form = {
                 'title': self.topic.title,
@@ -109,14 +123,10 @@ class TestRequestTopic(TestCase):
 
         def test_show_topic_when_topic_is_not_deletable(self):
             self.topic.save()
-            user_wrong = User()
-            user_wrong.email = "wronguser@wronguser.com"
-            user_wrong.first_name = "WrongUser"
-            user_wrong.username = "WrongUser"
-            user_wrong.is_active = True
-            user_wrong.save()
+
+            self.user_wrong.save()
             request = self.factory.get('/forum/topics/1/')
-            request.user = user_wrong
+            request.user = self.user_wrong
             response = show_topic(request, self.topic.id)
             self.assertEqual(response.status_code, REQUEST_SUCCEEDED)
 
@@ -172,6 +182,81 @@ class TestRequestTopic(TestCase):
             response = delete_topic(request, self.topic.id)
             self.assertEqual(response.status_code, REQUEST_REDIRECT)
             self.assertEqual(response.url, '/en/forum/topics/')
+
+        def test_show_lock_topic_button_when_topic_isnt_lockable(self):
+            self.user_wrong.save()
+            self.topic.save()
+            lockable_topic = __show_lock_topic_button__(self.topic, self.user_wrong)
+            self.assertFalse(lockable_topic)
+
+        def test_show_lock_topic_button_when_topic_is_lockable(self):
+            self.topic.save()
+            lockable_topic = __show_lock_topic_button__(self.topic, self.user)
+            self.assertTrue(lockable_topic)
+
+        def test_show_lock_topic_button_when_topic_is_already_locked(self):
+            topic = self.topic
+            topic.locked = True
+            topic.save()
+            lockable_topic = __show_lock_topic_button__(topic, self.user)
+            self.assertFalse(lockable_topic, False)
+
+        def test_show_lock_topic_button_when_topic_is_null(self):
+            topic = None
+            try:
+                __show_lock_topic_button__(topic, self.user)
+            except AssertionError:
+                self.assertTrue(True)
+
+        def test_show_lock_topic_button_when_user_is_null(self):
+            self.topic.save()
+            user = None
+            try:
+                __show_lock_topic_button__(self.topic, user)
+            except AssertionError:
+                self.assertTrue(True)
+
+        def test_lock_topic_when_topic_is_lockable(self):
+            self.topic.save()
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = self.user
+            response = lock_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, REQUEST_REDIRECT)
+            self.assertEqual(response.url, '/en/forum/topics/')
+
+            locked_topic = Topic.objects.get(id=self.topic.id)
+
+            self.assertTrue(locked_topic.locked)
+
+        def test_lock_topic_when_topic_doesnt_exist(self):
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = self.user
+            lock_topic(request, self.topic.id)
+            self.assertRaises(ObjectDoesNotExist)
+
+        def test_lock_topic_when_user_cant_lock(self):
+            self.user_wrong.save()
+            self.topic.save()
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = self.user_wrong
+            response = lock_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, REQUEST_REDIRECT)
+            self.assertEqual(response.url, '/en/forum/topics/')
+
+        def test_lock_topic_when_user_is_staff_lock(self):
+            user = self.user_wrong
+            user.is_staff = True
+            user.save()
+            self.topic.save()
+            request = self.factory.get('/forum/locktopic/' + str(self.topic.id), follow=True)
+            request.user = user
+            response = lock_topic(request, self.topic.id)
+            self.assertEqual(response.status_code, REQUEST_REDIRECT)
+            self.assertEqual(response.url, '/en/forum/topics/')
+
+            locked_topic = Topic.objects.get(id=self.topic.id)
+
+            self.assertTrue(locked_topic.locked)
 
 
 class TestAnswerCreation(TestCase):
@@ -269,7 +354,19 @@ class TestAnswerTopic(TestCase):
         self.assertEqual(response.status_code, REQUEST_REDIRECT)
 
     def test_list_all_answer(self):
-        list_answers = list_all_answer(self.topic)
+        list_answers = self.topic.answers()
+        self.assertEqual(len(list_answers), 0)
+
+    def list_all_answer_except_best_answer(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+
+        self.topic.best_answer = self.answer
+        self.topic.save()
+
+        list_answers = self.topic.answers()
+
         self.assertEqual(len(list_answers), 0)
 
     def test_if_user_can_delete_answer(self):
@@ -320,3 +417,32 @@ class TestAnswerTopic(TestCase):
         not_deletable_answer.append(False)
         deletable_answers = show_delete_answer_button(answers, self.topic, self.wrong_user)
         self.assertEqual(deletable_answers, not_deletable_answer)
+
+    def test_if_user_can_see_choose_best_answer_button(self):
+        topic_author = self.topic.author
+        current_user = topic_author
+        choose_best_answer = show_choose_best_answer_button(topic_author, current_user)
+        self.assertEqual(choose_best_answer, True)
+
+    def test_if_user_cant_see_choose_best_answer_button(self):
+        topic_author = self.topic.author
+        current_user = self.user
+        choose_best_answer = show_choose_best_answer_button(topic_author, current_user)
+        self.assertEqual(choose_best_answer, False)
+
+    def test_if_topic_author_cant_choose_an_inexistent_answer(self):
+        request = self.factory.get('/forum/best_answer/1/')
+        request.user = self.user
+        response = best_answer(request, self.answer.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/forum/topics/')
+
+    def test_if_topic_author_can_choose_best_answer(self):
+        self.answer.user = self.user
+        self.answer.topic = self.topic
+        self.answer.save()
+        request = self.factory.get('/forum/best_answer/1/')
+        request.user = self.topic.author
+        response = best_answer(request, self.answer.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/forum/topics/1/')

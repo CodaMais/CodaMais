@@ -1,3 +1,4 @@
+
 # standard library
 import http.client
 import urllib
@@ -18,25 +19,21 @@ from achievement.views import (
     verify_correct_exercise_achievement, verify_score_achievement, verify_submited_exercises_achievement
 )
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-@login_required
-def list_all_exercises(request):
-    logger.info("List all exercises page.")
-    data = {}
-    data['list_exercises'] = Exercise.objects.all()
-    return render(request, 'exercises.html', data)
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 @login_required
 def list_exercises_not_deprecated(request):
-    data = {}
     logger.info("List exercises not deprecated page.")
-    data['list_exercises'] = Exercise.objects.filter(
+    exercises = Exercise.objects.filter(
                              deprecated=constants.IS_NOT_DEPRECATED)
-    return render(request, 'exercises.html', data)
+    user = request.user
+
+    list_exercises = get_user_submissions_exercise(user, exercises)
+    return render(request, 'exercises.html', {
+        'list_exercises': list_exercises
+    })
 
 
 @login_required
@@ -220,3 +217,29 @@ def get_all_output_exercise(exercise):
 
     logger.info("The outputs for the exercise from database have been organized.")
     return list_output_exercise
+
+
+# This method get the number of submissions made by user in the exercise.
+def get_user_submissions_exercise(user, exercises):
+    assert user is not None, "User not logged."
+
+    logger.info("Inside get_user_submissions_exercise")
+
+    list_user_exercise = []
+
+    # Getting informations about submissions in exercises made by user.
+    for exercise in exercises:
+        user_exercise = None
+        try:
+            user_exercise = UserExercise.objects.get(user=user, exercise=exercise)
+        except UserExercise.DoesNotExist:
+            user_exercise = UserExercise()
+
+        logger.debug("Exercise: "+exercise.title+" Status: "+str(user_exercise.status))
+        list_user_exercise.append(user_exercise)
+
+    assert len(exercises) == len(list_user_exercise), "The list of submissions has a different number of exercises."
+    zipped_data = zip(exercises, list_user_exercise)
+    list_user_submissions = list(zipped_data)
+
+    return list_user_submissions

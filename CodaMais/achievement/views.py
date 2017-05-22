@@ -136,7 +136,7 @@ def get_user_submited_exercises_quantity(user):
 # Verifies if exists a relationship between the current user and the current achievement in database.
 def check_if_user_has_achievement(user, achievement):
     assert user is not None, "User not logged in."
-    assert achievement is not None, "Achievement not logged in."
+    assert achievement is not None, "Achievement does not exist."
 
     try:
         UserAchievement.objects.get(user=user, achievement=achievement)
@@ -151,7 +151,7 @@ def check_if_user_has_achievement(user, achievement):
 # and the current achievement in database.
 def unlock_achievement(user, achievement):
     assert user is not None, "User not logged in."
-    assert achievement is not None, "Achievement not logged in."
+    assert achievement is not None, "Achievement does not exist."
 
     user_achievement = UserAchievement()
     user_achievement.update_or_creates(user, achievement)

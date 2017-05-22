@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=100)),
                 ('achievement_type', models.PositiveIntegerField(choices=[(1, 'Exercício Correto'), (2, 'Resposta no Fórum'), (3, 'Pontuação do Usuário'), (4, 'Submissão de Exercícios')])),
                 ('quantity', models.PositiveIntegerField()),
-                ('achievement_icon', models.ImageField(default='Lock Filled-500.png', upload_to='')),
+                ('achievement_icon', models.ImageField(default='Trophy-96.png', upload_to='')),
             ],
         ),
         migrations.CreateModel(

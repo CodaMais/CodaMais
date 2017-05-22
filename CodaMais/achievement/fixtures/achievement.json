@@ -6,7 +6,7 @@
             "description": "1 exercício respondido corretamente.",
             "achievement_type": 1,
             "quantity": 1,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -17,7 +17,7 @@
             "description": "10 exercícios respondidos corretamente.",
             "achievement_type": 1,
             "quantity": 10,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -28,7 +28,7 @@
             "description": "30 exercícios respondidos corretamente.",
             "achievement_type": 1,
             "quantity": 30,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -39,7 +39,7 @@
             "description": "100 exercícios respondidos corretamente.",
             "achievement_type": 1,
             "quantity": 100,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -50,7 +50,7 @@
             "description": "Submeter 3 respostas no fórum.",
             "achievement_type": 2,
             "quantity": 3,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -61,7 +61,7 @@
             "description": "Submeter 25 respostas no fórum.",
             "achievement_type": 2,
             "quantity": 25,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -72,7 +72,7 @@
             "description": "Submeter 100 respostas no fórum.",
             "achievement_type": 2,
             "quantity": 100,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -83,7 +83,7 @@
             "description": "Submeter 250 respostas no fórum.",
             "achievement_type": 2,
             "quantity": 250,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -94,7 +94,7 @@
             "description": "Obter 50 pontos.",
             "achievement_type": 3,
             "quantity": 50,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -105,7 +105,7 @@
             "description": "Obter 250 pontos.",
             "achievement_type": 3,
             "quantity": 250,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -116,7 +116,7 @@
             "description": "Obter 1000 pontos.",
             "achievement_type": 3,
             "quantity": 1000,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -127,7 +127,7 @@
             "description": "Obter 5000 pontos.",
             "achievement_type": 3,
             "quantity": 5000,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
 
@@ -139,7 +139,7 @@
             "description": "Submeteu 5 exercícios.",
             "achievement_type": 4,
             "quantity": 5,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -150,7 +150,7 @@
             "description": "Submeteu 50 exercícios.",
             "achievement_type": 4,
             "quantity": 50,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -161,7 +161,7 @@
             "description": "Submeteu 200 exercícios.",
             "achievement_type": 4,
             "quantity": 200,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     },
     {
@@ -172,7 +172,7 @@
             "description": "Submeteu 500 exercícios.",
             "achievement_type": 4,
             "quantity": 500,
-            "achievement_icon": "Lock Filled-500.png"
+            "achievement_icon": "Trophy-96.png"
         }
     }
 ]

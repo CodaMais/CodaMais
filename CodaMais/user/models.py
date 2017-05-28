@@ -95,6 +95,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.email
 
+    # Function to get user's current position in ranking.
+    def get_position(self):
+        # List of all cadastrated users.
+        user_list = User.objects.filter().order_by('-score')
+
+        position = 0
+
+        for user in user_list:
+            position = position + 1
+            if user.username == self.username:
+                break
+
+        return position
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)

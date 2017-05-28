@@ -105,28 +105,54 @@ class LoginViewTest(TestCase):
 
 
 class UserTest(TestCase):
-    email = "user@user.com"
-    wrong_email = "useruser.com"
-    password = "userpassword"
-    first_name = "TestUser"
-    username = "Username"
+
+    def setUp(self):
+            self.user = User()
+            self.user.email = "user@user.com"
+            self.user.password = "userpassword"
+            self.user.first_name = "TestUser"
+            self.user.username = "Username"
+            self.user.score = 100
+            self.first_user = User()
+            self.first_user.email = "second_user@user.com"
+            self.first_user.password = "userpassword"
+            self.first_user.first_name = "TestUser"
+            self.first_user.username = "Second_Username"
+            self.first_user.score = 200
 
     def test_user_get_short_name(self):
-        User.objects.create_user(email=self.email,
-                                 password=self.password,
-                                 first_name=self.first_name,
-                                 username=self.username)
+        User.objects.create_user(email=self.user.email,
+                                 password=self.user.password,
+                                 first_name=self.user.first_name,
+                                 username=self.user.username)
 
-        user = User.objects.get(email=self.email)
-        self.assertEqual(self.email, user.get_short_name())
+        user = User.objects.get(email=self.user.email)
+        self.assertEqual(self.user.email, user.get_short_name())
 
     def test_user_get_full_name(self):
-        User.objects.create_user(email=self.email,
-                                 password=self.password,
-                                 first_name=self.first_name,
-                                 username=self.username)
-        user = User.objects.get(email=self.email)
-        self.assertEqual(self.email, user.get_full_name())
+        User.objects.create_user(email=self.user.email,
+                                 password=self.user.password,
+                                 first_name=self.user.first_name,
+                                 username=self.user.username)
+        user = User.objects.get(email=self.user.email)
+        self.assertEqual(self.user.email, user.get_full_name())
+
+    def test_get_current_ranking_position(self):
+        self.user.save()
+        position = self.user.get_position()
+        self.assertEqual(1, position)
+
+    def test_if_current_ranking_position_is_second(self):
+        self.first_user.save()
+        self.user.save()
+        self.assertEqual(2, self.user.get_position())
+
+    def test_if_current_ranking_position_is_first(self):
+        second_user = self.first_user
+        second_user.score = 50
+        second_user.save()
+        self.user.save()
+        self.assertEqual(1, self.user.get_position())
 
 
 class UserAdminTest(TestCase):

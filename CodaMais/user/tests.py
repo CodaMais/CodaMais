@@ -12,6 +12,9 @@ from user.views import (
 from .models import (
     User, UserProfile, RecoverPasswordProfile,
 )
+from exercise.models import (
+    Exercise, UserExercise
+)
 from .forms import (
     UserRegisterForm, UserEditForm, ConfirmPasswordForm, RecoverPasswordForm, UserLoginForm,
 )
@@ -113,6 +116,7 @@ class UserTest(TestCase):
             self.user.first_name = "TestUser"
             self.user.username = "Username"
             self.user.score = 100
+
             self.first_user = User()
             self.first_user.email = "second_user@user.com"
             self.first_user.password = "userpassword"
@@ -153,6 +157,36 @@ class UserTest(TestCase):
         second_user.save()
         self.user.save()
         self.assertEqual(1, self.user.get_position())
+
+    def test_if_current_user_dont_do_correct_exercise(self):
+        self.user.save()
+        self.assertEqual(0, self.user.get_correct_exercises())
+
+    def test_if_current_user_has_one_exercise(self):
+        self.exercise = Exercise()
+        self.exercise.title = 'Basic Exercise'
+        self.exercise.category = 2
+        self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
+        self.exercise.score = 10
+        self.exercise.deprecated = 0
+        self.exercise.save()
+        self.user_exercise = UserExercise()
+        self.user_exercise.scored = False
+        self.user_exercise.code = """
+                                    #include <stdio.h>
+                                    int main () {
+                                                char c;
+                                                scanf("%c", &c);
+                                                printf("B");
+                                                return 0;
+                                                }
+                                                """
+        self.user.id = 1
+        self.user_exercise.user = self.user
+        self.user_exercise.exercise = self.exercise
+        self.user.save()
+        self.user_exercise.save()
+        # self.assertEqual(0, self.user.get_correct_exercises())
 
 
 class UserAdminTest(TestCase):

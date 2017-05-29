@@ -8,6 +8,8 @@ from django.contrib.auth.models import (
 )
 from django.db.models import EmailField
 from django.core import validators
+from django.apps import apps
+
 
 # Local Django.
 from . import constants
@@ -108,6 +110,13 @@ class User(AbstractBaseUser, PermissionsMixin):
                 break
 
         return position
+
+    # Function to count all user correct exercises.
+    def get_correct_exercises(self):
+        user_correct_exercises = 0
+        UserExercise = apps.get_model(app_label='exercise', model_name='UserExercise')
+        user_correct_exercises = UserExercise.objects.filter(status=True, user=self).count()
+        return user_correct_exercises
 
 
 class UserProfile(models.Model):

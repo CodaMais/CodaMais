@@ -62,6 +62,9 @@ def show_exercise(request, id):
     user_missed_exercise = False
     if user_exercise.number_submission > 0 and user_exercise.status is False:
         user_missed_exercise = True
+    else:
+        # Nothing to do.
+        pass
 
     return render(request, 'description_exercise.html', {
         'exercise': exercise,

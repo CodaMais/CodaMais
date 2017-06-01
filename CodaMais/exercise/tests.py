@@ -26,6 +26,7 @@ class TestExerciseRegistration(TestCase):
         self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
         self.exercise.score = 10
         self.exercise.deprecated = 0
+        self.exercise.tip = 'Tip exercise.'
 
     def test_str_is_correct(self):
         self.exercise.save()
@@ -65,6 +66,11 @@ class TestExerciseRegistration(TestCase):
         self.assertEqual(
             exercise_database.deprecated,
             self.exercise.deprecated)
+
+    def test_exercise_get_tip(self):
+        self.exercise.save()
+        exercise_database = Exercise.objects.get(id=self.exercise.id)
+        self.assertEqual(exercise_database.tip, self.exercise.tip)
 
 
 class TestUserExerciseRegistration(TestCase):
@@ -114,6 +120,27 @@ class TestUserExerciseRegistration(TestCase):
         self.user_exercise_invalid_form = {
             'code': ''
         }
+
+    def test_user_missed_exercise_in_show_exercise(self):
+        code = """                 #include <stdio.h>
+                                    int main () {
+                                        char c;
+                                        scanf("%c", &c);
+                                        printf("ERROR");
+                                        return 0;
+                                    }
+                                    """
+        self.user_exercise.update_or_creates(
+                                            code,
+                                            self.user_exercise.exercise,
+                                            self.user_exercise.user,
+                                            self.user_exercise.time,
+                                            self.user_exercise.status,
+                                            self.user_exercise.scored)
+        request = self.factory.get('/exercise/')
+        request.user = self.user
+        response = views.show_exercise(request, self.exercise.id)
+        self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
     def test_if_relation_user_exercise_saved_database(self):
         self.user_exercise.update_or_creates(

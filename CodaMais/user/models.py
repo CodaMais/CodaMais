@@ -115,8 +115,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_correct_exercises(self):
         user_correct_exercises = 0
         UserExercise = apps.get_model(app_label='exercise', model_name='UserExercise')
+        user_all_excersices = UserExercise.objects.filter(user=self).count()
         user_correct_exercises = UserExercise.objects.filter(status=True, user=self).count()
-        return user_correct_exercises
+
+        if user_correct_exercises > 0:
+            percentage_correct_exercises = (100*user_correct_exercises)/user_all_excersices
+        else:
+            percentage_correct_exercises = 0
+        return percentage_correct_exercises
 
 
 class UserProfile(models.Model):

@@ -110,17 +110,23 @@
         <div class="card ">
             <div class="header">
                 <h4 class="title">Novos Tópicos no Fórum</h4>
-                <p class="category">Lista Dinâmica estilo Tabela (Máx 5 exerc.)</p>
+                <p class="category">....</p>
             </div>
-            <div class="content">
-                <!-- Content Structure -->
-                <div id="chartActivity" class="ct-chart"></div>
-                <div class="footer">
-                    <hr>
-                    <div class="stats">
-                        <i class="fa fa-history"></i>Atualizado X minutos atrás
-                    </div>
-                </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <th align = 'center'>Título</th>
+                        <th align = 'center'>Respostas</th>
+                    </thead>
+                    <tbody>
+                        {% for topic in topics %}
+                        <tr align = 'left' class='clickable-row'  data-href="{% url 'show_topic' topic.id %}">
+                          <td>{{topic.title}}</td>
+                          <td align = 'center'>{{topic.answer_set.all|length}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

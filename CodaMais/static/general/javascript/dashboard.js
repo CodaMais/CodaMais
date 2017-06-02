@@ -1,5 +1,4 @@
 
-
   $(document).ready(function() {
 
     $.getJSON("/dashboard/userExerciseChart",function(data){

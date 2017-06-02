@@ -12,12 +12,29 @@
             </div>
             <div class="content">
                 <!-- Content Structure -->
-                <div id="chartPreferences" class="ct-chart ct-perfect-fourth"></div>
+                  <div class="content table-responsive table-full-width">
+                      <table class="table table-hover table-striped">
+                          <thead>
+                              <th align = 'center'>Nº exe.</th>
+                              <th align = 'center'>Username</th>
+                              <th align = 'center'>Pontuação</th>
+                          </thead>
+                          <tbody>
+                              {% for user, completed_exercises in data %}
+                              <tr align = 'left' class='clickable-row'  data-href="{% url 'profile_view' user.username %}">
+                                  <td align = 'center'>{{completed_exercises}}</td>
+                                  <td>{{user.username}}</td>
+                                  <td align = 'center'>{{user.score}}</td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
 
                 <div class="footer">
                     <hr>
                     <div class="stats">
-                        <i class="fa fa-history"></i> Atualizado X minutos atrás
+                        <i class="fa fa-history"></i> Ranking ordenado pela score
                     </div>
                 </div>
             </div>

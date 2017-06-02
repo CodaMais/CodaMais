@@ -3,11 +3,14 @@ from django.contrib.auth.decorators import login_required
 
 from django.http import JsonResponse
 
+from ranking.views import get_users_with_bigger_score
+
 
 @login_required()
 def dashboard(request):
 
-    return render(request, 'dashboard.html')
+    ranking_data = get_ranking_table_data()
+    return render(request, 'dashboard.html', {'data': ranking_data})
 
 
 def user_exercise_chart(request):
@@ -20,3 +23,8 @@ def user_exercise_chart(request):
           }
 
     return JsonResponse(data)
+
+
+def get_ranking_table_data():
+    ranking_data = get_users_with_bigger_score()
+    return ranking_data

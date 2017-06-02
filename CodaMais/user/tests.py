@@ -184,9 +184,10 @@ class UserTest(TestCase):
         self.user.id = 1
         self.user_exercise.user = self.user
         self.user_exercise.exercise = self.exercise
+        self.user_exercise.status = True
         self.user.save()
         self.user_exercise.save()
-        # self.assertEqual(0, self.user.get_correct_exercises())
+        self.assertEqual(100, self.user.get_correct_exercises())
 
 
 class UserAdminTest(TestCase):

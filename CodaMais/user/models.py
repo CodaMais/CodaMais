@@ -1,5 +1,6 @@
 # standard library
 import datetime
+import logging
 
 # Django.
 from django.db import models
@@ -14,6 +15,9 @@ from django.apps import apps
 # Local Django.
 from . import constants
 from .managers import UserManager
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 class Email(EmailField):
@@ -109,17 +113,22 @@ class User(AbstractBaseUser, PermissionsMixin):
             if user.username == self.username:
                 break
 
+        logger.info("User position in ranking: " + str(position))
         return position
 
     # Function to count all user correct exercises.
     def get_correct_exercises(self):
-        user_correct_exercises = 0
         UserExercise = apps.get_model(app_label='exercise', model_name='UserExercise')
         user_all_excersices = UserExercise.objects.filter(user=self).count()
+
+        user_correct_exercises = 0
         user_correct_exercises = UserExercise.objects.filter(status=True, user=self).count()
 
+        logger.info("All exercises by user: " + self.username + ": " + str(user_all_excersices))
+        logger.info("All correct exercises by user: " + self.username + ": " + str(user_all_excersices))
+
         if user_correct_exercises > 0:
-            percentage_correct_exercises = (100*user_correct_exercises)/user_all_excersices
+            percentage_correct_exercises = (100 * user_correct_exercises) / user_all_excersices
         else:
             percentage_correct_exercises = 0
         return percentage_correct_exercises

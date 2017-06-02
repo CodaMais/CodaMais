@@ -10,3 +10,8 @@ def home(request):
         pass
 
     return render(request, 'index.html')
+
+
+def about(request):
+
+    return render(request, '../templates/about/about.html')

@@ -31,7 +31,7 @@ urlpatterns = i18n_patterns(
     url('^theory/', include('theory.urls')),
     url(r'^$', home, name="landing_home"),
     url(r'^admin/', admin.site.urls),
-
+    url(r'^about/', include('landing.urls')),
     # When using the Django's dev server, static files are served by default but
     # not media files, so you here we're force the server to consider them.
     url('^dashboard/', include('dashboard.urls')),

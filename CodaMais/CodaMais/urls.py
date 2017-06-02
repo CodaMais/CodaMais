@@ -21,6 +21,7 @@ from django.contrib import admin
 from django.views.static import serve
 from django.conf.urls.i18n import i18n_patterns
 
+
 # Local Django
 from landing.views import home
 

@@ -28,6 +28,8 @@ class Exercise(models.Model):
     deprecated = models.PositiveIntegerField(
                 choices=constants.DEPRECATED_CHOICES)
 
+    tip = models.CharField(max_length=constants.MAX_LENGTH_TIP)
+
     def __str__(self):
         return self.title
 

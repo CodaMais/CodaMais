@@ -243,3 +243,12 @@ def get_user_submissions_exercise(user, exercises):
     list_user_submissions = list(zipped_data)
 
     return list_user_submissions
+
+
+# This method get the last five exercises submited by user.
+def get_user_exercises_last_submissions(user):
+    assert user is not None, "User not logged."
+
+    user_exercises_list = UserExercise.objects.filter(user=user).order_by('-date_submission')[:5]
+
+    return user_exercises_list

@@ -1,5 +1,6 @@
 # Django
 from django.db import models
+from django.utils.timezone import now
 
 # third-party
 from redactor.fields import RedactorField
@@ -56,6 +57,8 @@ class UserExercise(models.Model):
 
     scored = models.BooleanField(default=False)
 
+    date_submission = models.DateTimeField(auto_now_add=True, blank=True)
+
     def update_or_creates(self, source_code, exercise, user, time, status, scored):
         self.number_submission += 1
         self.user = user
@@ -64,6 +67,7 @@ class UserExercise(models.Model):
         self.time = time
         self.code = source_code
         self.scored = scored
+        self.date_submission = now()
         self.save()
 
     def __str__(self):

@@ -6,18 +6,23 @@ from django.http import JsonResponse
 from forum.models import Topic
 from exercise.models import Exercise
 from ranking.views import get_users_with_bigger_score
+from exercise.views import get_user_exercises_last_submissions
 
 
 @login_required()
 def dashboard(request):
+    user = request.user
 
     ranking_data = get_ranking_table_data()
     new_topics_data = get_new_forum_topics()
     new_exercises_data = get_new_exercises()
+    user_last_exercises = get_user_last_exercise_submissions(user)
+
     return render(request, 'dashboard.html', {
         'data': ranking_data,
         'topics': new_topics_data,
-        'exercises': new_exercises_data
+        'exercises': new_exercises_data,
+        'user_exercises': user_last_exercises
     })
 
 
@@ -48,3 +53,9 @@ def get_new_exercises():
     # getting the last 5 exercises created
     exercises = Exercise.objects.all().order_by('-id')[:5]
     return exercises
+
+
+def get_user_last_exercise_submissions(user):
+
+    user_exercises = get_user_exercises_last_submissions(user)
+    return user_exercises

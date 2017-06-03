@@ -10,33 +10,31 @@
                 <h4 class="title">Top 5 - Ranking</h4>
                 <p class="category">Lista Dinâmica estilo Tabela</p>
             </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <th align = 'center'>Username</th>
+                        <th align = 'center'>Pontuação</th>
+                        <th align = 'center'>Nº Exer</th>
+                    </thead>
+                    <tbody>
+                        {% for user, completed_exercises in data %}
+                        <tr align = 'left' class='clickable-row'  data-href="{% url 'profile_view' user.username %}">
+                            <td>{{user.username}}</td>
+                            <td align = 'center'>{{user.score}}</td>
+                            <td align = 'center'>{{completed_exercises}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             <div class="content">
-                <!-- Content Structure -->
-                  <div class="content table-responsive table-full-width">
-                      <table class="table table-hover table-striped">
-                          <thead>
-                              <th align = 'center'>Nº exe.</th>
-                              <th align = 'center'>Username</th>
-                              <th align = 'center'>Pontuação</th>
-                          </thead>
-                          <tbody>
-                              {% for user, completed_exercises in data %}
-                              <tr align = 'left' class='clickable-row'  data-href="{% url 'profile_view' user.username %}">
-                                  <td align = 'center'>{{completed_exercises}}</td>
-                                  <td>{{user.username}}</td>
-                                  <td align = 'center'>{{user.score}}</td>
-                              </tr>
-                              {% endfor %}
-                          </tbody>
-                      </table>
+              <div class="footer">
+                  <hr>
+                  <div class="stats">
+                      <i class="fa fa-history"></i> Ranking ordenado pela score
                   </div>
-
-                <div class="footer">
-                    <hr>
-                    <div class="stats">
-                        <i class="fa fa-history"></i> Ranking ordenado pela score
-                    </div>
-                </div>
+              </div>
             </div>
         </div>
     </div>
@@ -65,25 +63,41 @@
 
 
 <div class="row">
-
     <div class="col-md-4">
         <div class="card ">
             <div class="header">
                 <h4 class="title">Últimas submissões</h4>
             </div>
-            <div class="content">
-                <!-- Content Structure -->
-                <div id="chartActivity" class="ct-chart"></div>
-                <div class="footer">
-                    <hr>
-                    <div class="stats">
-                        <i class="fa fa-history"></i>Atualizado X minutos atrás
-                    </div>
-                </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <th align = 'center'>Título</th>
+                        <th align = 'center'>Status</th>
+                        <th align = 'center'>Score</th>
+                    </thead>
+                    <tbody>
+                        {% for submission in user_exercises %}
+                        <tr class='clickable-row'  data-href="{% url 'show_exercise' submission.exercise.id %}">
+                          <td id=column>
+                            {{submission.exercise.title|truncatechars:40}}
+                          </td>
+                          <td id=align>
+                              {% if submission.status == True %}
+                                <i class="fa fa-check text-success"></i>
+                              {% elif submission.status == False and submission.number_submission %}
+                                <i class="fa fa-times text-danger"></i>
+                              {% else %}
+                                <!-- Nothing to do -->
+                              {% endif %}
+                          </td>
+                          <td>{{submission.exercise.score}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-
 
     <div class="col-md-4">
         <div class="card ">
@@ -108,7 +122,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="col-md-4">
         <div class="card ">

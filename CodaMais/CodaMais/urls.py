@@ -20,6 +20,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.static import serve
 from django.conf.urls.i18n import i18n_patterns
+# from django.template.response import TemplateResponse
 
 
 # Local Django
@@ -46,4 +47,5 @@ if settings.DEBUG:
         url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT
         }),
+        # url(r'^', TemplateResponse, {'template': '404.html'}),
     ]

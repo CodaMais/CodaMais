@@ -107,13 +107,13 @@ def process_user_exercise(request, id):
                                         user, runtime, status, scored)
 
         # Used to unlock correct exercise achievements everytime this method is called.
-        verify_correct_exercise_achievement(user)
+        verify_correct_exercise_achievement(user, request)
 
         # Used to unlock submited exercises achievement everytime this method is called.
-        verify_submited_exercises_achievement(user)
+        verify_submited_exercises_achievement(user, request)
 
         # Used to unlock score achievements when the user receives points from exercises.
-        verify_score_achievement(user)
+        verify_score_achievement(user, request)
     else:
         logger.info("The code form was invalid.")
         # Nothing to do.

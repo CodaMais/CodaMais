@@ -126,6 +126,23 @@
     </div>
     {% endif %} {% endfor %}
   </div>
+        {% block javascript %}
+          {% if messages %}
+            {% for message in messages %}
+              <script>
+                $.notify({
+                      icon: 'glyphicon glyphicon-star',
+                      message: '{{ message }}'
+                    },{
+                      placement: {
+                        from: "top",
+                        align: "center"
+                      }
+                });
+                </script>
+            {% endfor %}
+          {% endif %}
+        {% endblock %}
 
   {% if topic.locked is False %}
 

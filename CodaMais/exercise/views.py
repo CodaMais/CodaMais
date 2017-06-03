@@ -58,12 +58,21 @@ def show_exercise(request, id):
     # String list to compare with response.
     output_exercise = get_all_output_exercise(exercise)
 
+    # Verify if user should access a tip.
+    user_missed_exercise = False
+    if user_exercise.number_submission > 0 and user_exercise.status is False:
+        user_missed_exercise = True
+    else:
+        # Nothing to do.
+        pass
+
     return render(request, 'description_exercise.html', {
         'exercise': exercise,
         'user_exercise': user_exercise,
         'form': form,
         'input_exercise': input_exercise[0],
-        'output_exercise': output_exercise[0]
+        'output_exercise': output_exercise[0],
+        'user_missed_exercise': user_missed_exercise
     })
 
 

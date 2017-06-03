@@ -14,4 +14,4 @@ def home(request):
 
 def about(request):
 
-    return render(request, '../templates/about/about.html')
+    return render(request, 'about.html')

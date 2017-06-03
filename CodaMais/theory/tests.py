@@ -67,6 +67,7 @@ class TestExerciseTheory(TestCase):
         self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
         self.exercise.score = 10
         self.exercise.deprecated = 0
+        self.exercise.tip = "Exercise tip."
         self.test_case_exercise.input_exercise = "a\n"
         self.test_case_exercise.output_exercise = "B\n"
         self.theory.title = 'Vector'
@@ -76,15 +77,21 @@ class TestExerciseTheory(TestCase):
         self.theory.save()
         self.user.save()
 
+    def test_if_list_of_exercises_in_theory_is_filled(self):
+        self.exercise.theory = self.theory
+        self.exercise.save()
         self.test_case_exercise.exercise = self.exercise
         self.test_case_exercise.save()
 
-    def test_exercise_list_in_theory(self):
-        self.exercise.theory = self.theory
-        self.exercise.save()
-
-        list_exercises = views.exercise_list_in_theory(self.theory)
+        list_exercises = views.get_exercise_list_in_theory(self.theory)
         number_exercises = len(list_exercises)
         number_expected = 1
+
+        self.assertEqual(number_expected, number_exercises)
+
+    def test_if_list_of_exercises_in_theory_is_empty(self):
+        list_exercises = views.get_exercise_list_in_theory(self.theory)
+        number_exercises = len(list_exercises)
+        number_expected = 0
 
         self.assertEqual(number_expected, number_exercises)

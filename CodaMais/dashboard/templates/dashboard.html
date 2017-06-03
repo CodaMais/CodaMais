@@ -69,8 +69,7 @@
     <div class="col-md-4">
         <div class="card ">
             <div class="header">
-                <h4 class="title">Últimos exercícios realizados</h4>
-                <p class="category">Lista Dinâmica estilo Tabela (Máx 5 exerc.)</p>
+                <h4 class="title">Últimas submissões</h4>
             </div>
             <div class="content">
                 <!-- Content Structure -->
@@ -89,18 +88,23 @@
     <div class="col-md-4">
         <div class="card ">
             <div class="header">
-                <h4 class="title">Últimos uploads de exercícios</h4>
-                <p class="category">Lista Dinâmica estilo Tabela (Máx 5 exerc.)</p>
+                <h4 class="title">Novos Exercícios</h4>
             </div>
-            <div class="content">
-                <!-- Content Structure -->
-                <div id="chartActivity" class="ct-chart"></div>
-                <div class="footer">
-                    <hr>
-                    <div class="stats">
-                        <i class="fa fa-history"></i>Atualizado X minutos atrás
-                    </div>
-                </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <th align = 'center'>Título</th>
+                        <th align = 'center'>Score</th>
+                    </thead>
+                    <tbody>
+                        {% for exercise in exercises %}
+                        <tr class='clickable-row'  data-href="{% url 'show_exercise' exercise.id %}">
+                          <td>{{exercise.title}}</td>
+                          <td>{{exercise.score}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -110,19 +114,18 @@
         <div class="card ">
             <div class="header">
                 <h4 class="title">Novos Tópicos no Fórum</h4>
-                <p class="category">....</p>
             </div>
             <div class="content table-responsive table-full-width">
                 <table class="table table-hover table-striped">
                     <thead>
-                        <th align = 'center'>Título</th>
-                        <th align = 'center'>Respostas</th>
+                        <th>Título</th>
+                        <th class="text-right">Respostas</th>
                     </thead>
                     <tbody>
                         {% for topic in topics %}
-                        <tr align = 'left' class='clickable-row'  data-href="{% url 'show_topic' topic.id %}">
+                        <tr class='clickable-row'  data-href="{% url 'show_topic' topic.id %}">
                           <td>{{topic.title}}</td>
-                          <td align = 'center'>{{topic.answer_set.all|length}}</td>
+                          <td class="text-right">{{topic.answer_set.all|length}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

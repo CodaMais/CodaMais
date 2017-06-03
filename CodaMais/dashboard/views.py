@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 from forum.models import Topic
+from exercise.models import Exercise
 from ranking.views import get_users_with_bigger_score
 
 
@@ -12,9 +13,11 @@ def dashboard(request):
 
     ranking_data = get_ranking_table_data()
     new_topics_data = get_new_forum_topics()
+    new_exercises_data = get_new_exercises()
     return render(request, 'dashboard.html', {
         'data': ranking_data,
         'topics': new_topics_data,
+        'exercises': new_exercises_data
     })
 
 
@@ -39,3 +42,9 @@ def get_new_forum_topics():
     # getting the last 5 topics created
     topics = Topic.objects.all().order_by('-id')[:5]
     return topics
+
+
+def get_new_exercises():
+    # getting the last 5 exercises created
+    exercises = Exercise.objects.all().order_by('-id')[:5]
+    return exercises

@@ -32,21 +32,29 @@ class TestTheoryRegistration(TestCase):
 
 class TestRequestRegistration(TestCase):
 
+    user = User()
     theory = Theory()
 
     def setUp(self):
+        self.user.email = "user@user.com"
+        self.user.first_name = "TestUser"
+        self.user.username = "Username"
+        self.user.is_active = True
         self.theory.title = 'Vector'
         self.theory.content = '<p>Theory about Vector.</p>'
         self.factory = RequestFactory()
+        self.user.save()
 
     def test_list_all_theories(self):
         request = self.factory.get('/theory/')
+        request.user = self.user
         response = views.list_all_theories(request)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
     def test_show_theory(self):
         self.theory.save()
         request = self.factory.get('/theory/')
+        request.user = self.user
         response = views.show_theory(request, self.theory.id, self.theory.title)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
@@ -83,14 +91,14 @@ class TestExerciseTheory(TestCase):
         self.test_case_exercise.exercise = self.exercise
         self.test_case_exercise.save()
 
-        list_exercises = views.get_exercise_list_in_theory(self.theory)
+        list_exercises = views.get_exercise_list_in_theory(self.user, self.theory)
         number_exercises = len(list_exercises)
         number_expected = 1
 
         self.assertEqual(number_expected, number_exercises)
 
     def test_if_list_of_exercises_in_theory_is_empty(self):
-        list_exercises = views.get_exercise_list_in_theory(self.theory)
+        list_exercises = views.get_exercise_list_in_theory(self.user, self.theory)
         number_exercises = len(list_exercises)
         number_expected = 0
 

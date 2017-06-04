@@ -39,7 +39,7 @@ def user_exercise_chart(request):
         print(user_exercise_submission)
 
     data = {
-        'labels': ['20/JPN - 30/Jan', '20/Feb - 20/Feb', '20/Mar - 20/Mar', '20/Abr - 20/Abr', '20/Mai - 20/Mai'],
+        'labels': ['20/06', '21/04', '20/Mar - 20/Mar', '20/Abr - 20/Abr', '20/Mai - 20/Mai'],
         'series': [
             [542, 443, 320, 600, 553],
             [412, 243, 280, 580, 453]

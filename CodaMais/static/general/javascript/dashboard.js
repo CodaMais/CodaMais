@@ -3,15 +3,15 @@
 
     $.getJSON("/dashboard/userExerciseChart",function(data){
 
-      var options = {
-          seriesBarDistance: 20,
-          axisX: {
-              showGrid: false
-          },
-          height: "245px"
+      let options = {
+        fullWidth: true,
+        height: "245px",
+        chartPadding: {
+          right: 200
+        }
       };
 
-      Chartist.Bar('#exercisesMadeByUser', data, options);
+      Chartist.Line('#exercisesMadeByUser', data, options);
 
     });
 

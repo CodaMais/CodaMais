@@ -112,6 +112,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             position = position + 1
             if user.username == self.username:
                 break
+            else:
+                # Nothing to do.
+                pass
 
         logger.info("User position in ranking: " + str(position))
         return position

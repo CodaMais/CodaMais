@@ -118,19 +118,26 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # Function to count all user correct exercises.
     def get_correct_exercises(self):
-        UserExercise = apps.get_model(app_label='exercise', model_name='UserExercise')
-        user_all_excersices = UserExercise.objects.filter(user=self).count()
+        Exercise = apps.get_model(app_label='exercise', model_name='Exercise')
+        all_excersices = 0
+        # Getting all exercise not deprecated.
+        all_excersices = Exercise.objects.filter(deprecated='0').count()
 
+        UserExercise = apps.get_model(app_label='exercise', model_name='UserExercise')
         user_correct_exercises = 0
+        # Getting all the exercises answered correctly from the user.
         user_correct_exercises = UserExercise.objects.filter(status=True, user=self).count()
 
-        logger.info("All exercises by user: " + self.username + ": " + str(user_all_excersices))
-        logger.info("All correct exercises by user: " + self.username + ": " + str(user_all_excersices))
+        logger.info("All exercisesr: " + str(all_excersices))
+        logger.info("All correct exercises by user: " + self.username + ": " + str(all_excersices))
 
         if user_correct_exercises > 0:
-            percentage_correct_exercises = (100 * user_correct_exercises) / user_all_excersices
+            percentage_correct_exercises = (100 * user_correct_exercises) / all_excersices
         else:
             percentage_correct_exercises = 0
+
+        percentage_correct_exercises = round(percentage_correct_exercises, 2)
+
         return percentage_correct_exercises
 
 

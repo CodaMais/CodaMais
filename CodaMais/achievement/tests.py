@@ -1,6 +1,7 @@
 # Django.
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.contrib.messages.storage.fallback import FallbackStorage
 
 # Local Django.unlock_achievementunlock_achievement
 from achievement import constants
@@ -126,6 +127,11 @@ class TestAchievementView(TestCase):
         achievements_list = achievements_list.order_by('-quantity')
 
         request = self.factory.get('/achievement/')
+
+        # This is necessary to test with messages.
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
 
         check_achievement_user_should_get(self.user, self.user.score, achievements_list, request)
 

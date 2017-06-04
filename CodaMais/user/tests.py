@@ -4,6 +4,7 @@ import datetime
 # Django
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.contrib.messages.storage.fallback import FallbackStorage
 
 # local Django
 from user.views import (
@@ -67,6 +68,12 @@ class RegisterViewTest(TestCase):
 
     def test_if_register_was_made(self):
         request = self.factory.post('user/register/', self.form, follow=True)
+
+        # This is necessary to test with messages.
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+
         request.user = User()
         request.user.id = None
         response = register_view(request)

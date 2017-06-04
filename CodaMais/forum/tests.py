@@ -2,6 +2,7 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.messages.storage.fallback import FallbackStorage
 
 # local Django.
 
@@ -147,6 +148,12 @@ class TestRequestTopic(TestCase):
 
         def test_create_topic(self):
             request = self.factory.post('/forum/newtopic/', self.topic_creation_form)
+
+            # This is necessary to test with messages.
+            setattr(request, 'session', 'session')
+            messages = FallbackStorage(request)
+            setattr(request, '_messages', messages)
+
             request.user = self.user
             response = create_topic(request)
             self.assertEqual(response.status_code, REQUEST_REDIRECT)

@@ -1,6 +1,9 @@
+# Python
+import logging
+
 # Django
 from django.db import models
-from django.utils.timezone import now
+from django.utils.timezone import datetime, now
 
 # third-party
 from redactor.fields import RedactorField
@@ -8,6 +11,9 @@ from redactor.fields import RedactorField
 # local Django
 from exercise import constants
 from user.models import User
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 class Exercise(models.Model):
@@ -69,9 +75,52 @@ class UserExercise(models.Model):
         self.scored = scored
         self.date_submission = now()
         self.save()
+        return self
 
     def __str__(self):
         return self.user.email + "-" + str(self.exercise.id)
+
+
+class UserExerciseSubmission(models.Model):
+    user_exercise = models.ForeignKey(
+          UserExercise,
+          on_delete=models.CASCADE,)
+    scored = models.BooleanField(default=False)
+    submissions = models.IntegerField(default=1)
+    date_submission = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def updates_submission(user_exercise_submission, user_exercise):
+        # the number of submissions will be increment only if is not true that
+        # the current submission has scored (true) and exercise is correct (true)
+        if not (user_exercise_submission.scored is True and user_exercise.status is True):
+            user_exercise_submission.submissions += 1
+        else:
+            pass
+
+        # updates today's exercise submission "scored" to the exercise status
+        user_exercise_submission.scored = user_exercise.status
+        user_exercise_submission.save()
+
+    def submit(user_exercise):
+        # finds a existing one submission or creates a new one
+        today = datetime.today()
+        print(today.month)
+        submission, created = UserExerciseSubmission.objects.get_or_create(
+            user_exercise=user_exercise,
+            date_submission__year=today.year,
+            date_submission__month=today.month,
+            date_submission__day=today.day,
+            defaults={"scored": user_exercise.status}
+        )
+        # if a new user excercise submission is not created
+        if created is False:
+            # then updates the found user excercise submission
+            UserExerciseSubmission.updates_submission(submission, user_exercise)
+        else:
+            pass
+
+    def __str__(self):
+        return self.user_exercise.exercise.title + "-" + str(self.user_exercise.id)
 
 
 class TestCaseExercise(models.Model):

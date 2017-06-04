@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 # local Django
 from exercise.models import (
-    Exercise, UserExercise, TestCaseExercise
+    Exercise, UserExercise, TestCaseExercise, UserExerciseSubmission
 )
 from exercise import constants
 from exercise.forms import SubmitExerciseForm
@@ -105,6 +105,8 @@ def process_user_exercise(request, id):
         user_exercise.update_or_creates(
                                         source_code, exercise,
                                         user, runtime, status, scored)
+
+        UserExerciseSubmission.submit(user_exercise)
 
         # Used to unlock correct exercise achievements everytime this method is called.
         verify_correct_exercise_achievement(user)

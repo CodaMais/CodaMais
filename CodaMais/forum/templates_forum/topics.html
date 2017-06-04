@@ -20,17 +20,9 @@
                         <th>Número de Resposta</th>
                         <th>Resposta Aceita</th>
                         <th>Trancado</th>
-<li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-globe"></i>
-                            <b class="caret"></b>
-                            <span class="notification">2</span>
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a href="#">Notification 1</a></li>
-                        <li><a href="#">Notification 2</a></li>
-                      </ul>
-                </li>in list_topics %}
+                    </thead>
+                    <tbody>
+                        {% for topic in list_topics %}
                         <tr class='clickable-row' data-href="{% url 'show_topic' topic.id %}">
                             <td>{{topic.title}}</td>
                             <td>{{topic.author.username}}</td>

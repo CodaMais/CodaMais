@@ -1,10 +1,13 @@
+from datetime import timedelta
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from django.http import JsonResponse
 
 from forum.models import Topic
-from exercise.models import Exercise
+from exercise.models import Exercise, UserExerciseSubmission
 from ranking.views import get_users_with_bigger_score
 from exercise.views import get_user_exercises_last_submissions
 
@@ -27,13 +30,21 @@ def dashboard(request):
 
 
 def user_exercise_chart(request):
+    user = request.user
+    days_ago = 30
+    days_ago_date = timezone.now().date() - timedelta(days=days_ago)
+    user_exercises_submissions = UserExerciseSubmission.get_user_exercises_submissions_by_day(user, days_ago_date)
+
+    for user_exercise_submission in user_exercises_submissions:
+        print(user_exercise_submission)
+
     data = {
-            'labels': ['20/JPN - 30/Jan', '20/Feb - 20/Feb', '20/Mar - 20/Mar', '20/Abr - 20/Abr', '20/Mai - 20/Mai'],
-            'series': [
-                [542, 443, 320, 600, 553],
-                [412, 243, 280, 580, 453]
-              ]
-          }
+        'labels': ['20/JPN - 30/Jan', '20/Feb - 20/Feb', '20/Mar - 20/Mar', '20/Abr - 20/Abr', '20/Mai - 20/Mai'],
+        'series': [
+            [542, 443, 320, 600, 553],
+            [412, 243, 280, 580, 453]
+        ]
+    }
 
     return JsonResponse(data)
 

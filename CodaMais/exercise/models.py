@@ -3,6 +3,7 @@ import logging
 
 # Django
 from django.db import models
+from django.db.models import Sum
 from django.utils.timezone import datetime, now
 
 # third-party
@@ -88,6 +89,18 @@ class UserExerciseSubmission(models.Model):
     scored = models.BooleanField(default=False)
     submissions = models.IntegerField(default=1)
     date_submission = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def get_user_exercises_submissions_by_day(user, days_ago_date):
+        # get the number of submissions by day for all user exercises
+        submissions_by_day = UserExerciseSubmission.objects.filter(
+            user_exercise__user=user,
+            date_submission__gte=days_ago_date
+        ).values('date_submission').annotate(
+            submissions=Sum('submissions')
+        ).annotate(
+            corrects=Sum('scored')
+        )
+        return submissions_by_day
 
     def updates_submission(user_exercise_submission, user_exercise):
         # the number of submissions will be increment only if is not true that

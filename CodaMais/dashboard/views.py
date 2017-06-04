@@ -35,14 +35,24 @@ def user_exercise_chart(request):
     days_ago_date = timezone.now().date() - timedelta(days=days_ago)
     user_exercises_submissions = UserExerciseSubmission.get_user_exercises_submissions_by_day(user, days_ago_date)
 
+    # Lists that corresposd to fields in chart.
+    label_date_field = []
+    series_correct_answer = []
+    series_number_submissions = []
+
     for user_exercise_submission in user_exercises_submissions:
         print(user_exercise_submission)
+        submission_date = user_exercise_submission['date_submission']
+
+        label_date_field.append(str(submission_date.day) + '/' + str(submission_date.month))
+        series_correct_answer.append(int(user_exercise_submission['corrects']))
+        series_number_submissions.append(user_exercise_submission['submissions'])
 
     data = {
-        'labels': ['20/06', '21/04', '20/Mar - 20/Mar', '20/Abr - 20/Abr', '20/Mai - 20/Mai'],
+        'labels': label_date_field,
         'series': [
-            [542, 443, 320, 600, 553],
-            [412, 243, 280, 580, 453]
+            series_correct_answer,
+            series_number_submissions
         ]
     }
 

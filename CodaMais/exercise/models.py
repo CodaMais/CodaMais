@@ -5,6 +5,7 @@ import logging
 from django.db import models
 from django.db.models import Sum
 from django.utils.timezone import datetime, now
+from django.db.models.functions import TruncMonth
 
 # third-party
 from redactor.fields import RedactorField
@@ -95,11 +96,11 @@ class UserExerciseSubmission(models.Model):
         submissions_by_day = UserExerciseSubmission.objects.filter(
             user_exercise__user=user,
             date_submission__gte=days_ago_date
-        ).values('date_submission').annotate(
+        ).annotate(month=TruncMonth('date_submission')).values('month').annotate(
             submissions=Sum('submissions')
         ).annotate(
             corrects=Sum('scored')
-        )
+        ).values('date_submission', 'corrects', 'submissions')
         return submissions_by_day
 
     def updates_submission(user_exercise_submission, user_exercise):

@@ -7,7 +7,7 @@
         fullWidth: true,
         height: "245px",
         chartPadding: {
-          right: 200
+          right: 20
         }
       };
 

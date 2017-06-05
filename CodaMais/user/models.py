@@ -1,5 +1,6 @@
 # standard library
 import datetime
+import logging
 
 # Django.
 from django.db import models
@@ -8,10 +9,15 @@ from django.contrib.auth.models import (
 )
 from django.db.models import EmailField
 from django.core import validators
+from django.apps import apps
+
 
 # Local Django.
 from . import constants
 from .managers import UserManager
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(constants.PROJECT_NAME)
 
 
 class Email(EmailField):
@@ -80,7 +86,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = Email()
     score = Score()
 
-
     # User Profile Image
     user_image = models.ImageField(default=constants.USER_IMAGE,
                                    editable=True)
@@ -95,6 +100,48 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.email
+
+    # Function to get user's current position in ranking.
+    def get_position(self):
+        # List of all cadastrated users.
+        user_list = User.objects.filter().order_by('-score')
+
+        position = 0
+
+        for user in user_list:
+            position = position + 1
+            if user.username == self.username:
+                break
+            else:
+                # Nothing to do.
+                pass
+
+        logger.info("User position in ranking: " + str(position))
+        return position
+
+    # Function to count all user correct exercises.
+    def get_correct_exercises(self):
+        Exercise = apps.get_model(app_label='exercise', model_name='Exercise')
+        all_excersices = 0
+        # Getting all exercise not deprecated.
+        all_excersices = Exercise.objects.filter(deprecated='0').count()
+
+        UserExercise = apps.get_model(app_label='exercise', model_name='UserExercise')
+        user_correct_exercises = 0
+        # Getting all the exercises answered correctly from the user.
+        user_correct_exercises = UserExercise.objects.filter(status=True, user=self).count()
+
+        logger.info("All exercisesr: " + str(all_excersices))
+        logger.info("All correct exercises by user: " + self.username + ": " + str(all_excersices))
+
+        if user_correct_exercises > 0:
+            percentage_correct_exercises = (100 * user_correct_exercises) / all_excersices
+        else:
+            percentage_correct_exercises = 0
+
+        percentage_correct_exercises = round(percentage_correct_exercises, 2)
+
+        return percentage_correct_exercises
 
 
 class UserProfile(models.Model):

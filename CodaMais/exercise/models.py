@@ -7,6 +7,7 @@ from redactor.fields import RedactorField
 # local Django
 from exercise import constants
 from user.models import User
+from theory.models import Theory
 
 
 class Exercise(models.Model):
@@ -27,6 +28,14 @@ class Exercise(models.Model):
 
     deprecated = models.PositiveIntegerField(
                 choices=constants.DEPRECATED_CHOICES)
+
+    tip = models.CharField(max_length=constants.MAX_LENGTH_TIP)
+
+    theory = models.ForeignKey(
+        Theory,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,)
 
     def __str__(self):
         return self.title

@@ -18,15 +18,14 @@
                         <th>Autor</th>
                         <th>Data</th>
                         <th>Número de Resposta</th>
-                        <th>Respota Aceita</th>
+                        <th>Resposta Aceita</th>
                         <th>Trancado</th>
-
                     </thead>
                     <tbody>
                         {% for topic in list_topics %}
                         <tr class='clickable-row' data-href="{% url 'show_topic' topic.id %}">
                             <td>{{topic.title}}</td>
-                            <td>{{topic.author}}</td>
+                            <td>{{topic.author.username}}</td>
                             <td>{{topic.date_topic.date}}</td>
                             <td>{{topic.answer_set.all|length}}</td>
                             {% if topic.best_answer == None %}

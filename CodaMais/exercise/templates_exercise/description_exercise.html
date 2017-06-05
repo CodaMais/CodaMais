@@ -1,22 +1,22 @@
 {% extends "general/template.html" %} {% block content %}
 
 <style type="text/css" media="screen">
-  #editor {
-    width: 100%;
-    height: 200px;
-    margin-bottom: 20px;
-  }
+    #editor {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 20px;
+    }
 
-  form>p {
-    display: none;
-  }
+    form>p {
+        display: none;
+    }
 </style>
 
 <div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="header">
-        <h4 class="title">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">
           {{exercise.title}}
 
           {% if user_exercise.time is not 0 %}
@@ -27,58 +27,62 @@
 
           <span class="pull-right label label-info">Score {{ exercise.score }}</span>
         </h4>
-        <p class="category">{{exercise.get_category_display}}</p>
-      </div>
-      <div class="content">
-        {{exercise.statement_question|safe}}
-      </div>
+                <p class="category">{{exercise.get_category_display}}</p>
+            </div>
+            <div class="content">
+                {{exercise.statement_question|safe}}
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="col-md-12">
-    <div class="card">
-      <div class="header">
-        <p class="category text-uppercase">Exemplos de Entrada e Saída</p>
-      </div>
-      <div class="content table-responsive table-full-width">
-        <table class="table">
-          <thead>
-            <tr>
-              <th width="50%">
-                Entrada
-              </th>
-              <th>
-                Saída
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                {{input_exercise}}
-              </td>
-              <td>
-                {{output_exercise}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <p class="category text-uppercase">Exemplos de Entrada e Saída</p>
+            </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th width="50%">
+                                Entrada
+                            </th>
+                            <th>
+                                Saída
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{input_exercise}}
+                            </td>
+                            <td>
+                                {{output_exercise}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="col-md-12">
-    <div class="card">
-      <div class="header">
-        <p class="category text-uppercase">Editor</p>
-      </div>
-      <div class="content">
-        <form method="post" action="{% url 'process_user_exercise' exercise.id %}">
-          {% csrf_token %} {{ form.as_p }}
-          <div id="editor"></div>
-          <button type="submit" class="btn btn-default btn-fill">Enviar</button>
-        </form>
-      </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <p class="category">EDITOR
+                    {% if user_missed_exercise %}
+                    <a class="btn btn-outline-success pull-right" data-toggle="modal" data-target="#exercise_tip" href="javascript:void(0)">Precisa de Ajuda?</a>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="content">
+                <form method="post" action="{% url 'process_user_exercise' exercise.id %}">
+                    {% csrf_token %} {{ form.as_p }}
+                    <div id="editor"></div>
+                    <button type="submit" class="btn btn-default btn-fill">Enviar</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 {% block javascript %}
@@ -102,14 +106,35 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/g/ace@1.2.6(min/ace.js+min/mode-c_cpp.js+min/ext-beautify.js+min/theme-monokai.js)" type="text/javascript" charset="utf-8"></script>
 <script>
-  var editor = ace.edit("editor");
-  editor.setTheme("ace/theme/monokai");
-  editor.getSession().setMode("ace/mode/c_cpp");
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/c_cpp");
 
-  const $textarea = $('#id_code').hide();
-  editor.getSession().setValue($textarea.val());
-  editor.getSession().on('change', function() {
-    $textarea.val(editor.getSession().getValue());
-  });
+    const $textarea = $('#id_code').hide();
+    editor.getSession().setValue($textarea.val());
+    editor.getSession().on('change', function() {
+        $textarea.val(editor.getSession().getValue());
+    });
 </script>
+{% endblock %}
+
+{% block modal %}
+<div class="modal fade" id="exercise_tip">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        <h4 class="modal-title" id="myModalLabel">Dica do Exercício!</h4>
+      </div>
+      <div class="modal-body">
+        {{exercise.tip}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Obrigado!</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

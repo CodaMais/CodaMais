@@ -141,7 +141,6 @@ def create_topic(request):
         post = form.save(commit=False)  # Pausing the Django auto-save to enter username.
         post.author = user
         post.save()  # Posting date is generated automaticlly by the Model.
-        messages.success(request, 'Form submission successful')
         # Reset form.
         form = TopicForm()
         return redirect('list_all_topics')

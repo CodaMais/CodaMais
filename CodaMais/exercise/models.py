@@ -63,7 +63,7 @@ class UserExercise(models.Model):
             Exercise,
             on_delete=models.CASCADE,)
 
-    # The unit of measurement of time is seconds
+    # The unit of measurement of time is seconds.
     time = models.CharField(max_length=constants.MAX_LENGTH_TIME,
                             default=0)
 
@@ -96,7 +96,7 @@ class UserExerciseSubmission(models.Model):
     date_submission = models.DateTimeField(auto_now_add=True, blank=True)
 
     def submissions_by_day(user, days_ago_date):
-        # get the number of submissions by day for all user exercises
+        # Get the number of submissions by day for all user exercises.
         submissions_by_day = UserExerciseSubmission.objects.filter(
             user_exercise__user=user,
             date_submission__gte=days_ago_date
@@ -108,21 +108,22 @@ class UserExerciseSubmission(models.Model):
         return submissions_by_day
 
     def updates_submission(user_exercise_submission, user_exercise):
-        # the number of submissions will be increment only if is not true that
-        # the current submission has scored (true) and exercise is correct (true)
+
+        # The number of submissions will be increment only if is not true that
+        # the current submission has scored (true) and exercise is correct (true).
         if not (user_exercise_submission.scored is True and user_exercise.status is True):
             user_exercise_submission.submissions += 1
         else:
             pass
 
-        # updates today's exercise submission "scored" to the exercise status
+        # Updates today's exercise submission "scored" to the exercise status.
         user_exercise_submission.scored = user_exercise.status
         user_exercise_submission.save()
 
     def submit(user_exercise):
-        # finds a existing one submission or creates a new one
+        # Finds a existing one submission or creates a new one.
         today = datetime.today()
-        print(today.month)
+
         submission, created = UserExerciseSubmission.objects.get_or_create(
             user_exercise=user_exercise,
             date_submission__year=today.year,
@@ -130,11 +131,13 @@ class UserExerciseSubmission(models.Model):
             date_submission__day=today.day,
             defaults={"scored": user_exercise.status}
         )
-        # if a new user excercise submission is not created
+
+        # If a new user excercise submission is not created
         if created is False:
-            # then updates the found user excercise submission
+            # then updates the found user excercise submission.
             UserExerciseSubmission.updates_submission(submission, user_exercise)
         else:
+            # Nothing to do.
             pass
 
     def __str__(self):

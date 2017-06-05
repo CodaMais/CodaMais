@@ -1,6 +1,10 @@
+# standard library
+from datetime import timedelta
+
 # Django
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.utils import timezone
 
 # local Django
 from exercise import (
@@ -8,6 +12,7 @@ from exercise import (
 )
 from exercise.models import (
     Exercise, UserExercise, TestCaseExercise,
+    UserExerciseSubmission
 )
 
 from user.models import User
@@ -346,4 +351,30 @@ class TestRequestExercise(TestCase):
         response = views.show_exercise(request, self.exercise.id)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
 
+
 class TestUserExerciseSubmission(TestCase):
+    user = User()
+
+    def setUp(self):
+
+        self.factory = RequestFactory()
+
+        self.user.email = "user@user.com"
+        self.user.password = "userpassword"
+        self.user.first_name = "TestUser"
+        self.user.username = "Username"
+        self.user.is_active = True
+        self.user.save()
+
+    def request_user_exercises_submission_by_day(self):
+        user = self.user
+
+        days_ago = 7
+        days_ago_date = timezone.now().date() - timedelta(days=days_ago)
+
+        user_exercises_submissions = UserExerciseSubmission.submissions_by_day(
+            user,
+            days_ago_date
+        )
+
+        self.assertIsNotNone(user_exercises_submissions)

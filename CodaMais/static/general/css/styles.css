@@ -54,3 +54,8 @@
   /* The width of your bars */
   stroke-width: 20px;
 }
+
+.ct-axis-title{
+  color: #808080;
+  fill: #808080;
+}

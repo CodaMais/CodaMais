@@ -354,6 +354,10 @@ class TestRequestExercise(TestCase):
 
 class TestUserExerciseSubmission(TestCase):
     user = User()
+    exercise = Exercise()
+    user_exercise = UserExercise()
+    test_case_exercise = TestCaseExercise()
+    user_exercises_submission = UserExerciseSubmission()
 
     def setUp(self):
 
@@ -366,7 +370,38 @@ class TestUserExerciseSubmission(TestCase):
         self.user.is_active = True
         self.user.save()
 
-    def request_user_exercises_submission_by_day(self):
+        # Exercise.
+        self.exercise.title = 'Basic Exercise'
+        self.exercise.category = 2
+        self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
+        self.exercise.score = 10
+        self.exercise.deprecated = 0
+        self.exercise.save()
+
+        # Test case exercise.
+        self.test_case_exercise.input_exercise = "a\n"
+        self.test_case_exercise.output_exercise = ["B"]
+        self.test_case_exercise.exercise = self.exercise
+        self.test_case_exercise.save()
+
+        #
+        self.user_exercise.scored = False
+        self.user_exercise.code = """
+                                    #include <stdio.h>
+                                    int main () {
+                                        char c;
+                                        scanf("%c", &c);
+                                        printf("B");
+                                        return 0;
+                                    }
+                                    """
+
+        self.user_exercise.user = self.user
+        self.user_exercise.exercise = self.exercise
+        self.user_exercise.submissions = 1
+        self.user_exercise.save()
+
+    def test_request_user_exercises_submission_by_day(self):
         user = self.user
 
         days_ago = 7
@@ -378,3 +413,38 @@ class TestUserExerciseSubmission(TestCase):
         )
 
         self.assertIsNotNone(user_exercises_submissions)
+
+    def test_updates_exercise_submission(self):
+        self.user_exercises_submission = self.user_exercise
+        self.user_exercises_submission.save()
+
+        UserExerciseSubmission.updates_submission(self.user_exercises_submission, self.user_exercise)
+
+        self.assertEqual(self.user_exercises_submission.submissions, 2)
+
+    def test_does_not_updates_exercise_submission(self):
+
+        self.user_exercise.status = True
+        self.user_exercise.save()
+
+        self.user_exercises_submission.scored = True
+
+        self.user_exercises_submission = self.user_exercise
+        self.user_exercises_submission.save()
+
+        UserExerciseSubmission.updates_submission(self.user_exercises_submission, self.user_exercise)
+
+        self.assertEqual(self.user_exercises_submission.submissions, 2)
+
+    def test_user_exercise_submission_submit(self):
+
+        submission = UserExerciseSubmission.submit(self.user_exercise)
+        self.assertIsNotNone(submission)
+
+    def test_user_exercise_submission_submit_created(self):
+
+        self.user_exercises_submission = self.user_exercise
+        self.user_exercises_submission.save()
+
+        submission = UserExerciseSubmission.submit(self.user_exercise)
+        self.assertIsNotNone(submission)

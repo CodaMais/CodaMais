@@ -139,6 +139,8 @@ class UserExerciseSubmission(models.Model):
         else:
             # Nothing to do.
             pass
+            
+        return submission
 
     def __str__(self):
         return self.user_exercise.exercise.title + "-" + str(self.user_exercise.id)

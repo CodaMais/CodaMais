@@ -345,3 +345,5 @@ class TestRequestExercise(TestCase):
         request.user = self.user
         response = views.show_exercise(request, self.exercise.id)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
+
+class TestUserExerciseSubmission(TestCase):

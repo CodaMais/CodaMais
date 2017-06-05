@@ -80,7 +80,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = Email()
     score = Score()
 
-
     # User Profile Image
     user_image = models.ImageField(default=constants.USER_IMAGE,
                                    editable=True)

@@ -37,6 +37,10 @@ class Exercise(models.Model):
     deprecated = models.PositiveIntegerField(
                 choices=constants.DEPRECATED_CHOICES)
 
+    def new_exercises():
+        exercises = Exercise.objects.all().order_by('-id')[:5]
+        return exercises
+
     def __str__(self):
         return self.title
 
@@ -91,7 +95,7 @@ class UserExerciseSubmission(models.Model):
     submissions = models.IntegerField(default=1)
     date_submission = models.DateTimeField(auto_now_add=True, blank=True)
 
-    def get_user_exercises_submissions_by_day(user, days_ago_date):
+    def submissions_by_day(user, days_ago_date):
         # get the number of submissions by day for all user exercises
         submissions_by_day = UserExerciseSubmission.objects.filter(
             user_exercise__user=user,

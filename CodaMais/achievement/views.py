@@ -4,6 +4,7 @@ import logging
 # Local Django
 from achievement import constants
 from exercise.models import UserExercise
+from django.contrib import messages
 from forum.models import Answer
 from achievement.models import (
     Achievement, UserAchievement
@@ -17,7 +18,7 @@ logger.setLevel(logging.DEBUG)
 
 # Find all achievements related to corrected exercises and determine if the current user
 # is able to unlock some of them.
-def verify_correct_exercise_achievement(user):
+def verify_correct_exercise_achievement(user, request):
     logger.debug("Verifying correct exercise achievement.")
 
     user_corrected_exercise_quantity = get_user_corrected_exercise_quantity(user)
@@ -30,7 +31,8 @@ def verify_correct_exercise_achievement(user):
     correct_exercise_achievements_list = correct_exercise_achievements_list.order_by('-quantity')
 
     # Verify in fact wich achievement of the specific type achievements list the user should get.
-    check_achievement_user_should_get(user, user_corrected_exercise_quantity, correct_exercise_achievements_list)
+    check_achievement_user_should_get(user, user_corrected_exercise_quantity,
+                                      correct_exercise_achievements_list, request)
 
     logger.debug("Ending verifycation of correct exercise achievement.")
 
@@ -49,7 +51,7 @@ def get_user_corrected_exercise_quantity(user):
 
 # Find all achievements related to submited answers in topics and determine if the current user
 # is able to unlock some of them.
-def verify_submited_answers_achievement(user):
+def verify_submited_answers_achievement(user, request):
     logger.debug("Verifying submited answers achievement.")
 
     user_submited_answers_quantity = get_user_submited_answers_quantity(user)
@@ -62,7 +64,8 @@ def verify_submited_answers_achievement(user):
     submited_answers_achievements_list = submited_answers_achievements_list.order_by('-quantity')
 
     # Verify in fact wich achievement of the specific type achievements list the user should get.
-    check_achievement_user_should_get(user, user_submited_answers_quantity, submited_answers_achievements_list)
+    check_achievement_user_should_get(user, user_submited_answers_quantity,
+                                      submited_answers_achievements_list, request)
 
     logger.debug("Ending verifycation of submited answers achievement.")
 
@@ -81,7 +84,7 @@ def get_user_submited_answers_quantity(user):
 
 # Find all achievements related to score and determine if the current user is able to unlock some of them.
 # This method should be called everywhere user is scored.
-def verify_score_achievement(user):
+def verify_score_achievement(user, request):
     logger.debug("Verifying score achievement.")
 
     # List of achievements that have the same type(score).
@@ -93,14 +96,14 @@ def verify_score_achievement(user):
 
     score = user.score
     # Verify in fact wich achievement of the specific type achievements list the user should get.
-    check_achievement_user_should_get(user, score, score_achievements_list)
+    check_achievement_user_should_get(user, score, score_achievements_list, request)
 
     logger.debug("Ending verifycation of score achievement.")
 
 
 # Find all achievements related to submited exercises in topics and determine if the current user
 # is able to unlock some of them.
-def verify_submited_exercises_achievement(user):
+def verify_submited_exercises_achievement(user, request):
     logger.debug("Verifying submited exercise achievement.")
 
     user_submited_exercises_quantity = get_user_submited_exercises_quantity(user)
@@ -113,7 +116,8 @@ def verify_submited_exercises_achievement(user):
     submited_exercise_achievements_list = submited_exercise_achievements_list.order_by('-quantity')
 
     # Verify in fact wich achievement of the specific type achievements list the user should get.
-    check_achievement_user_should_get(user, user_submited_exercises_quantity, submited_exercise_achievements_list)
+    check_achievement_user_should_get(user, user_submited_exercises_quantity,
+                                      submited_exercise_achievements_list, request)
 
     logger.debug("Ending verifycation of submited exercises achievement.")
 
@@ -161,7 +165,7 @@ def unlock_achievement(user, achievement):
 
 # Verify which achievement the user should get or not, based on the specific quantity of
 # something that the achievement is related.
-def check_achievement_user_should_get(user, specific_user_quantity, achievements_list):
+def check_achievement_user_should_get(user, specific_user_quantity, achievements_list, request):
     assert user is not None, "User not logged in."
     assert achievements_list is not None, "Doesn't exist achievements in this Achievements list"
     assert specific_user_quantity >= 0, "Invalid number of specific user quantity."
@@ -174,6 +178,7 @@ def check_achievement_user_should_get(user, specific_user_quantity, achievements
 
             if has_achievement is False:
                 unlock_achievement(user, achievement)
+                messages.success(request, "Você desbloqueou a conquista " + achievement.name)
                 break
             else:
                 logger.info("The user: " + user.username + " already had unlocked this achievement.")

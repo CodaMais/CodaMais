@@ -1,5 +1,7 @@
 # Django.
 from django.test import TestCase
+from django.test.client import RequestFactory
+from django.contrib.messages.storage.fallback import FallbackStorage
 
 # Local Django.unlock_achievementunlock_achievement
 from achievement import constants
@@ -99,6 +101,8 @@ class TestAchievementView(TestCase):
         self.user_achievement.user = self.user
         self.user_achievement.achievement = self.achievement
 
+        self.factory = RequestFactory()
+
     def test_checking_if_user_has_not_achievement(self):
         has_achievement = check_if_user_has_achievement(self.user, self.achievement)
         self.assertFalse(has_achievement)
@@ -122,7 +126,14 @@ class TestAchievementView(TestCase):
         # The list of achievements must be ordered by the biggest quantity of correct exercises.
         achievements_list = achievements_list.order_by('-quantity')
 
-        check_achievement_user_should_get(self.user, self.user.score, achievements_list)
+        request = self.factory.get('/achievement/')
+
+        # This is necessary to test with messages.
+        setattr(request, 'session', 'session')
+        messages = FallbackStorage(request)
+        setattr(request, '_messages', messages)
+
+        check_achievement_user_should_get(self.user, self.user.score, achievements_list, request)
 
         user_achievement_data = UserAchievement.objects.get(user=self.user, achievement=self.achievement)
         self.assertEqual(str(user_achievement_data), str(self.user_achievement))
@@ -138,9 +149,11 @@ class TestAchievementView(TestCase):
         # The list of achievements must be ordered by the biggest quantity of correct exercises.
         achievements_list = achievements_list.order_by('-quantity')
 
+        request = self.factory.get('/achievement/')
+
         user_achievement_data = UserAchievement.objects.get(user=self.user, achievement=self.achievement)
 
-        check_achievement_user_should_get(self.user, self.user.score, achievements_list)
+        check_achievement_user_should_get(self.user, self.user.score, achievements_list, request)
 
         self.assertEqual(str(user_achievement_data), str(self.user_achievement))
 
@@ -155,7 +168,9 @@ class TestAchievementView(TestCase):
         # The list of achievements must be ordered by the biggest quantity of correct exercises.
         achievements_list = achievements_list.order_by('-quantity')
 
-        check_achievement_user_should_get(self.user, self.user.score, achievements_list)
+        request = self.factory.get('/achievement/')
+
+        check_achievement_user_should_get(self.user, self.user.score, achievements_list, request)
 
         self.assertRaises(UserAchievement.DoesNotExist,
                           UserAchievement.objects.get,

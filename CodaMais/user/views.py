@@ -14,6 +14,8 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 
 # local Django
 from achievement.models import UserAchievement
@@ -71,6 +73,9 @@ def register_view(request):
         send_mail(email_subject, email_body, constants.CODAMAIS_EMAIL, [email],
                   fail_silently=False)
 
+        # Show message informing that register was made and an email was sent to the user.
+        messages.success(request,
+                         'Cadastro realizado com sucesso. Veja sua caixa de email para confirmar seu cadastro.')
         logger.info("Email sended to user.")
         return redirect('/')
 
@@ -85,7 +90,8 @@ def register_confirm(request, activation_key):
     if request.user.id is not None:
         logger.info("Logged user: " + request.user.username)
 
-        # TODO(João) Redirect to landing page with alert message.
+        # TODO(João) Redirect to landing page.
+        messages.success(request, 'Conta já foi confirmada.')
         HttpResponse('Conta ja confirmada')
     else:
         # Nothing to do
@@ -101,6 +107,7 @@ def register_confirm(request, activation_key):
     if user_profile.key_expires < timezone.now():
         user_profile.delete()
         # TODO(João) Redirect to landing page with alert message.
+        messages.danger(request, 'Tempo para confirmar conta expirou. Crie sua conta novamente')
         return HttpResponse("Tempo para confirmar conta expirou.Crie novamente")
     else:
         # Nothing to do.
@@ -113,7 +120,8 @@ def register_confirm(request, activation_key):
     user.is_active = True
     user.save()
 
-    # TODO(Allan) Add alert message telling that account was confirmed.
+    # Show message informing that account was successfuly comfirmed.
+    messages.success(request, 'Sua conta foi confirmada com sucesso.')
     return redirect('/')
 
 
@@ -214,10 +222,14 @@ def recover_password(request):
                       fail_silently=False)
 
             logger.info("Recover password email sended.")
-            # TODO(João) Add some mechanism to show message to user that the email was sended
+            # Show message informing that recover password email was sent.
+            messages.success(request,
+                             'Verifique sua caixa de email para recuperar sua senha.')
             return redirect('/')
         except:
-            # TODO(João) Add some mechanism to show error message to user.
+            # Show message informing that recover password email was sent already.
+            messages.danger(request,
+                            'Email de recuperação de senha já enviado! Verifique sua caixa de email.')
             logger.info("This email already asked another password.")
             return render(request, 'recover_password/recover_password.html',
                           {"form": form, "buttonText:": button_text})
@@ -242,7 +254,7 @@ def recover_password_confirm(request, activation_key):
     if user_profile.key_expires < timezone.now():
         logger.info("Time do change password expired.")
         user_profile.delete()
-        # TODO(João) Show message alert to user.
+        messages.danger(request, 'Tempo para trocar de senha expirou!')
         return redirect('/')
     else:
         # Nothing to do.
@@ -255,7 +267,8 @@ def recover_password_confirm(request, activation_key):
             user.set_password(form.cleaned_data.get('password'))
             user.save()
             user_profile.delete()
-            # TODO(João) Show message alert to user telling that passsword was succesfull changed.
+            # Show message informing password was changed.
+            messages.success(request, 'Senha trocada com sucesso.')
             return redirect('/')
         else:
             # Nothing to do.

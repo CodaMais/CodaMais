@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 # local Django.
 from .models import (
@@ -43,7 +44,7 @@ def show_topic(request, id):
         # TODO(Roger) Create structure to alert the user that the topic doesn't exist.
         return redirect('list_all_topics')
 
-    redirect_answer = answer_topic(user, topic, form)
+    redirect_answer = answer_topic(user, topic, form, request)
 
     if redirect_answer is not None:
         return HttpResponseRedirect(redirect_answer)
@@ -140,7 +141,6 @@ def create_topic(request):
         post = form.save(commit=False)  # Pausing the Django auto-save to enter username.
         post.author = user
         post.save()  # Posting date is generated automaticlly by the Model.
-
         # Reset form.
         form = TopicForm()
         return redirect('list_all_topics')
@@ -178,7 +178,7 @@ def delete_topic(request, id):
 
 
 # The user answers the topic accessed.
-def answer_topic(user, topic, form):
+def answer_topic(user, topic, form, request):
     assert user is not None, "User not logged in."
     assert topic is not None, "Topic is not exists."
 
@@ -188,7 +188,7 @@ def answer_topic(user, topic, form):
         answer = Answer()
         answer.creates_answer(user, topic, answer_description)
 
-        verify_submited_answers_achievement(user)
+        verify_submited_answers_achievement(user, request)
 
         # Reset form.
         redirect_answer = "/forum/topics/" + str(topic.id)

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style type="text/css" media="screen">
+    #adjust {
+      display: block;
+      margin: 0 auto;
+      width: 940px;
+      height: 470px;
+      position: relative;
+      overflow: hidden;
+      clear: both;
+    }
+
+    #column {
+      text-align: left;
+      width: 120px;
+    }
+
+    #header {
+      align: top;
+    }
+  </style>
+</head>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+<body>
+  <div class="jumbotron">
+    <div id="adjust">
+
+      <div class="card">
+        <div class="header" id=header style="text-align:center;">
+          <table class="table">
+            <tr>
+              <td id=c olumn>
+                <div class="image">
+                  <a href="{% url 'landing_home'%}">
+                    <img src="/static/logo/hugo1.png" width="230px" height="265px"></img>
+                    <!-- <img src="/static/logo/logo.png" width="205px" height="115px"></img> -->
+                  </a>
+              </td>
+              <td>
+                <p>
+                  <h2 class="title"><b>Oops!</b> 404</h2></p>
+                <p>Não foi possível entrar essa página</p>
+                <p>Verifique se a url foi digitada corretamente. A página pode ter sido removida ou não existe.</p>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="content ">
+            <table class="table">
+              <tr>
+                <td id=c olumn>
+                  <p>
+                    <center>
+                      <a href="{% url 'landing_home'%}"> <button class="btn btn-outline-success" type="button">Página inicial</button></a>
+                    </center>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

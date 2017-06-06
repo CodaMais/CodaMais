@@ -49,3 +49,13 @@
 .card.best-answer > .header > .title {
   color: #FFF;
 }
+
+.ct-series-a .ct-bar {
+  /* The width of your bars */
+  stroke-width: 20px;
+}
+
+.ct-axis-title{
+  color: #808080;
+  fill: #808080;
+}

@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 # local Django
 from exercise.models import (
-    Exercise, UserExercise, TestCaseExercise
+    Exercise, UserExercise, TestCaseExercise, UserExerciseSubmission
 )
 from exercise import constants
 from exercise.forms import SubmitExerciseForm
@@ -114,6 +114,8 @@ def process_user_exercise(request, id):
         user_exercise.update_or_creates(
                                         source_code, exercise,
                                         user, runtime, status, scored)
+
+        UserExerciseSubmission.submit(user_exercise)
 
         # Used to unlock correct exercise achievements everytime this method is called.
         verify_correct_exercise_achievement(user, request)
@@ -252,3 +254,12 @@ def get_user_submissions_exercise(user, exercises):
     list_user_submissions = list(zipped_data)
 
     return list_user_submissions
+
+
+# This method get the last five exercises submited by user.
+def get_user_exercises_last_submissions(user):
+    assert user is not None, "User not logged."
+
+    user_exercises_list = UserExercise.objects.filter(user=user).order_by('-date_submission')[:5]
+
+    return user_exercises_list

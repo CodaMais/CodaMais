@@ -1,6 +1,10 @@
+# standard library
+from datetime import timedelta
+
 # Django
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.utils import timezone
 
 # local Django
 from exercise import (
@@ -8,6 +12,7 @@ from exercise import (
 )
 from exercise.models import (
     Exercise, UserExercise, TestCaseExercise,
+    UserExerciseSubmission
 )
 
 from user.models import User
@@ -372,3 +377,101 @@ class TestRequestExercise(TestCase):
         request.user = self.user
         response = views.show_exercise(request, self.exercise.id)
         self.assertEqual(response.status_code, constants.REQUEST_SUCCEEDED)
+
+
+class TestUserExerciseSubmission(TestCase):
+    user = User()
+    exercise = Exercise()
+    user_exercise = UserExercise()
+    test_case_exercise = TestCaseExercise()
+    user_exercises_submission = UserExerciseSubmission()
+
+    def setUp(self):
+
+        self.factory = RequestFactory()
+
+        self.user.email = "user@user.com"
+        self.user.password = "userpassword"
+        self.user.first_name = "TestUser"
+        self.user.username = "Username"
+        self.user.is_active = True
+        self.user.save()
+
+        # Exercise.
+        self.exercise.title = 'Basic Exercise'
+        self.exercise.category = 2
+        self.exercise.statement_question = '<p>Text Basic Exercise.</p>'
+        self.exercise.score = 10
+        self.exercise.deprecated = 0
+        self.exercise.save()
+
+        # Test case exercise.
+        self.test_case_exercise.input_exercise = "a\n"
+        self.test_case_exercise.output_exercise = ["B"]
+        self.test_case_exercise.exercise = self.exercise
+        self.test_case_exercise.save()
+
+        #
+        self.user_exercise.scored = False
+        self.user_exercise.code = """
+                                    #include <stdio.h>
+                                    int main () {
+                                        char c;
+                                        scanf("%c", &c);
+                                        printf("B");
+                                        return 0;
+                                    }
+                                    """
+
+        self.user_exercise.user = self.user
+        self.user_exercise.exercise = self.exercise
+        self.user_exercise.submissions = 1
+        self.user_exercise.save()
+
+    def test_request_user_exercises_submission_by_day(self):
+        user = self.user
+
+        days_ago = 7
+        days_ago_date = timezone.now().date() - timedelta(days=days_ago)
+
+        user_exercises_submissions = UserExerciseSubmission.submissions_by_day(
+            user,
+            days_ago_date
+        )
+
+        self.assertIsNotNone(user_exercises_submissions)
+
+    def test_updates_exercise_submission(self):
+        self.user_exercises_submission = self.user_exercise
+        self.user_exercises_submission.save()
+
+        UserExerciseSubmission.updates_submission(self.user_exercises_submission, self.user_exercise)
+
+        self.assertEqual(self.user_exercises_submission.submissions, 2)
+
+    def test_does_not_updates_exercise_submission(self):
+
+        self.user_exercise.status = True
+        self.user_exercise.save()
+
+        self.user_exercises_submission.scored = True
+
+        self.user_exercises_submission = self.user_exercise
+        self.user_exercises_submission.save()
+
+        UserExerciseSubmission.updates_submission(self.user_exercises_submission, self.user_exercise)
+
+        self.assertEqual(self.user_exercises_submission.submissions, 2)
+
+    def test_user_exercise_submission_submit(self):
+
+        submission = UserExerciseSubmission.submit(self.user_exercise)
+        self.assertIsNotNone(submission)
+
+    def test_user_exercise_submission_submit_created(self):
+
+        self.user_exercises_submission = self.user_exercise
+        self.user_exercises_submission.save()
+
+        submission = UserExerciseSubmission.submit(self.user_exercise)
+        self.assertIsNotNone(submission)

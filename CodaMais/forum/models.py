@@ -19,6 +19,10 @@ class Topic(models.Model):
     best_answer = models.ForeignKey('Answer', models.SET_NULL, related_name='best_answer', null=True)
     locked = models.BooleanField(default=False)
 
+    def new_topics():
+        topics = Topic.objects.all().order_by('-id')[:5]
+        return topics
+
     def answers(self):
         assert self is not None, "Topic not exists."
         # Getting all current topic answers except the best answer

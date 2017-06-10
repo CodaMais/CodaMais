@@ -7,6 +7,8 @@ from forum.models import (
 )
 
 
+# Class: TopicForm
+# The class represents all the fields of the topic in the site forum.
 class TopicForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(
                                 attrs={'class': 'form-control'}))

@@ -1,3 +1,11 @@
+'''
+    Copyright (C) 2017, CodaMais.
+    License: GNU General Public License v3.0, see LICENSE.txt
+    App: forum
+    File: models.py
+    Contains all classes related to the forum, it is django's default to keep all models in single file.
+'''
+
 # Django.
 from django.db import models
 

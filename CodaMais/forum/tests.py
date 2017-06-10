@@ -13,8 +13,8 @@ from user.models import User
 from forum.views import (
     list_all_topics, show_topic,
     create_topic, delete_topic, delete_answer,
-    best_answer, show_choose_best_answer_button,
-    show_delete_answer_button, __show_lock_topic_button__,
+    best_answer, __show_choose_best_answer_button__,
+    __show_delete_answer_button__, __show_lock_topic_button__,
     lock_topic,
 )
 
@@ -412,7 +412,7 @@ class TestAnswerTopic(TestCase):
         answers = Answer.objects.filter(topic=self.answer.topic)
         not_deletable_answer = []
         not_deletable_answer.append(True)
-        deletable_answers = show_delete_answer_button(answers, self.topic, self.user.username)
+        deletable_answers = __show_delete_answer_button__(answers, self.topic, self.user.username)
         self.assertEqual(deletable_answers, not_deletable_answer)
 
     def test_if_user_cant_see_delete_answer_button(self):
@@ -422,19 +422,19 @@ class TestAnswerTopic(TestCase):
         answers = Answer.objects.filter(topic=self.topic)
         not_deletable_answer = []
         not_deletable_answer.append(False)
-        deletable_answers = show_delete_answer_button(answers, self.topic, self.wrong_user)
+        deletable_answers = __show_delete_answer_button__(answers, self.topic, self.wrong_user)
         self.assertEqual(deletable_answers, not_deletable_answer)
 
     def test_if_user_can_see_choose_best_answer_button(self):
         topic_author = self.topic.author
         current_user = topic_author
-        choose_best_answer = show_choose_best_answer_button(topic_author, current_user)
+        choose_best_answer = __show_choose_best_answer_button__(topic_author, current_user)
         self.assertEqual(choose_best_answer, True)
 
     def test_if_user_cant_see_choose_best_answer_button(self):
         topic_author = self.topic.author
         current_user = self.user
-        choose_best_answer = show_choose_best_answer_button(topic_author, current_user)
+        choose_best_answer = __show_choose_best_answer_button__(topic_author, current_user)
         self.assertEqual(choose_best_answer, False)
 
     def test_if_topic_author_cant_choose_an_inexistent_answer(self):

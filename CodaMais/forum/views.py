@@ -52,13 +52,18 @@ def show_topic(request, id):
         # Nothing to do
         pass
 
-    answers = topic.answers()
-    quantity_answer = len(answers)
-    choose_best_answer = show_choose_best_answer_button(topic.author, user)
-    deletable_topic = show_delete_topic_button(topic.author, user.username)
+    # Checks whether the user is the author of the topic and shows the configuration buttons.
+    choose_best_answer = __show_choose_best_answer_button__(topic.author, user)
+    deletable_topic = __show_delete_topic_button__(topic.author, user.username)
     lockable_topic = __show_lock_topic_button__(topic, user)
-    deletable_answers = show_delete_answer_button(answers, topic, user.username)
+
+    # Checks whether the user is the author of the answer and shows the delete button.
+    answers = topic.answers()
+    deletable_answers = __show_delete_answer_button__(answers, topic, user.username)
     zipped_data = zip(answers, deletable_answers)
+
+    # Shows the answers related to the topic..
+    quantity_answer = len(answers)
     best_answer = topic.best_answer
 
     return render(request, 'show_topic.html', {
@@ -73,7 +78,7 @@ def show_topic(request, id):
         })
 
 
-def show_choose_best_answer_button(topic_author, current_user):
+def __show_choose_best_answer_button__(topic_author, current_user):
     # Check if logger user is the author of the topic, if is, enable to
     # choose best answer
     if topic_author.id == current_user.id:
@@ -84,7 +89,7 @@ def show_choose_best_answer_button(topic_author, current_user):
         return False
 
 
-def show_delete_topic_button(topic_author, current_user_username):
+def __show_delete_topic_button__(topic_author, current_user_username):
     deletable_topic = False  # Variable to define if user will see a button to delete a topic.
 
     # Check if logged user is visiting his own topic page.
@@ -251,7 +256,7 @@ def best_answer(request, id):
 
 
 # Only the person who whrote the anwer can delete it.
-def show_delete_answer_button(answers, topic, current_user_username):
+def __show_delete_answer_button__(answers, topic, current_user_username):
     deletable_answers = []
 
     for answer in answers:

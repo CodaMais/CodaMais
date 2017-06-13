@@ -1,3 +1,11 @@
+'''
+    Copyright (C) 2017, CodaMais.
+    License: GNU General Public License v3.0, see LICENSE.txt
+    App: forum
+    File: views.py
+    Contains all methods of the view layer related to the forum.
+    It is django's default to keep all methods in single file.
+'''
 # standard
 import logging
 

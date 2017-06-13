@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
-from django.contrib import messages
 
 # local Django.
 from .models import (
@@ -78,9 +77,10 @@ def show_topic(request, id):
         })
 
 
+#  Method that meets the business rule of choosing the best answer.
 def __show_choose_best_answer_button__(topic_author, current_user):
     # Check if logger user is the author of the topic, if is, enable to
-    # choose best answer
+    # choose best answer.
     if topic_author.id == current_user.id:
         logger.debug("Should enable to choose best answer.")
         return True
@@ -89,6 +89,7 @@ def __show_choose_best_answer_button__(topic_author, current_user):
         return False
 
 
+#  Method that meets the business rule of deleting the topic.
 def __show_delete_topic_button__(topic_author, current_user_username):
     deletable_topic = False  # Variable to define if user will see a button to delete a topic.
 
@@ -104,6 +105,7 @@ def __show_delete_topic_button__(topic_author, current_user_username):
     return deletable_topic
 
 
+#  Method that meets the business rule of don't allow more answer in topic.
 def __show_lock_topic_button__(topic, current_user):
     assert topic is not None, "Topic can't be none."
     assert current_user is not None, "Current user can't be none."

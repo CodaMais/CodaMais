@@ -224,6 +224,16 @@ class TestUserExerciseRegistration(TestCase):
         status = views.exercise_status(stdout, self.test_case_exercise.output_exercise)
         self.assertTrue(status)
 
+    def test_if_verify_compilation_source_code_is_none(self):
+        code = None
+        exercise_inputs = ['a\n', 'b\n']
+
+        response = views.submit_exercise(
+                                        code,
+                                        exercise_inputs)
+        message = views.verify_compilation_source_code(response)
+        self.assertNotEqual(message, None)
+
     def test_if_user_scored_exercise(self):
         scored = False
         status = True
@@ -251,6 +261,16 @@ class TestUserExerciseRegistration(TestCase):
 
     def test_if_user_exercise_is_processed_invalid_form(self):
         request = self.factory.post('/exercise/process/1/', self.user_exercise_invalid_form)
+        request.user = self.user
+        response = views.process_user_exercise(request, self.exercise.id)
+        self.assertEqual(response.status_code, REQUEST_REDIRECT)
+        self.assertEqual(response.url, '/en/exercise/1/')
+
+    def test_if_user_exercise_is_processed_invalid_form_code(self):
+        user_exercise_invalid_form_code = {
+            'code': 'int main()'
+        }
+        request = self.factory.post('/exercise/process/1/', user_exercise_invalid_form_code)
         request.user = self.user
         response = views.process_user_exercise(request, self.exercise.id)
         self.assertEqual(response.status_code, REQUEST_REDIRECT)

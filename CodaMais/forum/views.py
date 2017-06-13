@@ -81,6 +81,9 @@ def show_topic(request, id):
 def __show_choose_best_answer_button__(topic_author, current_user):
     # Check if logger user is the author of the topic, if is, enable to
     # choose best answer.
+    assert topic_author is not None, constants.INEXISTENT_TOPIC_ASSERT
+    assert current_user is not None, constants.INEXISTENT_REQUEST_USER
+
     if topic_author.id == current_user.id:
         logger.debug("Should enable to choose best answer.")
         return True
@@ -92,6 +95,8 @@ def __show_choose_best_answer_button__(topic_author, current_user):
 #  Method that meets the business rule of deleting the topic.
 def __show_delete_topic_button__(topic_author, current_user_username):
     deletable_topic = False  # Variable to define if user will see a button to delete a topic.
+    assert topic_author is not None, constants.INEXISTENT_TOPIC_ASSERT
+    assert current_user_username is not None, constants.INEXISTENT_REQUEST_USER
 
     # Check if logged user is visiting his own topic page.
     if topic_author.username == current_user_username:
@@ -102,6 +107,8 @@ def __show_delete_topic_button__(topic_author, current_user_username):
         # Nothing to do.
 
     logger.debug("Topic page is deletable? " + str(deletable_topic))
+
+    assert delete_topic is not None, constants.INEXISTENT_TOPIC
     return deletable_topic
 
 
@@ -129,6 +136,8 @@ def __show_lock_topic_button__(topic, current_user):
         # Nothing to do
 
     logger.debug("Topic page is lockable? " + str(lockable_topic))
+
+    assert lockable_topic is not None, constants.INEXISTENT_TOPIC
     return lockable_topic
 
 

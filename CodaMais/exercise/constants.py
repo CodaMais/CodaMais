@@ -40,3 +40,14 @@ INITIAL_SUM = 0.0
 
 # PROJECT NAME.
 PROJECT_NAME = "CodaMais"
+
+# DEFAULT CODE
+DEFAULT_CODE = """
+#include <stdio.h>
+#include <stlib.h>
+
+int main () {
+
+    return 0;
+}
+                """

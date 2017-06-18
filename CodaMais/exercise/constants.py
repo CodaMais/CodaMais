@@ -44,7 +44,6 @@ PROJECT_NAME = "CodaMais"
 # DEFAULT CODE
 DEFAULT_CODE = """
 #include <stdio.h>
-#include <stlib.h>
 
 int main () {
 

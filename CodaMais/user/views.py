@@ -159,7 +159,7 @@ def login_view(request):
                 # Nothing to do.
                 pass
         else:
-            # Nothing to do.
+            messages.success(request, "Insira um usuário que já tenha sido cadastrado.")
             logger.debug("Login form is invalid.")
             pass
     else:

@@ -1,3 +1,12 @@
+'''
+Copyright (C) 2017, CodaMais.
+License: GNU General Public License v3.0, see LICENSE.txt
+App: User
+File: models.py
+Contains all methods of the view layer related to the forum.
+It is django's default to keep all methods in single file.
+'''
+
 # standard library
 import datetime
 import logging
@@ -144,6 +153,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return percentage_correct_exercises
 
 
+# This class is used to set a relation between the user that required the register and the activation key.
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     activation_key = models.CharField(max_length=40, blank=True)

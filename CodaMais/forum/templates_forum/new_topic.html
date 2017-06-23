@@ -9,7 +9,7 @@
 
         <form method="post" action=".">
             {% csrf_token %}
-            {{ form.non_field_errors }}
+            <!-- {{ form.non_field_errors }} -->
             <div class="form-group">
                 {% for error in form.title.errors %}
                 <div class="alert alert-danger"role="alert">{{error}}</div>

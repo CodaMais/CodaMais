@@ -8,6 +8,8 @@ from . import constants
 from redactor.fields import RedactorField
 
 
+# Class: Theory
+# The class represents the contents that the user can read to learn more about it.
 class Theory(models.Model):
     title = models.CharField(verbose_name=u'Title',
                              max_length=constants.TITLE_FIELD_LENGHT)

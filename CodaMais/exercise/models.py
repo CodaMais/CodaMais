@@ -1,3 +1,11 @@
+'''
+    Copyright (C) 2017, CodaMais.
+    License: GNU General Public License v3.0, see LICENSE.txt
+    App: exercise
+    File: models.py
+    Contains all classes related to the exercise, it is django's default to keep all models in single file.
+'''
+
 # Python
 import logging
 
@@ -19,6 +27,8 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(constants.PROJECT_NAME)
 
 
+# Class: Exercise
+# The class represents the exercises register by admin.
 class Exercise(models.Model):
     title = models.CharField(max_length=constants.MAX_LENGTH_TITLE)
 

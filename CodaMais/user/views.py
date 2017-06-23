@@ -1,3 +1,12 @@
+'''
+    Copyright (C) 2017, CodaMais.
+    License: GNU General Public License v3.0, see LICENSE.txt
+    App: user
+    File: views.py
+    Contains methods related to the user, such as registration, login, and others.
+    It is django's default to keep all methods related to the same app in a single file.
+'''
+
 # standard library
 import logging
 import hashlib
@@ -159,7 +168,7 @@ def login_view(request):
                 # Nothing to do.
                 pass
         else:
-            # Nothing to do.
+            messages.success(request, "Insira um usuário que já tenha sido cadastrado.")
             logger.debug("Login form is invalid.")
             pass
     else:

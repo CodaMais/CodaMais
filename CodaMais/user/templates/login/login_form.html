@@ -38,4 +38,22 @@
             </div>
   </div>
 
+  {% block javascript %}
+    {% if messages %}
+        {% for message in messages %}
+        <script>
+          $.notify({
+                message: '{{ message }}'
+              },{
+                type: "danger",
+                placement: {
+                  from: "top",
+                  align: "center"
+                }
+          });
+          </script>
+        {% endfor %}
+    {% endif %}
+    {% endblock %}
+
   {% endblock %}

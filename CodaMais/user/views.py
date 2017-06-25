@@ -297,13 +297,15 @@ def profile_view(request, username):
         # Check if logged user is visiting his own profile page.
         editable_profile = __show_edit_button__(user.username, request.user.username)
 
+        assert editable_profile is (True or False), constants. EDITABLE_PROFILE_ASSERT
     else:
         logger.debug("Profile view request: POST")
         user = User()
 
     # Get all achievements of the current user.
     current_user_achievements_list = UserAchievement.objects.filter(user=user)
-    print(current_user_achievements_list)
+
+    assert current_user_achievements_list is not None, constants.USER_ACHIEVEMENT_LIST
 
     logger.debug("Profile page is editable? " + str(editable_profile))
     return render(request, 'profile/profile.html', {'user': user,

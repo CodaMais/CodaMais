@@ -67,6 +67,8 @@ CODAMAIS_EMAIL = 'codamaisapp@gmail.com'
 # ASSERT MESSAGES
 INEXISTENT_VISITOR_ASSERT = 'Visitor can\'t be none.'
 INEXISTENT_USER_ASSERT = 'Username can\'t be none. User must be logged in.'
+EDITABLE_PROFILE_ASSERT = "Editable profile must be true, or false."
+USER_ACHIEVEMENT_LIST = 'User achievement list can\'t be none'
 
 # BUTTON NAMES
 CONFIRM_BUTTON = 'Confirm'

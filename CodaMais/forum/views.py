@@ -34,6 +34,7 @@ def list_all_topics(request):
     topics = {}
     topics['list_topics'] = Topic.objects.all()
 
+    # TODO (Thiago) Create pagination forum topics.
     return render(request, 'topics.html', topics)
 
 

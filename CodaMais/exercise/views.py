@@ -31,6 +31,7 @@ def list_exercises_not_deprecated(request):
     user = request.user
 
     list_exercises = get_user_submissions_exercise(user, exercises)
+    # TODO (Thiago) Create pagination exercise.
     return render(request, 'exercises.html', {
         'list_exercises': list_exercises
     })
@@ -96,11 +97,20 @@ def process_user_exercise(request, id):
         # Receives the JSON response from API.
         api_result = submit_exercise(source_code, input_exercise)
 
-        # Sum all runtime of test cases.
-        runtime = extract_time(api_result)
+        # Defines whether the submitted code can be compiled
+        code_has_been_compiled = verify_compilation_source_code(api_result)
 
-        # Get the outputs of test cases.
-        stdout = extract_stdout(api_result)
+        # Case compiled, extract API return data.
+        if code_has_been_compiled is True:
+            # Sum all runtime of test cases.
+            runtime = extract_time(api_result)
+
+            # Get the outputs of test cases.
+            stdout = extract_stdout(api_result)
+        else:
+            # Initializes with default variable values required
+            stdout = []
+            runtime = 0.0
 
         # String list to compare with response.
         output_exercise = get_all_output_exercise(exercise)
@@ -263,3 +273,14 @@ def get_user_exercises_last_submissions(user):
     user_exercises_list = UserExercise.objects.filter(user=user).order_by('-date_submission')[:5]
 
     return user_exercises_list
+
+
+# Defines whether the submitted code can be compiled
+def verify_compilation_source_code(api_result):
+    message = json.loads(api_result)['result']['message']
+
+    # True was compiled, False was not compiled
+    if message is not None:
+        return True
+    else:
+        return False

@@ -91,14 +91,14 @@ class TestExerciseTheory(TestCase):
         self.test_case_exercise.exercise = self.exercise
         self.test_case_exercise.save()
 
-        list_exercises = views.get_exercise_list_in_theory(self.user, self.theory)
+        list_exercises = views.__get_exercise_list_in_theory__(self.user, self.theory)
         number_exercises = len(list_exercises)
         number_expected = 1
 
         self.assertEqual(number_expected, number_exercises)
 
     def test_if_list_of_exercises_in_theory_is_empty(self):
-        list_exercises = views.get_exercise_list_in_theory(self.user, self.theory)
+        list_exercises = views.__get_exercise_list_in_theory__(self.user, self.theory)
         number_exercises = len(list_exercises)
         number_expected = 0
 

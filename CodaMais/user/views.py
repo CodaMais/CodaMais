@@ -293,8 +293,9 @@ def recover_password_confirm(request, activation_key):
 def profile_view(request, username):
     if request.method == "GET":
         user = User.objects.get(username=username)
+
         # Check if logged user is visiting his own profile page.
-        editable_profile = show_edit_button(user.username, request.user.username)
+        editable_profile = __show_edit_button__(user.username, request.user.username)
 
     else:
         logger.debug("Profile view request: POST")
@@ -310,7 +311,9 @@ def profile_view(request, username):
                                                     'user_achievements_list': current_user_achievements_list})
 
 
-def show_edit_button(visitor_username, current_user_username):
+def __show_edit_button__(visitor_username, current_user_username):
+    assert visitor_username is not None, constants.INEXISTENT_VISITOR_ASSERT
+    assert current_user_username is not None, constants.ININEXISTENT_USER_ASSERT
 
     editable_profile = False  # Variable to define if user will see a button to edit his profile page.
 
@@ -319,8 +322,8 @@ def show_edit_button(visitor_username, current_user_username):
         editable_profile = True
 
     else:
-        logger.debug("Profile page shouldn't be editable.")
         # Nothing to do.
+        pass
 
     return editable_profile
 

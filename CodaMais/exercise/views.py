@@ -1,3 +1,11 @@
+'''
+    Copyright (C) 2017, CodaMais.
+    License: GNU General Public License v3.0, see LICENSE.txt
+    App: exercise
+    File: views.py
+    Contains methods related to the exercise pages.
+    Some methods are helpers to others methods that sends data to templates.
+'''
 
 # standard library
 import http.client
@@ -143,6 +151,8 @@ def process_user_exercise(request, id):
     return redirect('show_exercise', id=id)
 
 
+# Defines whether the user should receive the score of an exercise,
+# according to the result of the solution sent.
 def scores_exercise(scored, user, score, status):
     if not scored:
         logger.info("The user has not scored.")

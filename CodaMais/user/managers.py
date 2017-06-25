@@ -1,3 +1,12 @@
+'''
+Copyright (C) 2017, CodaMais.
+License: GNU General Public License v3.0, see LICENSE.txt
+App: User
+File: maganers.py
+Contains methods to manage the creation of users and administrators.
+
+'''
+
 # standard library
 import logging
 

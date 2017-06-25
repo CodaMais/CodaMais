@@ -297,7 +297,7 @@ def profile_view(request, username):
         # Check if logged user is visiting his own profile page.
         editable_profile = __show_edit_button__(user.username, request.user.username)
 
-        assert editable_profile is (True or False), constants. EDITABLE_PROFILE_ASSERT
+        assert editable_profile is (True or False), constants.EDITABLE_PROFILE_ASSERT
     else:
         logger.debug("Profile view request: POST")
         user = User()

@@ -49,7 +49,7 @@ def show_theory(request, id, title):
     # Getting all informations needed to show a Theory page completely.
     theory = Theory.objects.get(id=id)
     user = request.user
-    list_theory_exercises = get_exercise_list_in_theory(user, theory)
+    list_theory_exercises = __get_exercise_list_in_theory__(user, theory)
 
     assert list_theory_exercises is not None, "List of theory exercises is Null."
     assert theory is not None, "Theory is Null."
@@ -63,7 +63,7 @@ def show_theory(request, id, title):
 
 
 # Obtaining exercises corresponding to determinate theory.
-def get_exercise_list_in_theory(user, theory):
+def __get_exercise_list_in_theory__(user, theory):
     assert user is not None, "User not logged in."
     assert theory is not None, "This theory doesn't exist."
     logger.info("Trying to get all exercises corresponding to theory: " + theory.title)

@@ -54,13 +54,13 @@ EMAIL_CONFIRMATION_SUBJECT = 'Confirmação da Conta'
 EMAIL_CONFIRMATION_BODY = """
                           Ola %s,obrigado por se registrar.
                           Para ativar sua conta clique nesse link em menos de
-                          48 horas: http://127.0.0.1:8000/user/confirm/%s
+                          48 horas: http://codamais.herokuapp.com/user/confirm/%s
                           """
 PASSWORD_RECOVER_SUBJECT = 'Recuperar senha'
 PASSWORD_RECOVER_BODY = """
                          Usuario: %s
                          Para recuperar sua senha clique nesse link em menos de
-                         48 horas: http://127.0.0.1:8000/user/recover/%s
+                         48 horas: http://codamais.herokuapp.com//user/recover/%s
                           """
 CODAMAIS_EMAIL = 'codamaisapp@gmail.com'
 

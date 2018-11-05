@@ -155,7 +155,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 # This class is used to set a relation between the user that required the register and the activation key.
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField(default=datetime.date.today())
 
@@ -167,7 +167,7 @@ class UserProfile(models.Model):
 
 
 class RecoverPasswordProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField(default=datetime.date.today())
 
